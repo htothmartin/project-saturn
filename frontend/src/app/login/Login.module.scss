@@ -1,0 +1,20 @@
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    height: 100vh;
+    overflow-y: hidden;
+    position: relative;
+    background-image: url(./../../assets/images/bg-image.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    &__form{
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        width: 80%;
+        height: 80%;
+        max-width: 350px;
+    }    
+}
