@@ -1,87 +1,180 @@
 'use client';
 
-import { Input } from '@/components/Input';
-import styles from './Register.module.scss';
 import { BrandSection } from '@/components/BrandSection';
-import { Button } from '@/components/Button';
 import Link from 'next/link';
-import { registerUser } from './actions';
-import { useFormState, useFormStatus } from 'react-dom';
-import { useEffect, useRef } from 'react';
+import { z } from 'zod';
+import {
+    lowerCaseRegex,
+    numberRegex,
+    specialRegex,
+    upperCaseRegex,
+} from './constants';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
-const initialState = {
-	message: '',
-	errors: undefined,
-	fieldValues: {
-		email: '',
-		firstname: '',
-		lastname: '',
-		password: '',
-		confirmPassword: '',
-	},
-};
+const registerSchema = z
+    .object({
+        email: z.string().email('Please enter a valid email address!'),
+        firstname: z.string().min(1, 'Please enter your firstname.'),
+        lastname: z.string().min(1, 'Please enter your lastname.'),
+        password: z
+            .string()
+            .min(1, 'Please enter a password!')
+            .min(8, 'Password should minimum 8 characther!')
+            .refine((value) => lowerCaseRegex.test(value), {
+                message:
+                    'The password must contain atleast one lowercase character.',
+            })
+            .refine((value) => upperCaseRegex.test(value), {
+                message:
+                    'The password must contain atleast one uppercase character.',
+            })
+            .refine((value) => numberRegex.test(value), {
+                message: 'The password must contain atleast one number.',
+            })
+            .refine((value) => specialRegex.test(value), {
+                message:
+                    'The password must contain atleast one special character.',
+            }),
+        confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        message: 'The passwords must match.',
+        path: ['confirmPassword'],
+    });
 
-const Register = () => {
-	const [state, formAction] = useFormState(registerUser, initialState);
-	const { pending } = useFormStatus();
-	const formRef = useRef<HTMLFormElement>(null);
+const Register = (): JSX.Element => {
+    const registerForm = useForm<z.infer<typeof registerSchema>>({
+        resolver: zodResolver(registerSchema),
+        defaultValues: {
+            email: '',
+            firstname: '',
+            lastname: '',
+            password: '',
+            confirmPassword: '',
+        },
+    });
 
-	console.log(state);
+    const onSubmit = (values: z.infer<typeof registerSchema>): void => {
+        console.log(values);
+    };
 
-	useEffect(() => {
-		if (state.message === 'success') {
-			formRef?.current?.reset();
-		}
-	}, [state]);
-
-	return (
-		<div className={styles.grid}>
-			<BrandSection />
-			<form className={styles.grid__form} action={formAction} ref={formRef}>
-				<div className={styles.grid__signin}>
-					<h1>Sign In</h1>
-				</div>
-				<Input.TextField
-					id="register-email"
-					name="register-email"
-					label="Email"
-					errorMessage={state.errors?.email}
-				/>
-				<Input.TextField
-					id="register-firstname"
-					name="register-firstname"
-					label="First name"
-					errorMessage={state.errors?.firstname}
-				/>
-				<Input.TextField
-					id="register-lastname"
-					name="register-lastname"
-					label="Last name"
-					errorMessage={state.errors?.lastname}
-				/>
-				<Input.TextField
-					type="password"
-					id="register-password"
-					name="register-password"
-					label="Password"
-					errorMessage={state.errors?.password}
-				/>
-				<Input.TextField
-					type="password"
-					id="register-confirmPassword"
-					name="register-confirmPassword"
-					label="Password Again"
-					errorMessage={state.errors?.confirmPassword}
-				/>
-				<Button.Primary type="submit" disabled={pending}>
-					Login
-				</Button.Primary>
-				<p className={styles.register__link}>
-					You already have an accounct? Sign in <Link href="/login">here</Link>!
-				</p>
-			</form>
-		</div>
-	);
+    return (
+        <div className="grid h-screen w-screen grid-cols-2 overflow-hidden bg-login bg-cover bg-no-repeat">
+            <BrandSection />
+            <div className="m-auto flex w-3/4 max-w-md flex-col rounded-lg border-2 border-solid border-primary bg-slate-100 bg-opacity-10 p-16 backdrop-blur-md">
+                <h1 className="pb-4 text-4xl font-bold">Register</h1>
+                <Form {...registerForm}>
+                    <form
+                        onSubmit={registerForm.handleSubmit(onSubmit)}
+                        className="my-4"
+                    >
+                        <FormField
+                            control={registerForm.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-2xl">
+                                        Email
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="example@email.com"
+                                            {...field}
+                                            className="text-xl"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={registerForm.control}
+                            name="firstname"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-2xl">
+                                        Firstname
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input {...field} className="text-xl" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={registerForm.control}
+                            name="lastname"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-2xl">
+                                        Lastname
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input {...field} className="text-xl" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={registerForm.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-2xl">
+                                        Password
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input {...field} className="text-xl" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={registerForm.control}
+                            name="confirmPassword"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-2xl">
+                                        Confirm password
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input {...field} className="text-xl" />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div className="mx-auto my-4">
+                            <Button className="text-xl" type="submit">
+                                Register
+                            </Button>
+                        </div>
+                    </form>
+                </Form>
+                <p className="text-center">
+                    You already have an account? Login{' '}
+                    <Link className="underline" href="/register">
+                        here
+                    </Link>
+                    !
+                </p>
+            </div>
+        </div>
+    );
 };
 
 export default Register;

@@ -36,57 +36,68 @@ const Login = () => {
     };
 
     return (
-        <div className="relative grid h-screen w-screen grid-cols-2 overflow-hidden bg-login">
+        <div className="grid h-screen w-screen grid-cols-2 overflow-hidden bg-login bg-cover bg-no-repeat">
             <BrandSection />
-            <Form {...loginForm}>
-                <form
-                    onSubmit={loginForm.handleSubmit(onSubmit)}
-                    className="m-auto flex w-3/4 max-w-md flex-col rounded-lg border-2 border-solid border-primary p-16 backdrop-blur-md"
-                >
-                    <h1 className="text">Sign In</h1>
-                    <FormField
-                        control={loginForm.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-2xl">
-                                    Email
-                                </FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="example@email.com"
-                                        {...field}
-                                        className="text-xl"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={loginForm.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel className="text-2xl">
-                                    Password
-                                </FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder=""
-                                        {...field}
-                                        className="text-xl"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <Button className="text-xl" type="submit">
-                        Login
-                    </Button>
-                </form>
-            </Form>
+            <div className="m-auto flex w-3/4 max-w-md flex-col rounded-lg border-2 border-solid border-primary bg-slate-100 bg-opacity-10 p-16 backdrop-blur-md">
+                <h1 className="pb-4 text-4xl font-bold">Sign In</h1>
+                <Form {...loginForm}>
+                    <form
+                        onSubmit={loginForm.handleSubmit(onSubmit)}
+                        className="my-4"
+                    >
+                        <FormField
+                            control={loginForm.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-2xl">
+                                        Email
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="example@email.com"
+                                            {...field}
+                                            className="text-xl"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={loginForm.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel className="text-2xl">
+                                        Password
+                                    </FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder=""
+                                            {...field}
+                                            className="text-xl"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <div className="mx-auto my-4">
+                            <Button className="text-xl" type="submit">
+                                Login
+                            </Button>
+                        </div>
+                    </form>
+                </Form>
+                <p>
+                    You don &apos; t haven an accounct? Registere{' '}
+                    <Link className="underline" href="/register">
+                        here
+                    </Link>{' '}
+                    !
+                </p>
+            </div>
         </div>
 
         /*
