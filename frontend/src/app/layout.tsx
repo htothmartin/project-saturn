@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import { Montserrat } from 'next/font/google';
 import './scss/style.scss';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
 
 const montserrat = Montserrat({
     subsets: ['latin'],
@@ -46,6 +47,7 @@ export default function RootLayout({
                 >
                     {children}
                 </ThemeProvider>
+                <Toaster />
             </body>
         </html>
     );

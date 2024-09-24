@@ -11,11 +11,13 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
 import { z } from 'zod';
+import SkyBackground from './sky';
 
 const loginSchema = z.object({
     email: z.string().email('This is not a valid email address.'),
@@ -23,6 +25,7 @@ const loginSchema = z.object({
 });
 
 const Login = () => {
+    const { toast } = useToast();
     const loginForm = useForm<z.infer<typeof loginSchema>>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -31,12 +34,16 @@ const Login = () => {
         },
     });
 
-    const onSubmit = (values: z.infer<typeof loginSchema>) => {
+    const onSubmit = (values: z.infer<typeof loginSchema>): void => {
+        toast({
+            title: 'Login',
+            description: 'Sucessfully login.',
+        });
         console.log(values);
     };
 
     return (
-        <div className="grid h-screen w-screen grid-cols-2 overflow-hidden bg-login bg-cover bg-no-repeat">
+        <div className="grid h-screen w-screen grid-cols-2 overflow-hidden bg-cover bg-no-repeat">
             <BrandSection />
             <div className="m-auto flex w-3/4 max-w-md flex-col rounded-lg border-2 border-solid border-primary bg-slate-100 bg-opacity-10 p-16 backdrop-blur-md">
                 <h1 className="pb-4 text-4xl font-bold">Sign In</h1>
@@ -90,7 +97,7 @@ const Login = () => {
                         </div>
                     </form>
                 </Form>
-                <p>
+                <p className="text-center">
                     You don &apos; t haven an accounct? Registere{' '}
                     <Link className="underline" href="/register">
                         here
@@ -116,6 +123,7 @@ const Login = () => {
 				</p>
 			</div>
 		</div>
+        </SkyBackground>
 
     */
     );

@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 const registerSchema = z
     .object({
@@ -54,6 +55,7 @@ const registerSchema = z
     });
 
 const Register = (): JSX.Element => {
+    const { toast } = useToast();
     const registerForm = useForm<z.infer<typeof registerSchema>>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -66,7 +68,10 @@ const Register = (): JSX.Element => {
     });
 
     const onSubmit = (values: z.infer<typeof registerSchema>): void => {
-        console.log(values);
+        toast({
+            title: 'Register',
+            description: 'Sucessfully registered.',
+        });
     };
 
     return (
@@ -137,7 +142,11 @@ const Register = (): JSX.Element => {
                                         Password
                                     </FormLabel>
                                     <FormControl>
-                                        <Input {...field} className="text-xl" />
+                                        <Input
+                                            {...field}
+                                            type="password"
+                                            className="text-xl"
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -152,7 +161,11 @@ const Register = (): JSX.Element => {
                                         Confirm password
                                     </FormLabel>
                                     <FormControl>
-                                        <Input {...field} className="text-xl" />
+                                        <Input
+                                            {...field}
+                                            type="password"
+                                            className="text-xl"
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -167,7 +180,7 @@ const Register = (): JSX.Element => {
                 </Form>
                 <p className="text-center">
                     You already have an account? Login{' '}
-                    <Link className="underline" href="/register">
+                    <Link className="underline" href="/login">
                         here
                     </Link>
                     !
