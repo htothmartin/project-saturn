@@ -81,8 +81,7 @@ const Register = (): JSX.Element => {
           <Form {...registerForm}>
             <form
               onSubmit={registerForm.handleSubmit(onSubmit)}
-              className="my-4"
-            >
+              className="my-4">
               <FormField
                 control={registerForm.control}
                 name="email"

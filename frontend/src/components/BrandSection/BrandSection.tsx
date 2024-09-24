@@ -1,4 +1,4 @@
-import { Circles, SaturnLogo } from '@/assets';
+import { SaturnLogo } from '@/assets';
 
 export const BrandSection = (): JSX.Element => {
   return (

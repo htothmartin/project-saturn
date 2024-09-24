@@ -1,20 +1,20 @@
 html {
-    box-sizing: border-box;
-    font-size: 100%;
-    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-    -moz-box-sizing: border-box; /* Firefox, other Gecko */
+  box-sizing: border-box;
+  font-size: 100%;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
 }
 
 *,
 *::after,
 *::before {
-    box-sizing: inherit;
+  box-sizing: inherit;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    //font-family: Arial, Helvetica, sans-serif;
-    //background-color: var(--background-color);
-    //color: var(--font-primary);
+  margin: 0;
+  padding: 0;
+  //font-family: Arial, Helvetica, sans-serif;
+  //background-color: var(--background-color);
+  //color: var(--font-primary);
 }

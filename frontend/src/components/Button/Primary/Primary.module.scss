@@ -1,11 +1,10 @@
 @use 'globals/fonts';
 
 .primary {
-    font-family: inherit;
-    font-size: fonts.$m;
-    padding: 15px 10px;
-    background-color: var(--primary);
-    border: 3px solid white;
-    border-radius: 15px;
-
+  font-family: inherit;
+  font-size: fonts.$m;
+  padding: 15px 10px;
+  background-color: var(--primary);
+  border: 3px solid white;
+  border-radius: 15px;
 }
