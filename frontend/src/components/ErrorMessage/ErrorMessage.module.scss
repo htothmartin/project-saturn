@@ -1,0 +1,11 @@
+@use 'globals/fonts' as fonts;
+
+.error {
+    margin: 5px;
+    transition: 0.3s ease;
+}
+
+.message {
+    color: red;
+    font-size: fonts.$m;
+}

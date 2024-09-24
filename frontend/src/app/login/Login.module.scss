@@ -6,15 +6,30 @@
     overflow-y: hidden;
     position: relative;
     background-image: url(./../../assets/images/bg-image.jpg);
+    background-image: url('/src/assets/images/bg-image.jpg');
     background-repeat: no-repeat;
     background-size: cover;
+    color: var(--white);
 
-    &__form{
+    &__form {
         display: flex;
         flex-direction: column;
         margin: auto;
-        width: 80%;
-        height: 80%;
-        max-width: 350px;
-    }    
+        width: 90%;
+        max-width: 500px;
+        border: 2px solid var(--primary);
+        border-radius: 10px;
+        padding: 25px;
+        background: rgba(0, 0, 0, 0.425);
+        backdrop-filter: blur(10px);
+    }
+    &__signin {
+        color: var(--white);
+        padding: 10px;
+    }
+}
+
+.register__link {
+    text-align: center;
+    padding-block: 30px;
 }

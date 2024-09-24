@@ -1,3 +1,3 @@
 import { Primary } from './Primary';
 
-export { Primary };
+export const Button = { Primary };

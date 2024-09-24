@@ -2,9 +2,10 @@
 
 
 .input {
-    margin-top: 20px;
+    margin-bottom: 10px;
     display: flex;
     flex-direction: column;
+
     &__label {
         font-size: fonts.$m;
         color: var(--white);
@@ -24,5 +25,9 @@
             margin: 0;
         }
     }
-    
+}
+
+.error{
+    border: red 3px solid;
+    margin: 0;
 }
