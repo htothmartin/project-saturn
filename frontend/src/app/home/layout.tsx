@@ -1,4 +1,6 @@
 import { SaturnLogo } from '@/assets';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -52,7 +54,10 @@ export default function Layout({
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
-        <div className="ml-auto p-4">
+        <div className="ml-auto">
+          <ThemeToggle />
+        </div>
+        <div className="p-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
