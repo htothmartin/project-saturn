@@ -22,6 +22,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { AuthLayout } from '@/components/AuthLayout/AuthLayout';
 
 const registerSchema = z
     .object({
@@ -75,118 +76,126 @@ const Register = (): JSX.Element => {
     };
 
     return (
-        <div className="grid h-screen w-screen grid-cols-2 overflow-hidden bg-login bg-cover bg-no-repeat">
-            <BrandSection />
-            <div className="m-auto flex w-3/4 max-w-md flex-col rounded-lg border-2 border-solid border-primary bg-slate-100 bg-opacity-10 p-16 backdrop-blur-md">
-                <h1 className="pb-4 text-4xl font-bold">Register</h1>
-                <Form {...registerForm}>
-                    <form
-                        onSubmit={registerForm.handleSubmit(onSubmit)}
-                        className="my-4"
-                    >
-                        <FormField
-                            control={registerForm.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-2xl">
-                                        Email
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="example@email.com"
-                                            {...field}
-                                            className="text-xl"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={registerForm.control}
-                            name="firstname"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-2xl">
-                                        Firstname
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input {...field} className="text-xl" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={registerForm.control}
-                            name="lastname"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-2xl">
-                                        Lastname
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input {...field} className="text-xl" />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={registerForm.control}
-                            name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-2xl">
-                                        Password
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            type="password"
-                                            className="text-xl"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={registerForm.control}
-                            name="confirmPassword"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-2xl">
-                                        Confirm password
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            type="password"
-                                            className="text-xl"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <div className="mx-auto my-4">
-                            <Button className="text-xl" type="submit">
-                                Register
-                            </Button>
-                        </div>
-                    </form>
-                </Form>
-                <p className="text-center">
-                    You already have an account? Login{' '}
-                    <Link className="underline" href="/login">
-                        here
-                    </Link>
-                    !
-                </p>
-            </div>
-        </div>
+        <AuthLayout>
+            <>
+                <BrandSection />
+                <div className="m-auto flex w-3/4 max-w-md flex-col rounded-lg border-2 border-solid border-primary bg-slate-100 bg-opacity-10 p-16 backdrop-blur-md">
+                    <h1 className="pb-4 text-4xl font-bold">Register</h1>
+                    <Form {...registerForm}>
+                        <form
+                            onSubmit={registerForm.handleSubmit(onSubmit)}
+                            className="my-4"
+                        >
+                            <FormField
+                                control={registerForm.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-2xl">
+                                            Email
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                placeholder="example@email.com"
+                                                {...field}
+                                                className="text-xl"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={registerForm.control}
+                                name="firstname"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-2xl">
+                                            Firstname
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                className="text-xl"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={registerForm.control}
+                                name="lastname"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-2xl">
+                                            Lastname
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                className="text-xl"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={registerForm.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-2xl">
+                                            Password
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                type="password"
+                                                className="text-xl"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={registerForm.control}
+                                name="confirmPassword"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="text-2xl">
+                                            Confirm password
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                type="password"
+                                                className="text-xl"
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <div className="mx-auto my-4">
+                                <Button className="text-xl" type="submit">
+                                    Register
+                                </Button>
+                            </div>
+                        </form>
+                    </Form>
+                    <p className="text-center">
+                        You already have an account? Login{' '}
+                        <Link className="underline" href="/login">
+                            here
+                        </Link>
+                        !
+                    </p>
+                </div>
+            </>
+        </AuthLayout>
     );
 };
 
