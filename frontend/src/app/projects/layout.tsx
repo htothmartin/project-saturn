@@ -1,6 +1,6 @@
 import { SaturnLogo } from '@/assets';
+import { SkyBackground } from '@/components/AuthLayout/components/SkyBackgorund';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -13,13 +13,13 @@ import Link from 'next/link';
 export default function Layout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: JSX.Element;
 }>) {
   return (
-    <>
+    <div className="flex h-screen w-screen flex-col">
       <div className="flex w-screen flex-row items-center bg-background">
         <NavigationMenu className="bg-background p-4">
-          <NavigationMenuList className="flex flex-row items-center">
+          <NavigationMenuList className="flex flex-row items-center gap-4">
             <div className="mr-4">
               <SaturnLogo size={56} />
             </div>
@@ -39,7 +39,7 @@ export default function Layout({
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/home/" legacyBehavior passHref>
+              <Link href="/home/createproject" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   New Project
                 </NavigationMenuLink>
@@ -57,7 +57,7 @@ export default function Layout({
         <div className="ml-auto">
           <ThemeToggle />
         </div>
-        <div className="p-4">
+        <div className="m-4 p-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -78,8 +78,7 @@ export default function Layout({
           </svg>
         </div>
       </div>
-
       {children}
-    </>
+    </div>
   );
 }

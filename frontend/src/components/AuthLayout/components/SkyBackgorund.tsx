@@ -17,7 +17,7 @@ export function SkyBackground({ children }: SkyBackgroundProps) {
   );
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e]">
+    <div className="relative h-full overflow-hidden bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e]">
       <div className="absolute inset-0">
         {stars.map((star) => (
           <div
