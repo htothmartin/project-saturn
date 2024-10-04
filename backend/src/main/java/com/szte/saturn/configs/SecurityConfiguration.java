@@ -30,8 +30,6 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        System.out.println("asd");
-
         http.csrf()
                 .disable()
                 .authorizeHttpRequests()
