@@ -4,6 +4,7 @@ import { Montserrat } from 'next/font/google';
 import './scss/style.scss';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
+import { AuthProvider } from '@/context/AuthProvider';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -39,13 +40,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange>
+            {children}
+          </ThemeProvider>
+        </AuthProvider>
         <Toaster />
       </body>
     </html>

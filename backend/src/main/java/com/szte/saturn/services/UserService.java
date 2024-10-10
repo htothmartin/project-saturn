@@ -2,6 +2,7 @@ package com.szte.saturn.services;
 
 import com.szte.saturn.entities.User;
 import com.szte.saturn.repositories.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class UserService {
         return  users;
     }
 
-
-
-
-
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+    
 }

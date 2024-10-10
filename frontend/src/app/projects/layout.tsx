@@ -1,5 +1,6 @@
+'use client';
+
 import { SaturnLogo } from '@/assets';
-import { SkyBackground } from '@/components/AuthLayout/components/SkyBackgorund';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import {
   NavigationMenu,

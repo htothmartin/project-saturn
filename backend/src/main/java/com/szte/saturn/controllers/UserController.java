@@ -1,7 +1,6 @@
 package com.szte.saturn.controllers;
 
 import com.szte.saturn.entities.User;
-import com.szte.saturn.services.AuthenticationService;
 import com.szte.saturn.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

@@ -1,7 +1,9 @@
 package com.szte.saturn.entities;
 
+import com.szte.saturn.dtos.RegisterUserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,6 +17,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 @Accessors(chain = true)
 public class User implements UserDetails {
 
@@ -24,10 +27,10 @@ public class User implements UserDetails {
     private Integer id;
 
     @Column(nullable = false)
-    private String firstName;
+    private String firstname;
 
     @Column(nullable = false)
-    private String lastName;
+    private String lastname;
 
     @Column(unique = true, length = 100, nullable = false)
     private String email;
@@ -38,6 +41,12 @@ public class User implements UserDetails {
     @CreationTimestamp
     @Column(nullable = false)
     private String registeredAt;
+
+    public User(RegisterUserDto request) {
+        this.firstname = request.getFirstname();
+        this.lastname = request.getLastname();
+        this.email = request.getEmail();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -8,9 +8,9 @@ public class RegisterUserDto {
 
     private String email;
 
-    private String firstName;
+    private String firstname;
 
-    private String lastName;
+    private String lastname;
 
     private String password;
 }

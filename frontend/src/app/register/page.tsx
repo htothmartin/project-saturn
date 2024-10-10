@@ -23,6 +23,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { AuthLayout } from '@/components/AuthLayout/AuthLayout';
+import { RegisterReq } from '@/api/auth';
 
 const registerSchema = z
   .object({
@@ -66,6 +67,13 @@ const Register = (): JSX.Element => {
   });
 
   const onSubmit = (values: z.infer<typeof registerSchema>): void => {
+    RegisterReq(
+      values.email,
+      values.firstname,
+      values.lastname,
+      values.password,
+    );
+
     toast({
       title: 'Register',
       description: 'Sucessfully registered.',
@@ -80,6 +88,7 @@ const Register = (): JSX.Element => {
           <h1 className="pb-4 text-4xl font-bold">Register</h1>
           <Form {...registerForm}>
             <form
+              method="POST"
               onSubmit={registerForm.handleSubmit(onSubmit)}
               className="my-4">
               <FormField
