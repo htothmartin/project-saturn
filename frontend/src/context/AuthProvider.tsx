@@ -1,6 +1,7 @@
 'use client';
 
 import { me } from '@/api/user';
+import { useRouter } from 'next/navigation';
 import {
   createContext,
   Dispatch,
@@ -33,19 +34,23 @@ type Props = {
 
 export const AuthProvider = ({ children }: Props) => {
   const [auth, setAuth] = useState<Auth | undefined>();
+  const router = useRouter();
 
   useEffect(() => {
     const checkUserLoggedIn = async () => {
       try {
-        const { data } = await me();
-        if (data && data.user) {
-          setAuth(data.user);
+        const data = await me();
+        if (data) {
+          setAuth(data);
+          router.push('/projects');
         } else {
           setAuth(undefined);
+          router.push('/login');
         }
       } catch (error) {
         console.log('User is not logged in', error);
         setAuth(undefined);
+        //router.push('/login');
       }
     };
 

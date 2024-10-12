@@ -26,7 +26,10 @@ export const RegisterReq = async (
 };
 
 export const RefreshToken = async () => {
-  console.log('new access refresh');
   const { data } = await publicApi.post('/auth/refresh-token');
   return data.accessToken;
+};
+
+export const Logout = async () => {
+  await publicApi.post('/auth/logout');
 };

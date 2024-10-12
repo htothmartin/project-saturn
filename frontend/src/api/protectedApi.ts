@@ -27,13 +27,12 @@ protectedApi.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    console.log(originalRequest);
-
     if (error.response.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         accessToken = await RefreshToken();
         originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+        console.log(originalRequest);
         return protectedApi(originalRequest);
       } catch (refreshError) {
         console.log('Token refresh error', refreshError);

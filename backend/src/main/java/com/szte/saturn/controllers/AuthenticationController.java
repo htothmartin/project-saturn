@@ -63,9 +63,9 @@ public class AuthenticationController {
     @PostMapping("/refresh-token")
     public ResponseEntity<?> refresh(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-
+        
         if(cookies == null) {
-            return ResponseEntity.badRequest().body("No refreshtoken provided");
+            return ResponseEntity.badRequest().body("No refresh-token provided");
         }
 
         String refreshToken = "";
@@ -87,4 +87,23 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(new RefreshResponse().setAccessToken(newRefreshToken));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            SecurityContextHolder.clearContext();
+        }
+
+        ResponseCookie cookie = ResponseCookie.from("refresh-token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0) // Azaz, töröljük a sütit
+                .sameSite("Strict")
+                .build();
+
+        return ResponseEntity.ok().header("Set-Cookie", cookie.toString()).body("Successfully logged out");
+    }
+
 }
