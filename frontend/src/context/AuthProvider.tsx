@@ -1,6 +1,7 @@
 'use client';
 
 import { me } from '@/api/user';
+import { SplashScreen } from '@/components/SplashScreen';
 import { useRouter } from 'next/navigation';
 import {
   createContext,
@@ -50,16 +51,15 @@ export const AuthProvider = ({ children }: Props) => {
       } catch (error) {
         console.log('User is not logged in', error);
         setAuth(undefined);
-        //router.push('/login');
+        router.push('/login');
       }
     };
 
     checkUserLoggedIn();
   }, []);
-
   return (
     <AuthContext.Provider value={{ auth, setAuth }}>
-      {children}
+      {auth ? children : <SplashScreen />}
     </AuthContext.Provider>
   );
 };

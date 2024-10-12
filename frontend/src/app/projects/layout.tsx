@@ -37,7 +37,7 @@ export default function Layout({
             </div>
 
             <NavigationMenuItem>
-              <Link href="/home/" legacyBehavior passHref>
+              <Link href="/projects" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   Projects
                 </NavigationMenuLink>
@@ -51,7 +51,7 @@ export default function Layout({
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/home/createproject" legacyBehavior passHref>
+              <Link href="/projects/createproject" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   New Project
                 </NavigationMenuLink>

@@ -1,4 +1,3 @@
-import { SkyBackground } from './components/SkyBackgorund';
 import type { ReactElement } from 'react';
 
 type Props = {
@@ -7,10 +6,8 @@ type Props = {
 
 export const AuthLayout = ({ children }: Props): JSX.Element => {
   return (
-    <SkyBackground>
-      <div className="grid h-screen w-screen grid-cols-1 overflow-y-auto md:grid-cols-2">
-        {children}
-      </div>
-    </SkyBackground>
+    <div className="grid h-screen w-screen grid-cols-1 overflow-y-auto bg-login md:grid-cols-2">
+      {children}
+    </div>
   );
 };

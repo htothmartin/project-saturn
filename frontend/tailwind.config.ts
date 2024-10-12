@@ -12,7 +12,7 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        login: 'url("/images/bg-image.jpg")',
+        login: 'url("/images/contours.png")',
       },
 
       borderRadius: {
