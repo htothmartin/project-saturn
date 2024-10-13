@@ -48,8 +48,8 @@ export const AuthProvider = ({ children }: Props) => {
           setAuth(undefined);
           router.push('/login');
         }
-      } catch (error) {
-        console.log('User is not logged in', error);
+      } catch (_) {
+        console.log('User is not logged in');
         setAuth(undefined);
         router.push('/login');
       }
