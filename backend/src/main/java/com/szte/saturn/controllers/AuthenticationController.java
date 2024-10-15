@@ -51,7 +51,7 @@ public class AuthenticationController {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(jwtService.getRefreshExpirationTime())
+                .maxAge(jwtService.getRefreshExpirationTime() / 1000)
                 .sameSite("Strict")
                 .build();
 
@@ -99,7 +99,7 @@ public class AuthenticationController {
                 .httpOnly(true)
                 .secure(true)
                 .path("/")
-                .maxAge(0) // Azaz, töröljük a sütit
+                .maxAge(0)
                 .sameSite("Strict")
                 .build();
 

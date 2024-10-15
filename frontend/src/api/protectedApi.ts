@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { RefreshToken } from './auth';
+import axios, { AxiosError } from 'axios';
+import { Logout, RefreshToken } from './auth';
 
 export let accessToken = '';
 
@@ -32,10 +32,16 @@ protectedApi.interceptors.response.use(
       try {
         accessToken = await RefreshToken();
         originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
-        console.log(originalRequest);
         return protectedApi(originalRequest);
       } catch (refreshError) {
-        console.log('Token refresh error', refreshError);
+        const error = refreshError as AxiosError;
+        if (
+          error.response?.status === 400 &&
+          error.response.data == 'No refresh-token provided'
+        ) {
+          await Logout();
+          window.location.href = '/login';
+        }
         accessToken = '';
         return Promise.reject(refreshError);
       }
