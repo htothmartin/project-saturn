@@ -1,4 +1,4 @@
-import { setAccessToken } from './protectedApi';
+import { setAccessToken } from '@/utils/auth';
 import { publicApi } from './publicApi';
 
 export const LoginReq = async (email: string, password: string) => {
@@ -12,17 +12,12 @@ export const RegisterReq = async (
   lastname: string,
   password: string,
 ) => {
-  try {
-    await publicApi.post('/auth/signup', {
-      email,
-      firstname,
-      lastname,
-      password,
-    });
-  } catch (error) {
-    console.log('Register failed', error);
-    throw error;
-  }
+  await publicApi.post('/auth/signup', {
+    email,
+    firstname,
+    lastname,
+    password,
+  });
 };
 
 export const RefreshToken = async () => {

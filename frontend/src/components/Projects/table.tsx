@@ -11,10 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Project } from '@/model/project';
 import { useState } from 'react';
 
 type Props = {
-  projects: any[];
+  projects: Project[];
 };
 
 export const ProjectTable = ({ projects }: Props): JSX.Element => {

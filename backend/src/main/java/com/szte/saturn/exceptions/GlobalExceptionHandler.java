@@ -18,6 +18,8 @@ public class GlobalExceptionHandler {
     public ProblemDetail handleSecurityException(Exception exception){
         ProblemDetail errorDetail = null;
 
+        exception.printStackTrace();
+
         if (exception instanceof BadCredentialsException) {
             errorDetail = ProblemDetail.forStatusAndDetail(HttpStatusCode.valueOf(401), exception.getMessage());
             errorDetail.setProperty("description", "The username or password is incorrect");

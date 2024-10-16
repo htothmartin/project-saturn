@@ -1,9 +1,10 @@
 # Szakdolgozat
+
 ## Issue Tracker dokumentacio
 
 ### Rendszer specifikacio
-Az Issue tracker alkalmazasban az uj felhasznalok regisztralhatnak egy uj fiokot es belephetnek az email es jelszo paros segitsegvel. A felhasznalok letrehozhatnak projekteket. A projekteket elnevezhetik, kivalaszthatjak a fejlesztes tipusat es felhasznalokat hivatnak meg email alapjan.
-A projektekhez sprinteket vehetnek fel amikhez rendelhetnek taskokat.
+
+Az issu tracker alkalmazás célja, hogy otthoni és saját projekteket is könnyen lehessemn managelni egyedül, vagy akár kisebb csapatokban is. Az új felhasználók regisztrálhatnak egy új fiókot az oldalra, majd eztuán bejelentkezve érik el az oldal funkcióit. Lehetőségük van projekteket létrehozni, amihez meghívhatják ismerőseiket vagy az ismerőseik közül. A projektjeiket a főoldalon tekinthetik meg.
 
 ### Funkciok
 
@@ -13,12 +14,13 @@ A projektekhez sprinteket vehetnek fel amikhez rendelhetnek taskokat.
 - Felhasznalok meghivasa
 - Projekt setup
 - Taskok felvetele
-- Taskok allapota 
+- Taskok allapota
 - Comment a taskokon
-- Taskok priorititasa 
+- Taskok priorititasa
 - Sprintek letrehozasa
 
 ### Fukcionális követelmények
+
 1. Felhasználókezelés
    1. Az oldalra látogató felhasználóknak lehetőségük van regisztrálni az alkalmazásba. Megadandó adatok: vezetéknév, keresztnév, email, jelszó, jelszó ismét, születési dátum
    2. Lehetőség van belépésre az email cím és a jelszó megadásával.

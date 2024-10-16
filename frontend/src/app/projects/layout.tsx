@@ -15,8 +15,8 @@ import { Logout } from '@/api/auth';
 import { useRouter } from 'next/navigation';
 import { UserIcon } from '@/assets/icons/UserIcon';
 import { AuthProvider } from '@/context/AuthProvider';
-import { me } from '@/api/user';
 import useAuth from '@/hooks/useAuth';
+import { getProjectForUser } from '@/api/project';
 
 export default function Layout({
   children,
@@ -24,11 +24,11 @@ export default function Layout({
   children: JSX.Element;
 }>) {
   const router = useRouter();
-  const { setAuth } = useAuth();
+  const { setCurrentUser } = useAuth();
 
   const logout = async () => {
     await Logout();
-    setAuth(undefined);
+    setCurrentUser(undefined);
     router.push('/login');
   };
 
@@ -79,7 +79,7 @@ export default function Layout({
             <ThemeToggle />
             <Button
               variant="outline"
-              onClick={async () => console.log(await me())}>
+              onClick={async () => console.log(await getProjectForUser())}>
               <UserIcon />
               Profile
             </Button>

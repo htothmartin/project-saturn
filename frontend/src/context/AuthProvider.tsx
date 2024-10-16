@@ -1,5 +1,6 @@
 'use client';
 
+import { setupInterceptors } from '@/api/protectedApi';
 import { me } from '@/api/user';
 import { SplashScreen } from '@/components/SplashScreen';
 import { useRouter } from 'next/navigation';
@@ -11,7 +12,7 @@ import {
   useState,
 } from 'react';
 
-type Auth = {
+type CurrentUser = {
   id: number;
   firstname: string;
   lastname: string;
@@ -20,13 +21,13 @@ type Auth = {
 };
 
 type AuthContextType = {
-  auth: Auth | undefined;
-  setAuth: Dispatch<SetStateAction<Auth | undefined>>;
+  currentUser: CurrentUser | undefined;
+  setCurrentUser: Dispatch<SetStateAction<CurrentUser | undefined>>;
 };
 
 const AuthContext = createContext<AuthContextType>({
-  auth: undefined,
-  setAuth: () => {},
+  currentUser: undefined,
+  setCurrentUser: () => {},
 });
 
 type Props = {
@@ -34,7 +35,8 @@ type Props = {
 };
 
 export const AuthProvider = ({ children }: Props) => {
-  const [auth, setAuth] = useState<Auth | undefined>();
+  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>();
+  const [accessToken, setAccessToken] = useState<string>('');
   const router = useRouter();
 
   useEffect(() => {
@@ -42,24 +44,24 @@ export const AuthProvider = ({ children }: Props) => {
       try {
         const data = await me();
         if (data) {
-          setAuth(data);
+          setCurrentUser(data);
           router.push('/projects');
         } else {
-          setAuth(undefined);
+          setCurrentUser(undefined);
           router.push('/login');
         }
       } catch (_) {
         console.log('User is not logged in');
-        setAuth(undefined);
+        setCurrentUser(undefined);
         router.push('/login');
       }
     };
-
+    setupInterceptors(router, accessToken, setAccessToken);
     checkUserLoggedIn();
   }, []);
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
-      {auth ? children : <SplashScreen />}
+    <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
+      {currentUser ? children : <SplashScreen />}
     </AuthContext.Provider>
   );
 };

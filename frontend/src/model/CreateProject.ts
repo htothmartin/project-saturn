@@ -1,5 +1,4 @@
-export type Project = {
-  id: number;
+export type CreateProjectModel = {
   name: string;
   description: string;
   imageUrl: string;

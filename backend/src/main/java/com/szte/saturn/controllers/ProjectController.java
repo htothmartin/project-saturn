@@ -8,12 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/project")
+import java.util.List;
+
+@RequestMapping("/projects")
 @RestController
 public class ProjectController {
 
@@ -34,6 +33,16 @@ public class ProjectController {
         System.out.println(createProjectDto.getImageUrl());
         Project newProject = projectService.createProject(createProjectDto, currentUser);
         return ResponseEntity.ok(newProject);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Project>> getProjectByUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+
+        List<Project> projectsList = projectService.getAllProjects(currentUser);
+
+        return ResponseEntity.ok(projectsList);
     }
 
 

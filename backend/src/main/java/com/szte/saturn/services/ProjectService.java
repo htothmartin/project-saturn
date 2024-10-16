@@ -7,6 +7,8 @@ import com.szte.saturn.enums.ProjectStatus;
 import com.szte.saturn.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectService {
 
@@ -22,6 +24,10 @@ public class ProjectService {
         project.setProjectStatus(ProjectStatus.ACTIVE);
 
         return projectRepository.save(project);
+    }
+
+    public List<Project> getAllProjects(User user){
+        return projectRepository.findByOwnerId(user.getId());
     }
 
 

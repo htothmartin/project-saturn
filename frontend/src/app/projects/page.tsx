@@ -1,3 +1,4 @@
+import { ProjectCard } from '@/components/Project/Card';
 import { ProjectTable } from '@/components/Projects/table';
 
 const Home = (): JSX.Element => {
@@ -5,46 +6,53 @@ const Home = (): JSX.Element => {
     {
       id: 1,
       name: 'Website Redesign',
-      imageUrl: 'https://picsum.photos/300/300', // Fetching dummy image from Picsum
-      currentSprint: 'Sprint 1',
-      sprintProgress: 60,
-      status: 'In Progress',
+      description: 'adsf',
+      imageUrl:
+        'https://utfs.io/f/v9TWYtJIg8cm7UXZCAgk25wihMWTCRpZKdb1fco0Bnyust6F',
+      key: 'DG', // Fetching dummy image from Picsum
     },
     {
       id: 2,
       name: 'Mobile App Launch',
-      imageUrl: 'https://picsum.photos/300/300', // Fetching dummy image from Picsum
-      currentSprint: 'Sprint 2',
-      sprintProgress: 100,
-      status: 'Completed',
+      description: 'adsf',
+      imageUrl:
+        'https://utfs.io/f/v9TWYtJIg8cm7UXZCAgk25wihMWTCRpZKdb1fco0Bnyust6F',
+      key: 'DA', // Fetching dummy image from Picsum
     },
     {
       id: 3,
       name: 'Marketing Campaign',
-      imageUrl: 'https://picsum.photos/300/300', // Fetching dummy image from Picsum
-      currentSprint: 'Sprint 1',
-      sprintProgress: 0,
-      status: 'Not Started',
+      description: 'adsf',
+      imageUrl:
+        'https://utfs.io/f/v9TWYtJIg8cm7UXZCAgk25wihMWTCRpZKdb1fco0Bnyust6F',
+      key: 'DG', // Fetching dummy image from Picsum
     },
     {
       id: 4,
       name: 'New Feature Development',
-      imageUrl: 'https://picsum.photos/300/300', // Fetching dummy image from Picsum
-      currentSprint: 'Sprint 3',
-      sprintProgress: 40,
-      status: 'In Progress',
+      description: 'adsf',
+      imageUrl:
+        'https://utfs.io/f/v9TWYtJIg8cm7UXZCAgk25wihMWTCRpZKdb1fco0Bnyust6F', // Fetching dummy image from Picsum
+      key: 'CLD',
     },
     {
       id: 5,
       name: 'Product Update',
-      imageUrl: 'https://picsum.photos/300/300', // Fetching dummy image from Picsum
-      currentSprint: 'Sprint 1',
-      sprintProgress: 10,
-      status: 'On Hold',
+      description: 'adsf',
+      imageUrl:
+        'https://utfs.io/f/v9TWYtJIg8cm7UXZCAgk25wihMWTCRpZKdb1fco0Bnyust6F',
+      key: 'AD', // Fetching dummy image from Picsum
     },
   ];
+  return <></>;
 
-  return <ProjectTable projects={projects} />;
+  return (
+    <>
+      {projects.map((project) => (
+        <ProjectCard key={project.id} project={project} />
+      ))}
+    </>
+  );
 };
 
 export default Home;
