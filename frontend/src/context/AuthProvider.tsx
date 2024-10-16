@@ -2,7 +2,6 @@
 
 import { setupInterceptors } from '@/api/protectedApi';
 import { me } from '@/api/user';
-import { SplashScreen } from '@/components/SplashScreen';
 import { useRouter } from 'next/navigation';
 import {
   createContext,
@@ -23,11 +22,13 @@ type CurrentUser = {
 type AuthContextType = {
   currentUser: CurrentUser | undefined;
   setCurrentUser: Dispatch<SetStateAction<CurrentUser | undefined>>;
+  setAccessToken: Dispatch<SetStateAction<string>>;
 };
 
 const AuthContext = createContext<AuthContextType>({
   currentUser: undefined,
   setCurrentUser: () => {},
+  setAccessToken: () => {},
 });
 
 type Props = {
@@ -42,26 +43,30 @@ export const AuthProvider = ({ children }: Props) => {
   useEffect(() => {
     const checkUserLoggedIn = async () => {
       try {
-        const data = await me();
-        if (data) {
-          setCurrentUser(data);
-          router.push('/projects');
-        } else {
-          setCurrentUser(undefined);
-          router.push('/login');
+        if (!currentUser) {
+          const data = await me();
+          if (data) {
+            setCurrentUser(data);
+            router.push('/projects');
+          } else {
+            setCurrentUser(undefined);
+            router.push('/login');
+          }
         }
-      } catch (_) {
+      } catch (error) {
         console.log('User is not logged in');
+        console.error(error);
         setCurrentUser(undefined);
         router.push('/login');
       }
     };
-    setupInterceptors(router, accessToken, setAccessToken);
     checkUserLoggedIn();
+    setupInterceptors(router, accessToken, setAccessToken);
   }, []);
   return (
-    <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
-      {currentUser ? children : <SplashScreen />}
+    <AuthContext.Provider
+      value={{ currentUser, setCurrentUser, setAccessToken }}>
+      {children}
     </AuthContext.Provider>
   );
 };

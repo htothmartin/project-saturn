@@ -26,8 +26,10 @@ const CreateProject = (): JSX.Element => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    console.log(projectForm);
     console.log(data);
     const result = CreateNewProjectAction(data);
+    console.log('finish');
   };
 
   return (
@@ -81,7 +83,7 @@ const CreateProject = (): JSX.Element => {
               <div className="mt-6 flex justify-center">
                 <Button
                   type="submit"
-                  disabled={projectForm.formState.isSubmitting}
+                  disabled={projectForm.formState.isLoading}
                   className="w-52">
                   Submit
                 </Button>

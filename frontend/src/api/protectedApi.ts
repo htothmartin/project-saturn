@@ -25,6 +25,7 @@ export const setupInterceptors = (
   protectedApi.interceptors.response.use(
     (response) => response,
     async (error) => {
+      console.log(protectedApi.defaults.headers.common['Authorization']);
       const originalRequest = error.config;
 
       if (error.response.status === 403 && !originalRequest._retry) {
@@ -32,7 +33,10 @@ export const setupInterceptors = (
         try {
           const newAccessToken = await RefreshToken();
           setAccessToken(newAccessToken);
+
           originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+          protectedApi.defaults.headers.common['Authorization'] =
+            `Bearer ${newAccessToken}`;
           return protectedApi(originalRequest);
         } catch (refreshError) {
           const error = refreshError as AxiosError;

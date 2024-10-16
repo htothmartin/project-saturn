@@ -21,6 +21,7 @@ import { AuthLayout } from '@/components/AuthLayout/AuthLayout';
 import { LoginReq } from '@/api/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import useAuth from '@/hooks/useAuth';
 
 const loginSchema = z.object({
   email: z.string().email('This is not a valid email address.'),
@@ -38,11 +39,13 @@ const Login = () => {
   });
   const router = useRouter();
   const [pending, setPending] = useState<boolean>(false);
+  const { setAccessToken } = useAuth();
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setPending(true);
     try {
-      await LoginReq(values.email, values.password);
+      const data = await LoginReq(values.email, values.password);
+      setAccessToken(data.accessToken);
 
       toast({
         title: 'Login',

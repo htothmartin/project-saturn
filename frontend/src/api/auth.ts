@@ -1,9 +1,8 @@
-import { setAccessToken } from '@/utils/auth';
 import { publicApi } from './publicApi';
 
 export const LoginReq = async (email: string, password: string) => {
   const { data } = await publicApi.post('/auth/login', { email, password });
-  setAccessToken(data.accessToken);
+  return data;
 };
 
 export const RegisterReq = async (
