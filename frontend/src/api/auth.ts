@@ -1,4 +1,4 @@
-import { publicApi } from './publicApi';
+import { publicApi } from './axios';
 
 export const LoginReq = async (email: string, password: string) => {
   const { data } = await publicApi.post('/auth/login', { email, password });
@@ -19,8 +19,9 @@ export const RegisterReq = async (
   });
 };
 
-export const RefreshToken = async () => {
+export const refreshAccessToken = async () => {
   const { data } = await publicApi.post('/auth/refresh-token');
+  console.log(data);
   return data.accessToken;
 };
 

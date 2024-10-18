@@ -1,7 +1,10 @@
 'use client';
 
-import { setupInterceptors } from '@/api/protectedApi';
+import { refreshAccessToken } from '@/api/auth';
+import { protectedApi } from '@/api/axios';
 import { me } from '@/api/user';
+import { SplashScreen } from '@/components/SplashScreen';
+import { User } from '@/model/user';
 import { useRouter } from 'next/navigation';
 import {
   createContext,
@@ -11,64 +14,95 @@ import {
   useState,
 } from 'react';
 
-type CurrentUser = {
-  id: number;
-  firstname: string;
-  lastname: string;
-  email: string;
-  registeredAt: Date;
+type AuthContext = {
+  auth: Auth;
+  setAuth: Dispatch<SetStateAction<Auth>>;
+  isLoading: boolean;
 };
 
-type AuthContextType = {
-  currentUser: CurrentUser | undefined;
-  setCurrentUser: Dispatch<SetStateAction<CurrentUser | undefined>>;
-  setAccessToken: Dispatch<SetStateAction<string>>;
-};
-
-const AuthContext = createContext<AuthContextType>({
-  currentUser: undefined,
-  setCurrentUser: () => {},
-  setAccessToken: () => {},
+export const AuthContext = createContext<AuthContext>({
+  auth: { user: null, accessToken: '' },
+  setAuth: () => {},
+  isLoading: true,
 });
 
 type Props = {
   children: JSX.Element;
 };
 
+export type Auth = {
+  user: User | null;
+  accessToken: string;
+};
+
 export const AuthProvider = ({ children }: Props) => {
-  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>();
-  const [accessToken, setAccessToken] = useState<string>('');
+  const [auth, setAuth] = useState<Auth>({ user: null, accessToken: '' });
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const checkUserLoggedIn = async () => {
-      try {
-        if (!currentUser) {
-          const data = await me();
-          if (data) {
-            setCurrentUser(data);
-            router.push('/projects');
-          } else {
-            setCurrentUser(undefined);
-            router.push('/login');
-          }
+    const requestIntercept = protectedApi.interceptors.request.use(
+      (config) => {
+        if (!config.headers['Authorization']) {
+          config.headers['Authorization'] = `Bearer ${auth?.accessToken}`;
         }
-      } catch (error) {
-        console.log('User is not logged in');
-        console.error(error);
-        setCurrentUser(undefined);
-        router.push('/login');
-      }
+        return config;
+      },
+      (error) => Promise.reject(error),
+    );
+
+    const responseIntercept = protectedApi.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
+        if (error.response.status === 403 && !originalRequest?._retry) {
+          originalRequest._retry = true;
+          try {
+            const newAccessToken = await refreshAccessToken();
+            setAuth((prev) => {
+              return { ...prev, accessToken: newAccessToken };
+            });
+            originalRequest.headers['Authorization'] =
+              `Bearer ${newAccessToken}`;
+            protectedApi.defaults.headers.common['Authorization'] =
+              `Bearer ${newAccessToken}`;
+          } catch (error) {
+            setAuth({ user: null, accessToken: '' });
+            router.push('/login');
+            return Promise.reject(error);
+          }
+
+          return protectedApi(originalRequest);
+        }
+        return Promise.reject(error);
+      },
+    );
+
+    return () => {
+      protectedApi.interceptors.request.eject(requestIntercept);
+      protectedApi.interceptors.response.eject(responseIntercept);
     };
-    checkUserLoggedIn();
-    setupInterceptors(router, accessToken, setAccessToken);
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const user = await me();
+        setAuth((prev) => {
+          return { ...prev, user: user };
+        });
+        router.push('/projects');
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
   return (
-    <AuthContext.Provider
-      value={{ currentUser, setCurrentUser, setAccessToken }}>
-      {children}
+    <AuthContext.Provider value={{ auth, setAuth, isLoading }}>
+      {isLoading ? <SplashScreen /> : children}
     </AuthContext.Provider>
   );
 };
-
-export default AuthContext;

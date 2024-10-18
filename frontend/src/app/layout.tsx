@@ -1,27 +1,17 @@
 import type { Metadata, Viewport } from 'next';
-//import localFont from 'next/font/local';
 import { Montserrat } from 'next/font/google';
 import './scss/style.scss';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/AuthProvider';
+import { Suspense } from 'react';
+import Loading from './loading';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
   display: 'swap',
 });
-/*
-const geistSans = localFont({
-	src: './fonts/GeistVF.woff',
-	variable: '--font-geist-sans',
-	weight: '100 900',
-});
-const geistMono = localFont({
-	src: './fonts/GeistMonoVF.woff',
-	variable: '--font-geist-mono',
-	weight: '100 900',
-});
-*/
+
 export const viewport: Viewport = {
   initialScale: 1,
   width: 'device-width',
@@ -40,16 +30,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <AuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange>
-            {children}
-          </ThemeProvider>
-        </AuthProvider>
-        <Toaster />
+        <Suspense fallback={<Loading />}>
+          <AuthProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange>
+              {children}
+            </ThemeProvider>
+          </AuthProvider>
+          <Toaster />
+        </Suspense>
       </body>
     </html>
   );

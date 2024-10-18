@@ -14,7 +14,6 @@ import Link from 'next/link';
 import { Logout } from '@/api/auth';
 import { useRouter } from 'next/navigation';
 import { UserIcon } from '@/assets/icons/UserIcon';
-import useAuth from '@/hooks/useAuth';
 import { getProjectForUser } from '@/api/project';
 
 export default function Layout({
@@ -23,11 +22,9 @@ export default function Layout({
   children: JSX.Element;
 }>) {
   const router = useRouter();
-  const { setCurrentUser } = useAuth();
 
   const logout = async () => {
     await Logout();
-    setCurrentUser(undefined);
     router.push('/login');
   };
 
