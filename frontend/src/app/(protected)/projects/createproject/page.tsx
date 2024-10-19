@@ -16,20 +16,46 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { createProjectSchema } from '@/lib/schemas';
-import { CreateNewProjectAction } from './_actions';
+import { useState } from 'react';
+import { useUploadThing } from '@/utils/uploadthing';
+import { createNewProject } from '@/api/project';
 
 const CreateProject = (): JSX.Element => {
   type Inputs = z.infer<typeof createProjectSchema>;
+  const [file, setFile] = useState<File>();
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const projectForm = useForm<Inputs>({
     resolver: zodResolver(createProjectSchema),
   });
 
+  const { startUpload } = useUploadThing('imageUploader', {
+    onClientUploadComplete: (files) => {
+      setImageUrl(files[0].url);
+      console.log('uploaded successfully!');
+    },
+    onUploadError: () => {
+      alert('error occurred while uploading');
+    },
+    onUploadBegin: () => {
+      console.log('upload has begun for');
+    },
+  });
+
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    console.log(projectForm);
-    console.log(data);
-    const result = CreateNewProjectAction(data);
-    console.log('finish');
+    setIsLoading(true);
+    if (file) {
+      await startUpload([file]);
+    }
+
+    await createNewProject({
+      name: data.projectName,
+      description: data.projectDescription ?? '',
+      imageUrl: imageUrl,
+      key: data.projectKey,
+    });
+    setIsLoading(false);
   };
 
   return (
@@ -48,7 +74,7 @@ const CreateProject = (): JSX.Element => {
                   <FormItem>
                     <FormLabel>Project name</FormLabel>
                     <FormControl>
-                      <Input required {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -69,22 +95,40 @@ const CreateProject = (): JSX.Element => {
               />
               <FormField
                 control={projectForm.control}
+                name="projectImage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Project description</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept=".jpeg,.png"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          field.onChange(file);
+                          setFile(file);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={projectForm.control}
                 name="projectKey"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Project key</FormLabel>
                     <FormControl>
-                      <Input required {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <div className="mt-6 flex justify-center">
-                <Button
-                  type="submit"
-                  disabled={projectForm.formState.isLoading}
-                  className="w-52">
+                <Button type="submit" disabled={isLoading} className="w-52">
                   Submit
                 </Button>
               </div>

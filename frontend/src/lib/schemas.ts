@@ -12,6 +12,7 @@ export const fileSchema = z
 export const createProjectSchema = z.object({
   projectName: z.string().min(1, 'The project name is required.'),
   projectDescription: z.string().optional(),
+  projectImage: fileSchema,
   projectKey: z
     .string()
     .min(2, 'The project key is required.')
