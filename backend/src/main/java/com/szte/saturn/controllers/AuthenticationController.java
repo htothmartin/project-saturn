@@ -55,7 +55,7 @@ public class AuthenticationController {
                 .sameSite("Strict")
                 .build();
 
-        LoginResponse loginResponse = new LoginResponse().setMessage("success").setAccessToken(accessToken);
+        LoginResponse loginResponse = new LoginResponse().setMessage("success").setAccessToken(accessToken).setExpiresIn(jwtService.getAccessExpirationTime() / 1000);
 
         return ResponseEntity.ok().header("Set-Cookie", jwtCookie.toString()).body(loginResponse);
     }
