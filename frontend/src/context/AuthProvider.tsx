@@ -58,6 +58,7 @@ export const AuthProvider = ({ children }: Props) => {
         if (error.response.status === 403 && !originalRequest?._retry) {
           originalRequest._retry = true;
           try {
+            console.log(originalRequest);
             const newAccessToken = await refreshAccessToken();
             setAuth((prev) => {
               return { ...prev, accessToken: newAccessToken };

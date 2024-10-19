@@ -19,6 +19,7 @@ import { createProjectSchema } from '@/lib/schemas';
 import { useState } from 'react';
 import { useUploadThing } from '@/utils/uploadthing';
 import { createNewProject } from '@/api/project';
+import { toast } from 'sonner';
 
 const CreateProject = (): JSX.Element => {
   type Inputs = z.infer<typeof createProjectSchema>;
@@ -28,6 +29,12 @@ const CreateProject = (): JSX.Element => {
 
   const projectForm = useForm<Inputs>({
     resolver: zodResolver(createProjectSchema),
+    defaultValues: {
+      projectName: '',
+      projectDescription: '',
+      projectImage: undefined,
+      projectKey: '',
+    },
   });
 
   const { startUpload } = useUploadThing('imageUploader', {
@@ -45,17 +52,23 @@ const CreateProject = (): JSX.Element => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     setIsLoading(true);
-    if (file) {
-      await startUpload([file]);
-    }
+    try {
+      if (file) {
+        await startUpload([file]);
+      }
 
-    await createNewProject({
-      name: data.projectName,
-      description: data.projectDescription ?? '',
-      imageUrl: imageUrl,
-      key: data.projectKey,
-    });
-    setIsLoading(false);
+      await createNewProject({
+        name: data.projectName,
+        description: data.projectDescription ?? '',
+        imageUrl: imageUrl,
+        key: data.projectKey,
+      });
+      toast('Project successfuly created');
+    } catch {
+      toast('An error occured');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
