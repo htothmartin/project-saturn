@@ -55,14 +55,15 @@ const CreateProject = (): JSX.Element => {
     try {
       if (file) {
         await startUpload([file]);
+
+        await createNewProject({
+          name: data.projectName,
+          description: data.projectDescription ?? '',
+          imageUrl: imageUrl,
+          key: data.projectKey,
+        });
       }
 
-      await createNewProject({
-        name: data.projectName,
-        description: data.projectDescription ?? '',
-        imageUrl: imageUrl,
-        key: data.projectKey,
-      });
       toast('Project successfuly created');
     } catch {
       toast('An error occured');

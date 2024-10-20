@@ -92,7 +92,6 @@ export const AuthProvider = ({ children }: Props) => {
         setAuth((prev) => {
           return { ...prev, user: user };
         });
-        router.push('/projects');
       } catch (error) {
         console.error(error);
       } finally {

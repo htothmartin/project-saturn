@@ -37,6 +37,7 @@ public class ProjectController {
 
     @GetMapping("/")
     public ResponseEntity<List<Project>> getProjectByUser() {
+        System.out.println("All project");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
 
