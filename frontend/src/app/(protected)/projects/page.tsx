@@ -22,7 +22,7 @@ const Home = (): JSX.Element => {
   console.log(projects);
 
   return (
-    <div className="mt-8 flex flex-wrap justify-center gap-8">
+    <div className="mt-8 flex flex-wrap justify-start gap-8">
       {projects?.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}

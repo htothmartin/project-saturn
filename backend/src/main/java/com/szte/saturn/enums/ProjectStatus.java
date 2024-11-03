@@ -1,6 +1,7 @@
 package com.szte.saturn.enums;
 
-public enum ProjectStatus {
+public enum
+ProjectStatus {
     ACTIVE,
     COMPLETED,
     IN_PROGRESS,

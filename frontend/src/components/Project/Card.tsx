@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 import { MoreVertical } from 'lucide-react';
+import { ProjectStatusBadge } from '../ProjectStatus';
 
 type Props = {
   project: Project;
@@ -45,8 +46,11 @@ export const ProjectCard = ({ project }: Props): JSX.Element => {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex">
-          <Button>Open</Button>
+        <div className="flex flex-row py-4">
+          <ProjectStatusBadge statusType={project.projectStatus} />
+          <div className="ml-auto">
+            <Button>Open</Button>
+          </div>
         </div>
         <Progress value={49} />
       </CardContent>
