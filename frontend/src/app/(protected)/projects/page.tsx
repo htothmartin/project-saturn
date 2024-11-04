@@ -1,58 +1,32 @@
+'use client';
+
+import { getProjectForUser } from '@/api/project';
 import { ProjectCard } from '@/components/Project/Card';
-import { ProjectTable } from '@/components/Projects/table';
+import { Project } from '@/model/project';
+import { Dice1 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const Home = (): JSX.Element => {
-  const projects = [
-    {
-      id: 1,
-      name: 'Website Redesign',
-      description: 'adsf',
-      imageUrl:
-        'https://utfs.io/f/v9TWYtJIg8cm7UXZCAgk25wihMWTCRpZKdb1fco0Bnyust6F',
-      key: 'DG', // Fetching dummy image from Picsum
-    },
-    {
-      id: 2,
-      name: 'Mobile App Launch',
-      description: 'adsf',
-      imageUrl:
-        'https://utfs.io/f/v9TWYtJIg8cm7UXZCAgk25wihMWTCRpZKdb1fco0Bnyust6F',
-      key: 'DA', // Fetching dummy image from Picsum
-    },
-    {
-      id: 3,
-      name: 'Marketing Campaign',
-      description: 'adsf',
-      imageUrl:
-        'https://utfs.io/f/v9TWYtJIg8cm7UXZCAgk25wihMWTCRpZKdb1fco0Bnyust6F',
-      key: 'DG', // Fetching dummy image from Picsum
-    },
-    {
-      id: 4,
-      name: 'New Feature Development',
-      description: 'adsf',
-      imageUrl:
-        'https://utfs.io/f/v9TWYtJIg8cm7UXZCAgk25wihMWTCRpZKdb1fco0Bnyust6F', // Fetching dummy image from Picsum
-      key: 'CLD',
-    },
-    {
-      id: 5,
-      name: 'Product Update',
-      description: 'adsf',
-      imageUrl:
-        'https://utfs.io/f/v9TWYtJIg8cm7UXZCAgk25wihMWTCRpZKdb1fco0Bnyust6F',
-      key: 'AD', // Fetching dummy image from Picsum
-    },
-  ];
-  return <></>;
+  const [projects, setProjects] = useState<Project[] | undefined>(undefined);
+
+  const fetchProjects = async () => {
+    const { data } = await getProjectForUser();
+    setProjects(data);
+  };
+
+  useEffect(() => {
+    if (!projects) {
+      fetchProjects();
+    }
+  });
+  console.log(projects);
 
   return (
-    <>
-      {projects.map((project) => (
+    <div className="mt-8 flex flex-wrap justify-start gap-8">
+      {projects?.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}
-    </>
+    </div>
   );
 };
-
 export default Home;

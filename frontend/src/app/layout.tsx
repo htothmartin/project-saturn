@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Montserrat } from 'next/font/google';
 import './scss/style.scss';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider } from '@/context/AuthProvider';
 import { Suspense } from 'react';
 import Loading from './loading';

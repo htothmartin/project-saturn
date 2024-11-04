@@ -11,7 +11,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -23,6 +22,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { Auth } from '@/context/AuthProvider';
+import { toast } from 'sonner';
 
 const loginSchema = z.object({
   email: z.string().email('This is not a valid email address.'),
@@ -30,7 +30,6 @@ const loginSchema = z.object({
 });
 
 const Login = () => {
-  const { toast } = useToast();
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -50,15 +49,10 @@ const Login = () => {
         return { ...prev, accessToken: data.accessToken };
       });
 
-      toast({
-        title: 'Login',
-        description: 'Sucessfully login.',
-      });
       router.push('/projects');
     } catch (error) {
       console.log(error);
-      toast({
-        title: 'Login',
+      toast('Login', {
         description: 'Login failed.',
       });
     }

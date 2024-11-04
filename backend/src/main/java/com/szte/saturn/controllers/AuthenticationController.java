@@ -69,7 +69,7 @@ public class AuthenticationController {
         }
 
         String refreshToken = "";
-        String newRefreshToken = "";
+        String newAccessToken = "";
 
         for(Cookie cookie : cookies){
             if("refresh-token".equals(cookie.getName())){
@@ -82,10 +82,10 @@ public class AuthenticationController {
             final String userEmail = jwtService.extractUsername(refreshToken);
             final UserDetails currentUser = userService.getUserByEmail(userEmail);
 
-            newRefreshToken = jwtService.generateToken(currentUser, false);
+            newAccessToken = jwtService.generateToken(currentUser, false);
         }
 
-        return ResponseEntity.ok(new RefreshResponse().setAccessToken(newRefreshToken));
+        return ResponseEntity.ok(new RefreshResponse().setAccessToken(newAccessToken));
     }
 
     @PostMapping("/logout")

@@ -21,9 +21,9 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
 import { AuthLayout } from '@/components/AuthLayout/AuthLayout';
 import { RegisterReq } from '@/api/auth';
+import { toast } from 'sonner';
 
 const registerSchema = z
   .object({
@@ -54,7 +54,6 @@ const registerSchema = z
   });
 
 const Register = (): JSX.Element => {
-  const { toast } = useToast();
   const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -74,8 +73,7 @@ const Register = (): JSX.Element => {
       values.password,
     );
 
-    toast({
-      title: 'Register',
+    toast('Register', {
       description: 'Sucessfully registered.',
     });
   };
