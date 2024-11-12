@@ -1,5 +1,3 @@
-'use client';
-
 import { Project } from '@/model/project';
 import { Card, CardContent, CardHeader } from '../ui/card';
 import Image from 'next/image';
@@ -15,15 +13,13 @@ import {
 } from '../ui/dropdown-menu';
 import { MoreVertical } from 'lucide-react';
 import { ProjectStatusBadge } from '../ProjectStatus';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 type Props = {
   project: Project;
 };
 
 export const ProjectCard = ({ project }: Props): JSX.Element => {
-  const router = useRouter();
-
   return (
     <Card className="h-60 w-[450px]">
       <CardHeader className="flex flex-row gap-8 text-center">
@@ -54,9 +50,9 @@ export const ProjectCard = ({ project }: Props): JSX.Element => {
         <div className="flex flex-row py-4">
           <ProjectStatusBadge statusType={project.projectStatus} />
           <div className="ml-auto">
-            <Button onClick={() => router.push(`projects/${project.id}`)}>
-              Open
-            </Button>
+            <Link href={`projects/${project.id}`}>
+              <Button>Open</Button>
+            </Link>
           </div>
         </div>
         <Progress value={49} />

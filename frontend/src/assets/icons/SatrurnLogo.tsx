@@ -14,7 +14,7 @@ export const SaturnLogo = ({ size = 64 }: Props): JSX.Element => {
       id="Layer_1"
       xmlns="http://www.w3.org/2000/svg"
       transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"
-      stroke="#ffffff"
+      stroke="currentColor"
       strokeWidth="0.64">
       <title>SatrunLogo</title>
       <g id="SVGRepo_bgCarrier" strokeWidth="0" />

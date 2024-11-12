@@ -2,14 +2,7 @@
 
 import { Board } from '@/components/Board';
 import { DraggableTicket } from '@/components/DraggableTicket';
-import {
-  useDroppable,
-  useDraggable,
-  DragOverlay,
-  UniqueIdentifier,
-  DragEndEvent,
-  DndContext,
-} from '@dnd-kit/core';
+import { UniqueIdentifier, DragEndEvent, DndContext } from '@dnd-kit/core';
 import { useState } from 'react';
 
 const Project = (): JSX.Element => {

@@ -2,6 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Layout({
@@ -10,6 +12,8 @@ export default function Layout({
   children: JSX.Element;
 }>) {
   const [isOpen, setIsOpen] = useState<boolean>(true);
+
+  const params = useParams<{ id: string }>();
 
   return (
     <div className="flex h-screen w-screen">
@@ -23,9 +27,15 @@ export default function Layout({
         </Button>
         {isOpen && (
           <>
-            <Button>Board</Button>
-            <Button>Tasks</Button>
-            <Button>Members</Button>
+            <Button>
+              <Link href="">Board</Link>
+            </Button>
+            <Button>
+              <Link href={`${params.id}/tickets`}>Tasks</Link>
+            </Button>
+            <Button>
+              <Link href={'/'}>Members</Link>
+            </Button>
           </>
         )}
       </div>

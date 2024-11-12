@@ -12,9 +12,10 @@ import {
 import { NavigationMenuList } from '@radix-ui/react-navigation-menu';
 import Link from 'next/link';
 import { Logout } from '@/api/auth';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { UserIcon } from '@/assets/icons/UserIcon';
 import { getProjectForUser } from '@/api/project';
+import { ModalTypes } from '@/enums/ModalTypes';
 
 export default function Layout({
   children,
@@ -22,6 +23,7 @@ export default function Layout({
   children: JSX.Element;
 }>) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const logout = async () => {
     await Logout();
@@ -52,7 +54,10 @@ export default function Layout({
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/projects/createproject" legacyBehavior passHref>
+              <Link
+                href={`${pathname}?modal=${ModalTypes.CreateProject}`}
+                legacyBehavior
+                passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   New Project
                 </NavigationMenuLink>
