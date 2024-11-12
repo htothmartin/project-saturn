@@ -3,7 +3,6 @@
 import { getProjectForUser } from '@/api/project';
 import { ProjectCard } from '@/components/Project/Card';
 import { Project } from '@/model/project';
-import { Dice1 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const Home = (): JSX.Element => {
@@ -22,7 +21,7 @@ const Home = (): JSX.Element => {
   console.log(projects);
 
   return (
-    <div className="mt-8 flex flex-wrap justify-start gap-8">
+    <div className="mt-8 flex h-full w-full flex-wrap justify-start gap-8">
       {projects?.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}

@@ -30,7 +30,7 @@ export default function Layout({
 
   return (
     <div className="flex h-screen w-screen flex-col">
-      <div className="flex w-screen flex-row items-center bg-background">
+      <div className="flex w-screen flex-row items-center border-b-2 bg-background">
         <NavigationMenu className="bg-background p-4">
           <NavigationMenuList className="flex flex-row items-center gap-4">
             <div className="mr-4">
@@ -77,8 +77,8 @@ export default function Layout({
             onClick={async () => {
               try {
                 console.log(await getProjectForUser());
-              } catch (er) {
-                console.log('asd');
+              } catch (error) {
+                console.log(error);
               }
             }}>
             <UserIcon />
