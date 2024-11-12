@@ -1,3 +1,5 @@
+import { IssueType } from '@/enums/IssueType';
+import { TicketPriority } from '@/enums/TicketPriority';
 import { z } from 'zod';
 
 export const fileSchema = z
@@ -17,4 +19,11 @@ export const createProjectSchema = z.object({
     .string()
     .min(2, 'The project key is required.')
     .max(6, "The porject key can't be longer than 6 character."),
+});
+
+export const addTicketSchema = z.object({
+  ticketTitle: z.string().min(1, 'The ticket title is required.'),
+  ticketDescription: z.string().optional(),
+  ticketPriority: z.nativeEnum(TicketPriority),
+  issueType: z.nativeEnum(IssueType),
 });

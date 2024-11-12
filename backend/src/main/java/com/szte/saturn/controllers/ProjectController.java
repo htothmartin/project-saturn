@@ -22,7 +22,7 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<Project> create(@RequestBody CreateProjectDto createProjectDto) {
         System.out.println(createProjectDto.getName());
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -35,9 +35,8 @@ public class ProjectController {
         return ResponseEntity.ok(newProject);
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public ResponseEntity<List<Project>> getProjectByUser() {
-        System.out.println("All project");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
 

@@ -16,17 +16,18 @@ const Project = (): JSX.Element => {
   };
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      {!parent ? ticket : null}
-      <div className="m-4 grid h-full w-full grid-cols-4 gap-4">
+    <div className="m-4 grid h-full w-full grid-cols-4 gap-4 overflow-y-scroll">
+      <DndContext onDragEnd={handleDragEnd}>
+        {!parent ? ticket : null}
+
         <Board id="commited">{parent === 'commited' ? ticket : <></>}</Board>
         <Board id="inprogress">
           {parent === 'inprogress' ? ticket : <></>}
         </Board>
         <Board id="review">{parent === 'review' ? ticket : <></>}</Board>
         <Board id="closed">{parent === 'closed' ? ticket : <></>}</Board>
-      </div>
-    </DndContext>
+      </DndContext>
+    </div>
   );
 };
 

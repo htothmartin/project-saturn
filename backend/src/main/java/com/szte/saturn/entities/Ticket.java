@@ -1,8 +1,9 @@
 package com.szte.saturn.entities;
 
+import com.szte.saturn.dtos.CreateTicketDto;
+import com.szte.saturn.enums.IssueType;
 import com.szte.saturn.enums.TicketPriority;
 import com.szte.saturn.enums.TicketStatus;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,13 @@ import java.util.Date;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class Ticket {
+
+    public Ticket(CreateTicketDto ticketDto) {
+        this.title = ticketDto.getTitle();
+        this.description = ticketDto.getDescription();
+        this.ticketPriority = ticketDto.getPriority();
+        this.issueType = ticketDto.getType();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,6 +55,10 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TicketStatus ticketStatus;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private IssueType issueType;
 
     @CreationTimestamp
     @Column(nullable = false)

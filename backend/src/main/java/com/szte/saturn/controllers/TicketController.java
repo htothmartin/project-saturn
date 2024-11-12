@@ -1,11 +1,13 @@
 package com.szte.saturn.controllers;
 
+import com.szte.saturn.dtos.CreateTicketDto;
 import com.szte.saturn.entities.Ticket;
+import com.szte.saturn.entities.User;
 import com.szte.saturn.services.TicketService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +19,17 @@ public class TicketController {
 
     public TicketController(TicketService ticketService) {
         this.ticketService = ticketService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Ticket> create(@RequestBody CreateTicketDto addTicketDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        User currentUser = (User) authentication.getPrincipal();
+
+        Ticket ticket = ticketService.createTicket(addTicketDto, currentUser);
+
+        return ResponseEntity.ok(ticket);
     }
 
     public ResponseEntity<List<Ticket>> getAllByProjectsTickets(@PathVariable Integer projectId ) {

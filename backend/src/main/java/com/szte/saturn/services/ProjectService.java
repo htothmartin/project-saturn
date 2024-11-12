@@ -30,5 +30,7 @@ public class ProjectService {
         return projectRepository.findByOwnerId(user.getId());
     }
 
+    public Project getProject(Integer id){ return projectRepository.findById(id).orElse(null); }
+
 
 }
