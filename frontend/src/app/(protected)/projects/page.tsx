@@ -1,24 +1,25 @@
 'use client';
 
-import { getProjectForUser } from '@/api/project';
 import { ProjectCard } from '@/components/Project/Card';
-import { Project } from '@/model/project';
-import { useEffect, useState } from 'react';
+import {
+  fetchProjects,
+  selectProjects,
+} from '@/lib/store/features/project/projectSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { useEffect } from 'react';
 
 const Home = (): JSX.Element => {
-  const [projects, setProjects] = useState<Project[] | undefined>(undefined);
+  const dispatch = useAppDispatch();
 
-  const fetchProjects = async () => {
-    const { data } = await getProjectForUser();
-    setProjects(data);
-  };
+  const projects = useAppSelector(selectProjects);
+  console.log(projects);
 
   useEffect(() => {
-    if (!projects) {
-      fetchProjects();
+    console.log(projects);
+    if (projects.length === 0) {
+      dispatch(fetchProjects());
     }
-  });
-  console.log(projects);
+  }, []);
 
   return (
     <div className="mt-8 flex h-full w-full flex-wrap justify-start gap-8">

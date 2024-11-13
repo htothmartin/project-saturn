@@ -21,7 +21,6 @@ export const RegisterReq = async (
 
 export const refreshAccessToken = async () => {
   const { data } = await publicApi.post('/auth/refresh-token');
-  console.log(data);
   return data.accessToken;
 };
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { Modal } from '@/components/Modals';
+import StoreProvider from '@/context/StoreProvider';
 import useAuth from '@/hooks/useAuth';
 
 export default function Layout({
@@ -9,9 +10,9 @@ export default function Layout({
   useAuth();
 
   return (
-    <>
+    <StoreProvider>
       {children}
       <Modal />
-    </>
+    </StoreProvider>
   );
 }
