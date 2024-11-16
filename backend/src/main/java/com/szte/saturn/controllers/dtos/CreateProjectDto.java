@@ -1,4 +1,4 @@
-package com.szte.saturn.dtos;
+package com.szte.saturn.controllers.dtos;
 
 import lombok.Getter;
 import lombok.Setter;

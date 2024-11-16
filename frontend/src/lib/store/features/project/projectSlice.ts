@@ -59,6 +59,6 @@ export const {
   fetchActiveProjectError,
 } = projectSlice.actions;
 
-export const selectProjects = (state: RootState) => state.project.projects;
+export const selectProjects = (state: RootState) => state.project;
 
 export default projectSlice.reducer;

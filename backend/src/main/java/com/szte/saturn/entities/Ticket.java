@@ -1,6 +1,6 @@
 package com.szte.saturn.entities;
 
-import com.szte.saturn.dtos.CreateTicketDto;
+import com.szte.saturn.controllers.dtos.CreateTicketDto;
 import com.szte.saturn.enums.IssueType;
 import com.szte.saturn.enums.TicketPriority;
 import com.szte.saturn.enums.TicketStatus;

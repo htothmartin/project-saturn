@@ -1,8 +1,6 @@
 package com.szte.saturn.dtos;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class UserDTO {

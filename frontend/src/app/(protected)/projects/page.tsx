@@ -10,12 +10,12 @@ import { useEffect } from 'react';
 const Home = (): JSX.Element => {
   const dispatch = useAppDispatch();
 
-  const projects = useAppSelector(selectProjects);
+  const { projects, isProjectsFetching } = useAppSelector(selectProjects);
   console.log(projects);
 
   useEffect(() => {
     console.log(projects);
-    if (projects.length === 0) {
+    if (projects.length === 0 && !isProjectsFetching) {
       dispatch(fetchProjects());
     }
   }, []);

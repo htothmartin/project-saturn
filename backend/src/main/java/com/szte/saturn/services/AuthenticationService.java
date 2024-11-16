@@ -1,10 +1,9 @@
 package com.szte.saturn.services;
 
-import com.szte.saturn.dtos.LoginUserDto;
-import com.szte.saturn.dtos.RegisterUserDto;
+import com.szte.saturn.controllers.AuthenticationController;
+import com.szte.saturn.controllers.dtos.RegisterUserDto;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,7 +31,7 @@ public class AuthenticationService {
         return userRepository.save(user);
     }
 
-    public User signIn(LoginUserDto request) {
+    public User signIn(AuthenticationController.LoginUserDto request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         return userRepository.findByEmail(request.getEmail()).orElseThrow();

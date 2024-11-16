@@ -1,6 +1,6 @@
 package com.szte.saturn.services;
 
-import com.szte.saturn.dtos.CreateTicketDto;
+import com.szte.saturn.controllers.dtos.CreateTicketDto;
 import com.szte.saturn.entities.Project;
 import com.szte.saturn.entities.Ticket;
 import com.szte.saturn.entities.User;

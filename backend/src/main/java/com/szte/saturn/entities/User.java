@@ -1,6 +1,6 @@
 package com.szte.saturn.entities;
 
-import com.szte.saturn.dtos.RegisterUserDto;
+import com.szte.saturn.controllers.dtos.RegisterUserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,10 +1,8 @@
 package com.szte.saturn.controllers;
 
-import com.szte.saturn.dtos.LoginUserDto;
-import com.szte.saturn.dtos.RegisterUserDto;
+import com.szte.saturn.controllers.dtos.RegisterUserDto;
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
-import com.szte.saturn.repositories.UserRepository;
 import com.szte.saturn.responses.LoginResponse;
 import com.szte.saturn.responses.RefreshResponse;
 import com.szte.saturn.services.AuthenticationService;
@@ -12,11 +10,12 @@ import com.szte.saturn.services.JwtService;
 import com.szte.saturn.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/auth")
@@ -107,4 +106,12 @@ public class AuthenticationController {
         return ResponseEntity.ok().header("Set-Cookie", cookie.toString()).body("Successfully logged out");
     }
 
+    @Getter
+    @Setter
+    public static class LoginUserDto {
+
+        private String email;
+
+        private String password;
+    }
 }

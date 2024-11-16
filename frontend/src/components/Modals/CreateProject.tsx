@@ -19,12 +19,18 @@ import { useState } from 'react';
 import { useUploadThing } from '@/utils/uploadthing';
 import { createNewProject } from '@/api/project';
 import { toast } from 'sonner';
+import { usePathname, useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { fetchProjects } from '@/lib/store/features/project/projectSlice';
 
 export const CreateProject = (): JSX.Element => {
   type Inputs = z.infer<typeof createProjectSchema>;
   const [file, setFile] = useState<File>();
   const [imageUrl, setImageUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const dispatch = useDispatch();
 
   const projectForm = useForm<Inputs>({
     resolver: zodResolver(createProjectSchema),
@@ -64,6 +70,8 @@ export const CreateProject = (): JSX.Element => {
       }
 
       toast('Project successfuly created');
+      dispatch(fetchProjects());
+      router.push(pathname);
     } catch {
       toast('An error occured');
     } finally {
