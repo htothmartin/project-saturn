@@ -1,0 +1,7 @@
+export enum TicketStatus {
+  COMMITED = 'COMMITED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  IN_REVIEW = 'IN_REVIEW',
+  BLOCKED = 'BLOCKED',
+  CLOSED = 'CLOSED',
+}

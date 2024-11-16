@@ -13,9 +13,8 @@ import { NavigationMenuList } from '@radix-ui/react-navigation-menu';
 import Link from 'next/link';
 import { Logout } from '@/api/auth';
 import { usePathname, useRouter } from 'next/navigation';
-import { UserIcon } from '@/assets/icons/UserIcon';
-import { getProjectForUser } from '@/api/project';
 import { ModalTypes } from '@/enums/ModalTypes';
+import { UserAvatar } from '@/components/UserAvatar';
 
 export default function Layout({
   children,
@@ -77,18 +76,7 @@ export default function Layout({
             Logout
           </Button>
           <ThemeToggle />
-          <Button
-            variant="outline"
-            onClick={async () => {
-              try {
-                console.log(await getProjectForUser());
-              } catch (error) {
-                console.log(error);
-              }
-            }}>
-            <UserIcon />
-            Profile
-          </Button>
+          <UserAvatar />
         </div>
       </div>
       {children}

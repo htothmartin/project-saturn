@@ -7,3 +7,7 @@ export const createNewProject = async (project: ProjectForm) => {
 export const getProjectForUser = async () => {
   return await protectedApi.get('/projects');
 };
+
+export const getActiveProject = async (id: string) => {
+  return await protectedApi.get(`/projects/${id}`);
+};

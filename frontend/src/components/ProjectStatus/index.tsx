@@ -6,7 +6,6 @@ type Props = {
 };
 
 export const ProjectStatusBadge = ({ statusType }: Props): JSX.Element => {
-  console.log(statusType);
   switch (statusType) {
     case ProjectStatus.ACTIVE:
       return <Badge variant="green">{ProjectStatus.ACTIVE}</Badge>;

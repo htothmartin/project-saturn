@@ -13,7 +13,7 @@ export default function Layout({
 }>) {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
-  const params = useParams<{ id: string }>();
+  const params = useParams<{ projectId: string }>();
 
   return (
     <div className="flex h-screen w-screen">
@@ -28,13 +28,13 @@ export default function Layout({
         {isOpen && (
           <>
             <Button>
-              <Link href="">Board</Link>
+              <Link href={`/projects/${params.projectId}`}>Board</Link>
             </Button>
             <Button>
-              <Link href={`${params.id}/tickets`}>Tasks</Link>
+              <Link href={`/projects/${params.projectId}/tickets`}>Tasks</Link>
             </Button>
             <Button>
-              <Link href={'/'}>Members</Link>
+              <Link href={`/projects/${params.projectId}`}>Members</Link>
             </Button>
           </>
         )}

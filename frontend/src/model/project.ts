@@ -1,3 +1,6 @@
+import { Ticket } from './tickets';
+import { User } from './user';
+
 export type Project = {
   id: number;
   name: string;
@@ -12,4 +15,10 @@ export type ProjectForm = {
   description: string;
   imageUrl: string;
   key: string;
+};
+
+export type ActiveProject = {
+  project: Project;
+  tickets: Ticket[];
+  users: User[];
 };

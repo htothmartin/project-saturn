@@ -25,7 +25,7 @@ public class ProjectController {
 
     @PostMapping()
     public ResponseEntity<Project> create(@RequestBody CreateProjectDto createProjectDto) {
-        
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User currentUser = (User) authentication.getPrincipal();
@@ -43,14 +43,12 @@ public class ProjectController {
         return ResponseEntity.ok(projectsList);
     }
 
-    @GetMapping("/id")
-    public ResponseEntity<ActiveProjectDTO> getProjectById(@RequestParam Integer id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ActiveProjectDTO> getProjectById(@PathVariable Integer id) {
 
         ActiveProjectDTO activeProject = projectService.getProject(id);
 
         return ResponseEntity.ok(activeProject);
-
-
     }
 
 }

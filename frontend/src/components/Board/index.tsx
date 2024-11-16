@@ -1,11 +1,17 @@
+import { Ticket } from '@/model/tickets';
 import { useDroppable } from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { BoardItem } from './BoardItem';
 
 type Props = {
-  children: JSX.Element;
   id: string;
+  tickets: Ticket[];
 };
 
-export function Board({ children, id }: Props): JSX.Element {
+export function Board({ id, tickets }: Props): JSX.Element {
   const { isOver, setNodeRef } = useDroppable({
     id: id,
   });
@@ -16,11 +22,19 @@ export function Board({ children, id }: Props): JSX.Element {
 
   return (
     <div
-      className="h-full w-full rounded-md border-2 border-solid border-foreground bg-secondary"
-      ref={setNodeRef}
-      style={style}>
+      key={`board-${id}`}
+      className="h-full w-full rounded-md border-2 border-solid border-foreground bg-secondary">
       Board
-      {children}
+      <SortableContext
+        id={id}
+        items={tickets}
+        strategy={verticalListSortingStrategy}>
+        <div ref={setNodeRef} style={style}>
+          {tickets.map((ticket) => (
+            <BoardItem key={ticket.id} ticket={ticket} />
+          ))}
+        </div>
+      </SortableContext>
     </div>
   );
 }

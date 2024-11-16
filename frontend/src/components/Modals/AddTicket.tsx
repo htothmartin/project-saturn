@@ -26,12 +26,17 @@ import {
 } from '../ui/select';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/lib/store/hooks';
+import { fetchActiveProject } from '@/lib/store/features/project/projectSlice';
 
 export const AddTicket = (): JSX.Element => {
   type Inputs = z.infer<typeof addTicketSchema>;
-  const params = useParams<{ id: string }>();
-  const projectId = params.id;
+  const params = useParams<{ projectId: string }>();
+  const projectId = params.projectId;
+  const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const ticketForm = useForm<Inputs>({
     resolver: zodResolver(addTicketSchema),
@@ -53,6 +58,8 @@ export const AddTicket = (): JSX.Element => {
         projectId: Number(projectId),
       });
       toast('Ticket successfully added');
+      dispatch(fetchActiveProject(projectId));
+      router.push(pathname);
     } catch {
       toast('An error occured');
     }

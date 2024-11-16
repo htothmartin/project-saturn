@@ -1,10 +1,10 @@
-import { Project } from '@/model/project';
+import { ActiveProject, Project } from '@/model/project';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 
 type ProjectState = {
   projects: Project[];
-  activeProject: Project | null;
+  activeProject: ActiveProject | null;
   isProjectsFetching: boolean;
   isActiveJobFetching: boolean;
 };
@@ -27,19 +27,18 @@ const projectSlice = createSlice({
       state: ProjectState,
       action: PayloadAction<Project[]>,
     ) {
-      console.log(action);
       state.projects = action.payload;
       state.isProjectsFetching = false;
     },
     fetchProjectsError(state: ProjectState) {
       state.isProjectsFetching = false;
     },
-    fetchActiveProject(state: ProjectState) {
+    fetchActiveProject(state: ProjectState, action: PayloadAction<string>) {
       state.isActiveJobFetching = true;
     },
     fetchActiveProjectSuccess(
       state: ProjectState,
-      action: PayloadAction<Project>,
+      action: PayloadAction<ActiveProject>,
     ) {
       state.activeProject = action.payload;
       state.isActiveJobFetching = false;
@@ -60,5 +59,8 @@ export const {
 } = projectSlice.actions;
 
 export const selectProjects = (state: RootState) => state.project;
+
+export const selectActiveProject = (state: RootState) =>
+  state.project.activeProject;
 
 export default projectSlice.reducer;
