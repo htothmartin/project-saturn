@@ -1,6 +1,7 @@
 package com.szte.saturn.controllers;
 
 import com.szte.saturn.dtos.CreateProjectDto;
+import com.szte.saturn.dtos.ProjectDTO;
 import com.szte.saturn.entities.Project;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.services.ProjectService;
@@ -36,11 +37,11 @@ public class ProjectController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Project>> getProjectByUser() {
+    public ResponseEntity<List<ProjectDTO>> getProjectByUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
 
-        List<Project> projectsList = projectService.getAllProjects(currentUser);
+        List<ProjectDTO> projectsList = projectService.getAllProjects(currentUser);
 
         return ResponseEntity.ok(projectsList);
     }

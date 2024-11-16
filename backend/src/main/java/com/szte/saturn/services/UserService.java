@@ -1,7 +1,10 @@
 package com.szte.saturn.services;
 
+import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
+import com.szte.saturn.mapper.UserMapper;
 import com.szte.saturn.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -13,20 +16,25 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository){
+    private final UserMapper userMapper;
+
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    public List<User> allUsers(){
+    public List<UserDTO> allUsers(){
         List<User> users = new ArrayList<>();
 
         userRepository.findAll().forEach(users::add);
-
-        return  users;
+        return  userMapper.toListDto(users);
     }
 
-    public User getUserByEmail(String email){
-        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    public UserDTO getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        return userMapper.toDto(user);
     }
-    
 }

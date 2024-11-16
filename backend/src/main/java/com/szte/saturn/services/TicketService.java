@@ -5,6 +5,7 @@ import com.szte.saturn.entities.Project;
 import com.szte.saturn.entities.Ticket;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.enums.TicketStatus;
+import com.szte.saturn.repositories.ProjectRepository;
 import com.szte.saturn.repositories.TicketRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,11 @@ import java.util.List;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
-    private final ProjectService projectService;
+    private final ProjectRepository projectRepository;
 
-    public TicketService(TicketRepository ticketRepository, ProjectService projectService) {
+    public TicketService(TicketRepository ticketRepository, ProjectRepository projectRepository) {
         this.ticketRepository = ticketRepository;
-        this.projectService = projectService;
+        this.projectRepository = projectRepository;
     }
 
     public List<Ticket> getAllTickets(Integer projectId) {
@@ -27,7 +28,7 @@ public class TicketService {
 
     public Ticket createTicket(CreateTicketDto request, User user){
 
-        Project project = projectService.getProject(request.getProjectId());
+        Project project = projectRepository.findById(request.getProjectId()).orElseThrow();
 
         Ticket ticket = new Ticket(request).setReporter(user).setTicketStatus(TicketStatus.COMMITED).setProject(project);
 

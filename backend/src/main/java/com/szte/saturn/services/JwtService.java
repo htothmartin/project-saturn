@@ -1,5 +1,7 @@
 package com.szte.saturn.services;
 
+import com.szte.saturn.entities.User;
+import com.szte.saturn.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,6 +20,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
+    private final UserRepository userRepository;
     @Value("${security.jwt.access-key}")
     private String accessSecretKey;
 
@@ -30,6 +33,10 @@ public class JwtService {
     @Value("${security.jwt.expiration-time-refresh}")
     private long refreshExpiration;
 
+    public JwtService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -39,7 +46,9 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails, boolean isRefresh) {
+    public String generateToken(int userId, boolean isRefresh) {
+        User userDetails = userRepository.findUserById(userId).orElse(null);
+
         return generateToken(new HashMap<>(), userDetails, isRefresh);
     }
 

@@ -2,6 +2,7 @@ package com.szte.saturn.controllers;
 
 import com.szte.saturn.dtos.LoginUserDto;
 import com.szte.saturn.dtos.RegisterUserDto;
+import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.repositories.UserRepository;
 import com.szte.saturn.responses.LoginResponse;
@@ -44,8 +45,8 @@ public class AuthenticationController {
     public ResponseEntity<?> authenticate(@RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.signIn(loginUserDto);
 
-        String accessToken = jwtService.generateToken(authenticatedUser, false);
-        String refreshToken = jwtService.generateToken(authenticatedUser, true);
+        String accessToken = jwtService.generateToken(authenticatedUser.getId(), false);
+        String refreshToken = jwtService.generateToken(authenticatedUser.getId(), true);
 
         ResponseCookie jwtCookie = ResponseCookie.from("refresh-token", refreshToken)
                 .httpOnly(true)
@@ -80,9 +81,9 @@ public class AuthenticationController {
         if( !refreshToken.isEmpty()){
 
             final String userEmail = jwtService.extractUsername(refreshToken);
-            final UserDetails currentUser = userService.getUserByEmail(userEmail);
+            final UserDTO currentUser = userService.getUserByEmail(userEmail);
 
-            newAccessToken = jwtService.generateToken(currentUser, false);
+            newAccessToken = jwtService.generateToken(currentUser.getId(), false);
         }
 
         return ResponseEntity.ok(new RefreshResponse().setAccessToken(newAccessToken));

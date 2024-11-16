@@ -1,5 +1,4 @@
 'use client';
-
 import { ProjectCard } from '@/components/Project/Card';
 import {
   fetchProjects,

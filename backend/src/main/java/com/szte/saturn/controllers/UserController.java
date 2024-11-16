@@ -1,5 +1,6 @@
 package com.szte.saturn.controllers;
 
+import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -31,8 +32,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> allUser(){
-        List<User>  users = userService.allUsers();
+    public ResponseEntity<List<UserDTO>> allUser(){
+        List<UserDTO>  users = userService.allUsers();
 
         return ResponseEntity.ok(users);
     }
