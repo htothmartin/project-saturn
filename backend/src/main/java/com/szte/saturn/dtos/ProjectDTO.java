@@ -8,17 +8,21 @@ import java.util.Date;
 @Data
 public class ProjectDTO {
 
-    private Integer id;
+    private Long id;
 
     private String name;
 
     private String description;
-
-    private String imageUrl;
 
     private Date createdAt;
 
     private UserDTO owner;
 
     private ProjectStatus projectStatus;
+
+    private boolean pin;
+
+    private Integer ticketCount;
+
+    private Integer closedTickets;
 }

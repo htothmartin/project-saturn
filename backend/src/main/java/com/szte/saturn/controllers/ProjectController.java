@@ -34,21 +34,30 @@ public class ProjectController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ProjectDTO>> getProjectByUser() {
+    public ResponseEntity<List<ProjectDTO>> getProjectByUser(@RequestParam(defaultValue = "asc") String sort, @RequestParam(defaultValue = "") String q) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
-
-        List<ProjectDTO> projectsList = projectService.getAllProjects(currentUser);
+        List<ProjectDTO> projectsList = projectService.getProjectsByUser(currentUser, sort, q);
 
         return ResponseEntity.ok(projectsList);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ActiveProjectDTO> getProjectById(@PathVariable Integer id) {
-
-        ActiveProjectDTO activeProject = projectService.getProject(id);
+    public ResponseEntity<ActiveProjectDTO> getProjectById(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        ActiveProjectDTO activeProject = projectService.getProject(id, currentUser.getId());
 
         return ResponseEntity.ok(activeProject);
+    }
+
+    @PostMapping("/{id}/pin")
+    public ResponseEntity<ProjectDTO> pinProject(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        ProjectDTO pinnedProject = projectService.pinProject(id, currentUser.getId());
+
+        return ResponseEntity.ok(pinnedProject);
     }
 
 }

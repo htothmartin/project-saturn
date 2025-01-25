@@ -17,5 +17,5 @@ public class CreateTicketDto {
 
     private IssueType type;
 
-    private Integer projectId;
+    private Long projectId;
 }

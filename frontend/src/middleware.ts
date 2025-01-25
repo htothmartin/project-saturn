@@ -3,6 +3,10 @@ import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
+  if (request.nextUrl.pathname === '/') {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
+
   const refreshToken = cookies().get('refresh-token');
   if (!refreshToken) {
     return NextResponse.redirect(new URL('/login', request.url));
@@ -12,5 +16,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/projects/:path*',
+  matcher: ['/', '/projects/:path*'],
 };

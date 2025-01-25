@@ -22,55 +22,54 @@ import java.util.Date;
 @Accessors(chain = true)
 public class Ticket {
 
-    public Ticket(CreateTicketDto ticketDto) {
-        this.title = ticketDto.getTitle();
-        this.description = ticketDto.getDescription();
-        this.ticketPriority = ticketDto.getPriority();
-        this.issueType = ticketDto.getType();
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
-    @Column
+    @Column(name = "title", length = 150)
     private String title;
 
-    @Column
+    @Column(name = "description")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TicketPriority priority;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TicketStatus status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private IssueType issueType;
+
+    @Column(name = "created_at")
+    @CreationTimestamp
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private Date updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "assignee_id")
     private User assignee;
 
     @ManyToOne
-    @JoinColumn(name = "project_id", nullable = false)
-    private Project project;
-
-    @ManyToOne
     @JoinColumn(name = "reporter_id", nullable = false)
     private User reporter;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TicketStatus ticketStatus;
+    @ManyToOne
+    @JoinColumn(name = "project_id", nullable = false)
+    private Project project;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private IssueType issueType;
-
-    @CreationTimestamp
-    @Column(nullable = false)
-    private Date createdAt;
-
-    @UpdateTimestamp
-    @Column(nullable = false)
-    private Date updatedAt;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TicketPriority ticketPriority;
+    public Ticket(CreateTicketDto ticketDto) {
+        this.title = ticketDto.getTitle();
+        this.description = ticketDto.getDescription();
+        this.priority = ticketDto.getPriority();
+        this.issueType = ticketDto.getType();
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.szte.saturn.mapper;
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,11 @@ public class UserMapper {
     private ModelMapper modelMapper;
 
     public UserDTO toDto(User user) {
-        return modelMapper.map(user, UserDTO.class);
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        if(userDTO.getProfilePictureUrl() == null){
+            userDTO.setProfilePictureUrl("");
+        }
+        return userDTO;
     }
 
     public List<UserDTO> toListDto(List<User> users) {

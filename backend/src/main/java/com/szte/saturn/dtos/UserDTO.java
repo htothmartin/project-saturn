@@ -5,9 +5,11 @@ import lombok.Data;
 @Data
 public class UserDTO {
 
-    private Integer id;
+    private Long id;
 
     private String firstname;
 
     private String lastname;
+
+    private String profilePictureUrl;
 }

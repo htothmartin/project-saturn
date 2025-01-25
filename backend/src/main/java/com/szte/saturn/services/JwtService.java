@@ -46,7 +46,7 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(int userId, boolean isRefresh) {
+    public String generateToken(Long userId, boolean isRefresh) {
         User userDetails = userRepository.findUserById(userId).orElse(null);
 
         return generateToken(new HashMap<>(), userDetails, isRefresh);

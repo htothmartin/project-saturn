@@ -13,7 +13,4 @@ public class ActiveProjectDTO {
     private List<TicketDTO> tickets;
 
     private Set<UserDTO> users;
-
-
-
 }

@@ -22,7 +22,7 @@ public class TicketService {
         this.projectRepository = projectRepository;
     }
 
-    public List<Ticket> getAllTickets(Integer projectId) {
+    public List<Ticket> getAllTickets(Long projectId) {
         return ticketRepository.findByProjectId(projectId);
     }
 
@@ -30,7 +30,7 @@ public class TicketService {
 
         Project project = projectRepository.findById(request.getProjectId()).orElseThrow();
 
-        Ticket ticket = new Ticket(request).setReporter(user).setTicketStatus(TicketStatus.COMMITED).setProject(project);
+        Ticket ticket = new Ticket(request).setReporter(user).setStatus(TicketStatus.COMMITED).setProject(project);
 
         return ticketRepository.save(ticket);
     }

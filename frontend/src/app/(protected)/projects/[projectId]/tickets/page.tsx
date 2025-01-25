@@ -1,7 +1,7 @@
 'use client';
 
+import { SearchBar } from '@/components/SearchBar';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -15,12 +15,18 @@ import {
 import { ModalTypes } from '@/enums/ModalTypes';
 import { useActiveJob } from '@/hooks/useActiveJob';
 import { useModal } from '@/hooks/useModal';
-import { ArrowRight, SearchIcon } from 'lucide-react';
+import { selectFilter } from '@/lib/store/features/project/projectSelectors';
+import { useAppSelector } from '@/lib/store/hooks';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Tickets = (): JSX.Element => {
   const { activeProject } = useActiveJob();
   const { getModalUrl } = useModal();
+  const router = useRouter();
+
+  const filter = useAppSelector(selectFilter);
 
   const tickets = activeProject?.tickets;
 
@@ -30,12 +36,8 @@ const Tickets = (): JSX.Element => {
         <Link href={getModalUrl(ModalTypes.AddTicket)}>
           <Button>Add</Button>
         </Link>
-
-        <div className="ml-auto flex gap-2 align-middle">
-          <Input></Input>
-          <Button>
-            <SearchIcon className="m-2" />
-          </Button>
+        <div className="ml-auto">
+          <SearchBar value={filter.q} />
         </div>
       </div>
       <Table>
@@ -60,10 +62,12 @@ const Tickets = (): JSX.Element => {
               <TableCell>{ticket.status}</TableCell>
               <TableCell>{ticket.ticketPriority}</TableCell>
               <TableCell className="text-right">
-                {ticket?.assigne?.firstname ?? ''}
+                {ticket?.assigne?.firstname}
               </TableCell>
               <TableCell>
-                <Button variant="ghost">
+                <Button
+                  onClick={() => router.push(`tickets/${ticket.id}`)}
+                  variant="ghost">
                   <ArrowRight />
                 </Button>
               </TableCell>

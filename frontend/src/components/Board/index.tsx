@@ -27,7 +27,7 @@ export function Board({ id, tickets }: Props): JSX.Element {
       Board
       <SortableContext
         id={id}
-        items={tickets}
+        items={tickets.map((item) => item.id)}
         strategy={verticalListSortingStrategy}>
         <div ref={setNodeRef} style={style}>
           {tickets.map((ticket) => (

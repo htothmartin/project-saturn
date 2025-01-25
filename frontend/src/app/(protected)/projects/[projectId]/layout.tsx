@@ -27,14 +27,16 @@ export default function Layout({
         </Button>
         {isOpen && (
           <>
-            <Button>
+            <Button asChild>
               <Link href={`/projects/${params.projectId}`}>Board</Link>
             </Button>
-            <Button>
+            <Button asChild>
               <Link href={`/projects/${params.projectId}/tickets`}>Tasks</Link>
             </Button>
-            <Button>
-              <Link href={`/projects/${params.projectId}`}>Members</Link>
+            <Button asChild>
+              <Link href={`/projects/${params.projectId}/members`}>
+                Members
+              </Link>
             </Button>
           </>
         )}

@@ -1,9 +1,7 @@
 'use client';
 
-import {
-  fetchActiveProject,
-  selectProjects,
-} from '@/lib/store/features/project/projectSlice';
+import { selectProjects } from '@/lib/store/features/project/projectSelectors';
+import { fetchActiveProject } from '@/lib/store/features/project/projectSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { useParams } from 'next/navigation';
 import { useEffect } from 'react';

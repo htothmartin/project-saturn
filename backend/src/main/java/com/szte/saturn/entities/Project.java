@@ -8,7 +8,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -19,44 +24,49 @@ import java.util.Set;
 @NoArgsConstructor
 @Accessors(chain = true)
 public class Project {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Integer id;
 
-    @Column(nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    @Column(name = "name", length = 50)
     private String name;
 
-    @Column
+    @Column(name = "description")
     private String description;
 
-    @Column
-    private String imageUrl;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private ProjectStatus status;
 
+    @Column(name = "created_at")
     @CreationTimestamp
-    @Column(nullable = false)
-    private String createdAt;
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private Date updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ProjectStatus projectStatus;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Ticket> tickets;
 
-    @ManyToMany
-    @JoinTable(
-            name = "project_users", // Join table name
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Sprint> sprints;
+
+    @ManyToMany(mappedBy = "projects")
+    private Set<User> users = new HashSet<>();
+
+    @ManyToMany(mappedBy = "pinnedProjects")
+    private Set<User> pinnedProjects = new HashSet<>();
+
 
     public Project(CreateProjectDto request){
         this.name = request.getName();
         this.description = request.getDescription();
-        this.imageUrl = request.getImageUrl();
     }
 
 }

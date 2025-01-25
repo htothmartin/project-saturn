@@ -2,15 +2,15 @@
 
 ## EK Diagram
 
-![ek diagram](./ek.drawio.png)
+![ek diagram](./diagram.png)
 
 ## Relációs adatbázisséma
 
 Felhasználó(<u>id</u>, keresztnév, vezetéknév, email, jelszó, regisztrált, profilkép_url)
 
-Projekt (<u>id</u>, név, létrehozva, frissítve, <i>felhaználó_id</u>, ikon)
+Projekt (<u>id</u>, név, létrehozva, frissítve, <i>felhaználó_id</i>, ikon)
 
-Feladat (<u>id</u>, leírás, cím, prioritás, típus, státusz, létrehozva, frissítve, <i>hozzásrendelt_id<i>, <i>bejelentő_id</i>, <i>projekt_id</i>)
+Feladat (<u>id</u>, leírás, cím, prioritás, típus, státusz, létrehozva, frissítve, <i>hozzásrendelt_id</i>, <i>bejelentő_id</i>, <i>projekt_id</i>)
 
 Sprint (<u>id</u>, szám, kezdő_dátum, befejező_dátum, <i>projekt_id</i>)
 
@@ -18,7 +18,9 @@ Tevékenységnapló (<u>id</u>, <i>felhasználó_id</i>, tevékenység, időbél
 
 Komment (<u>id</u>, tartalom, <i>létrehozó_id</i>, <i>feladat_id</i>)
 
-Felhasználó_Projek (<u><i>felhasználó_id</i></u>, <u><i>projekt_id</i></u>)
+Felhasználó_Projektek (<u><i>felhasználó_id</i></u>, <u><i>projekt_id</i></u>)
+
+Kitűzött_Projektek (<u><i>felhasználó_id</i></u>, <u><i>projekt_id</i></u>)
 
     A séma első normál formában, mivel miden attributum atomi.
 
@@ -106,7 +108,14 @@ Felhasználó_Projek (<u><i>felhasználó_id</i></u>, <u><i>projekt_id</i></u>)
 
 ---
 
-### **Felhasználó_Projek**
+### **Felhasználó_Projektek**
+
+| **Mező**       | **Típus** | **Megjegyzés**       |
+| -------------- | --------- | -------------------- |
+| felhasználó_id | INTEGER   | PK, FK (Felhasználó) |
+| projekt_id     | INTEGER   | PK, FK (Projekt)     |
+
+### **Kitűzött_Projektek**
 
 | **Mező**       | **Típus** | **Megjegyzés**       |
 | -------------- | --------- | -------------------- |

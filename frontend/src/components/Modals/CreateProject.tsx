@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/form';
 import { createProjectSchema } from '@/lib/schemas';
 import { useState } from 'react';
-import { useUploadThing } from '@/utils/uploadthing';
 import { createNewProject } from '@/api/project';
 import { toast } from 'sonner';
 import { usePathname, useRouter } from 'next/navigation';
@@ -25,8 +24,6 @@ import { fetchProjects } from '@/lib/store/features/project/projectSlice';
 
 export const CreateProject = (): JSX.Element => {
   type Inputs = z.infer<typeof createProjectSchema>;
-  const [file, setFile] = useState<File>();
-  const [imageUrl, setImageUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -37,37 +34,18 @@ export const CreateProject = (): JSX.Element => {
     defaultValues: {
       projectName: '',
       projectDescription: '',
-      projectImage: undefined,
       projectKey: '',
-    },
-  });
-
-  const { startUpload } = useUploadThing('imageUploader', {
-    onClientUploadComplete: (files) => {
-      setImageUrl(files[0].url);
-      console.log('uploaded successfully!');
-    },
-    onUploadError: () => {
-      alert('error occurred while uploading');
-    },
-    onUploadBegin: () => {
-      console.log('upload has begun for');
     },
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     setIsLoading(true);
     try {
-      if (file) {
-        await startUpload([file]);
-
-        await createNewProject({
-          name: data.projectName,
-          description: data.projectDescription ?? '',
-          imageUrl: imageUrl,
-          key: data.projectKey,
-        });
-      }
+      await createNewProject({
+        name: data.projectName,
+        description: data.projectDescription ?? '',
+        key: data.projectKey,
+      });
 
       toast('Project successfuly created');
       dispatch(fetchProjects());
@@ -103,27 +81,6 @@ export const CreateProject = (): JSX.Element => {
               <FormLabel>Project description</FormLabel>
               <FormControl>
                 <Textarea {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={projectForm.control}
-          name="projectImage"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Project description</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  accept=".jpeg,.png"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    field.onChange(file);
-                    setFile(file);
-                  }}
-                />
               </FormControl>
               <FormMessage />
             </FormItem>

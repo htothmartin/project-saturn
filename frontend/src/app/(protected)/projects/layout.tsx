@@ -15,6 +15,7 @@ import { Logout } from '@/api/auth';
 import { usePathname, useRouter } from 'next/navigation';
 import { ModalTypes } from '@/enums/ModalTypes';
 import { UserAvatar } from '@/components/UserAvatar';
+import useAuth from '@/hooks/useAuth';
 
 export default function Layout({
   children,
@@ -23,6 +24,8 @@ export default function Layout({
 }>) {
   const router = useRouter();
   const pathname = usePathname();
+
+  const { auth } = useAuth();
 
   const logout = async () => {
     await Logout();
@@ -76,7 +79,7 @@ export default function Layout({
             Logout
           </Button>
           <ThemeToggle />
-          <UserAvatar />
+          <UserAvatar imageUrl={auth.user?.profileImgUrl ?? ''} />
         </div>
       </div>
       {children}

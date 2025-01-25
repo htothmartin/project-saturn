@@ -51,7 +51,7 @@ const Login = () => {
 
       router.push('/projects');
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast('Login', {
         description: 'Login failed.',
       });

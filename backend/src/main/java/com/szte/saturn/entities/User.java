@@ -1,5 +1,6 @@
 package com.szte.saturn.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.szte.saturn.controllers.dtos.RegisterUserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,8 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Table(name="users")
 @Entity
@@ -22,25 +22,46 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "firstname", nullable = false, length = 50)
     private String firstname;
 
-    @Column(nullable = false)
+    @Column(name = "lastname", nullable = false, length = 50)
     private String lastname;
 
-    @Column(unique = true, length = 100, nullable = false)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "registered_at")
     @CreationTimestamp
-    @Column(nullable = false)
-    private String registeredAt;
+    private Date registeredAt;
+
+    @Column(name = "profile_picture_url")
+    private String profilePictureUrl;
+
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "user_projects",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    private Set<Project> projects = new HashSet<>();
+
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "pinned_projects",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    private Set<Project> pinnedProjects = new HashSet<>();
+
 
     public User(RegisterUserDto request) {
         this.firstname = request.getFirstname();

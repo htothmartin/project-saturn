@@ -1,12 +1,14 @@
 import { ActiveProject, Project } from '@/model/project';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../store';
+import { SortOrder } from '@/enums/SortOrder';
+import { Filter } from '@/model/filter';
 
 type ProjectState = {
   projects: Project[];
   activeProject: ActiveProject | null;
   isProjectsFetching: boolean;
   isActiveJobFetching: boolean;
+  filter: Filter;
 };
 
 const initialState: ProjectState = {
@@ -14,6 +16,7 @@ const initialState: ProjectState = {
   activeProject: null,
   isProjectsFetching: false,
   isActiveJobFetching: false,
+  filter: { sort: SortOrder.Ascending, q: '' },
 };
 
 const projectSlice = createSlice({
@@ -33,7 +36,8 @@ const projectSlice = createSlice({
     fetchProjectsError(state: ProjectState) {
       state.isProjectsFetching = false;
     },
-    fetchActiveProject(state: ProjectState, action: PayloadAction<string>) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    fetchActiveProject(state: ProjectState, _: PayloadAction<string>) {
       state.isActiveJobFetching = true;
     },
     fetchActiveProjectSuccess(
@@ -46,6 +50,20 @@ const projectSlice = createSlice({
     fetchActiveProjectError(state: ProjectState) {
       state.isActiveJobFetching = false;
     },
+    setSortOrder(state: ProjectState, action: PayloadAction<SortOrder>) {
+      state.filter.sort = action.payload;
+    },
+    setSearchValue(state: ProjectState, action: PayloadAction<string>) {
+      state.filter.q = action.payload;
+    },
+    pinProjectSuccess(state: ProjectState, action: PayloadAction<Project>) {
+      state.projects = state.projects.map((project) => {
+        if (project.id === action.payload.id) {
+          return action.payload;
+        }
+        return project;
+      });
+    },
   },
 });
 
@@ -56,11 +74,9 @@ export const {
   fetchActiveProject,
   fetchActiveProjectSuccess,
   fetchActiveProjectError,
+  setSortOrder,
+  setSearchValue,
+  pinProjectSuccess,
 } = projectSlice.actions;
-
-export const selectProjects = (state: RootState) => state.project;
-
-export const selectActiveProject = (state: RootState) =>
-  state.project.activeProject;
 
 export default projectSlice.reducer;
