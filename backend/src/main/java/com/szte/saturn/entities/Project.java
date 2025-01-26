@@ -1,5 +1,6 @@
 package com.szte.saturn.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.szte.saturn.controllers.dtos.CreateProjectDto;
 import com.szte.saturn.enums.ProjectStatus;
 import jakarta.persistence.*;
@@ -57,10 +58,23 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Sprint> sprints;
 
-    @ManyToMany(mappedBy = "projects")
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_projects",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private Set<User> users = new HashSet<>();
 
-    @ManyToMany(mappedBy = "pinnedProjects")
+
+    @ManyToMany
+
+    @JoinTable(
+            name = "pinned_projects",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private Set<User> pinnedProjects = new HashSet<>();
 
 

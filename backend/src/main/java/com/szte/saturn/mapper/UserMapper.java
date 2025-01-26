@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @Component
 public class UserMapper {
 
-
     @Autowired
     private ModelMapper modelMapper;
 
@@ -22,6 +21,7 @@ public class UserMapper {
         if(userDTO.getProfilePictureUrl() == null){
             userDTO.setProfilePictureUrl("");
         }
+        userDTO.setFullName(user.getFirstname() + " " + user.getLastname());
         return userDTO;
     }
 

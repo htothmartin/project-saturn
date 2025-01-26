@@ -32,8 +32,7 @@ import { fetchActiveProject } from '@/lib/store/features/project/projectSlice';
 
 export const AddTicket = (): JSX.Element => {
   type Inputs = z.infer<typeof addTicketSchema>;
-  const params = useParams<{ projectId: string }>();
-  const projectId = params.projectId;
+  const { projectId } = useParams<{ projectId: string }>();
   const pathname = usePathname();
   const router = useRouter();
   const dispatch = useAppDispatch();

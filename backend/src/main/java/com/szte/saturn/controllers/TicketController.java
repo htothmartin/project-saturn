@@ -32,9 +32,9 @@ public class TicketController {
         return ResponseEntity.ok(ticket);
     }
 
-    @GetMapping("/")
+    @GetMapping("/{projectId}")
     public ResponseEntity<List<Ticket>> getAllByProjectsTickets(@PathVariable Long projectId ) {
-        List<Ticket> tickets = ticketService.getAllTickets(projectId);
+        List<Ticket> tickets = ticketService.getTicketsByProjects(projectId);
 
         return ResponseEntity.ok(tickets);
     }

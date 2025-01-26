@@ -7,6 +7,7 @@ import com.szte.saturn.entities.User;
 import com.szte.saturn.enums.TicketStatus;
 import com.szte.saturn.repositories.ProjectRepository;
 import com.szte.saturn.repositories.TicketRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,20 +16,20 @@ import java.util.List;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
-    private final ProjectRepository projectRepository;
+    private final ProjectService projectService;
 
-    public TicketService(TicketRepository ticketRepository, ProjectRepository projectRepository) {
+    public TicketService(TicketRepository ticketRepository, ProjectService projectService) {
         this.ticketRepository = ticketRepository;
-        this.projectRepository = projectRepository;
+        this.projectService = projectService;
     }
 
-    public List<Ticket> getAllTickets(Long projectId) {
+    public List<Ticket> getTicketsByProjects(Long projectId) {
         return ticketRepository.findByProjectId(projectId);
     }
 
     public Ticket createTicket(CreateTicketDto request, User user){
 
-        Project project = projectRepository.findById(request.getProjectId()).orElseThrow();
+        Project project = projectService.getProjectById(request.getProjectId());
 
         Ticket ticket = new Ticket(request).setReporter(user).setStatus(TicketStatus.COMMITED).setProject(project);
 

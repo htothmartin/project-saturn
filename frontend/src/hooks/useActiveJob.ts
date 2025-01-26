@@ -12,10 +12,10 @@ export const useActiveJob = () => {
   const { activeProject, isActiveJobFetching } = useAppSelector(selectProjects);
 
   useEffect(() => {
-    if (activeProject === null && !isActiveJobFetching) {
+    if (!isActiveJobFetching) {
       dispatch(fetchActiveProject(params.projectId));
     }
-  }, [activeProject]);
+  }, [params.projectId]);
 
   return { activeProject, isActiveJobFetching };
 };

@@ -20,7 +20,11 @@ export type ProjectForm = {
 };
 
 export type ActiveProject = {
-  project: Project;
+  id: number;
+  name: string;
+  description: string;
+  key: string;
+  projectStatus: ProjectStatus;
   tickets: Ticket[];
   users: User[];
 };

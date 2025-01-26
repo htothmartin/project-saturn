@@ -3,6 +3,7 @@ package com.szte.saturn.controllers;
 import com.szte.saturn.controllers.dtos.CreateProjectDto;
 import com.szte.saturn.dtos.ActiveProjectDTO;
 import com.szte.saturn.dtos.ProjectDTO;
+import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.Project;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.services.ProjectService;
@@ -44,9 +45,8 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ActiveProjectDTO> getProjectById(@PathVariable Long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        ActiveProjectDTO activeProject = projectService.getProject(id, currentUser.getId());
+
+        ActiveProjectDTO activeProject = projectService.getProject(id);
 
         return ResponseEntity.ok(activeProject);
     }
@@ -60,4 +60,19 @@ public class ProjectController {
         return ResponseEntity.ok(pinnedProject);
     }
 
+    @PostMapping("/{projectId}/users/{userId}")
+    public ResponseEntity<String> addUserToProject(@PathVariable Long projectId,  @PathVariable Long userId) {
+
+        projectService.addUserToProject(projectId, userId);
+
+
+        return ResponseEntity.ok().body("Successfully added to project");
+    }
+
+    @DeleteMapping("/{projectId}/users/{userId}")
+    public ResponseEntity<String> deleteUserFromProject(@PathVariable Long projectId,  @PathVariable Long userId) {
+        projectService.deleteUserFromProject(projectId, userId);
+
+        return ResponseEntity.ok().body("Successfully deleted from project");
+    }
 }

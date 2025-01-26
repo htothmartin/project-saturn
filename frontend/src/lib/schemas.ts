@@ -17,3 +17,7 @@ export const addTicketSchema = z.object({
   ticketPriority: z.nativeEnum(TicketPriority),
   issueType: z.nativeEnum(IssueType),
 });
+
+export const addMemeberSchema = z.object({
+  email: z.string().email(),
+});

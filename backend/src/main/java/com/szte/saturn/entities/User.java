@@ -44,22 +44,12 @@ public class User implements UserDetails {
     @Column(name = "profile_picture_url")
     private String profilePictureUrl;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "users")
     @JsonIgnore
-    @JoinTable(
-            name = "user_projects",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id")
-    )
     private Set<Project> projects = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "pinnedProjects")
     @JsonIgnore
-    @JoinTable(
-            name = "pinned_projects",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "project_id")
-    )
     private Set<Project> pinnedProjects = new HashSet<>();
 
 

@@ -36,5 +36,4 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
             "FROM pinned_projects p WHERE p.project_id = :projectId AND p.user_id = :userId", nativeQuery = true)
     boolean findByOwnerId(@Param("projectId") Integer projectId, @Param("userId") Integer userId);
 
-
 }

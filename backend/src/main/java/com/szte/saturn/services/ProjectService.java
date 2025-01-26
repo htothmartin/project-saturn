@@ -3,6 +3,7 @@ package com.szte.saturn.services;
 import com.szte.saturn.controllers.dtos.CreateProjectDto;
 import com.szte.saturn.dtos.ActiveProjectDTO;
 import com.szte.saturn.dtos.ProjectDTO;
+import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.Project;
 import com.szte.saturn.entities.Ticket;
 import com.szte.saturn.entities.User;
@@ -12,6 +13,7 @@ import com.szte.saturn.repositories.ProjectRepository;
 import com.szte.saturn.repositories.TicketRepository;
 import com.szte.saturn.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -24,14 +26,16 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
     private final ProjectMapper projectMapper;
-    private final TicketRepository ticketRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public ProjectService(ProjectRepository projectRepository, ProjectMapper projectMapper, TicketRepository ticketRepository, UserRepository userRepository){
+    public ProjectService(ProjectRepository projectRepository, ProjectMapper projectMapper,@Lazy UserService userService) {
         this.projectRepository = projectRepository;
         this.projectMapper = projectMapper;
-        this.ticketRepository = ticketRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
+    }
+
+    public Project getProjectById(Long projectId){
+        return projectRepository.findById(projectId).orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     public Project createProject(CreateProjectDto request, User user){
@@ -50,30 +54,42 @@ public class ProjectService {
         return projectMapper.toListDto(projects, user.getId());
     }
 
-    public ActiveProjectDTO getProject(Long id, Long userId){
+    public ActiveProjectDTO getProject(Long projectId){
 
-        Project project = projectRepository.findById(id).orElse(null);
-        List<Ticket> tickets = ticketRepository.findByProjectId(id);
-        Set<User> users = projectRepository.findUsersByProjectId(id);
+        Project project = getProjectById(projectId);
 
-
-        return projectMapper.toActiveProjectDTO(project, tickets, users, userId);
+        return projectMapper.toActiveProjectDTO(project);
     }
 
-    public ProjectDTO pinProject(Long id, Long userId){
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        Project project = projectRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Project not found"));
-        if(user.getPinnedProjects().contains(project)){
-            user.getPinnedProjects().remove(project);
-        } else {
-            user.getPinnedProjects().add(project);
-        }
-        userRepository.save(user);
+    public ProjectDTO pinProject(Long projectId, Long userId){
+        User user = userService.findUserById(userId);
+        Project project = getProjectById(projectId);
 
-        System.out.println(project.getName());
+        if(project.getPinnedProjects().contains(user)){
+            project.getPinnedProjects().remove(user);
+        } else {
+            project.getPinnedProjects().add(user);
+        }
+        projectRepository.save(project);
 
         return projectMapper.toDto(project, user.getId());
     }
 
+    public void addUserToProject(Long projectId, Long userId) {
+        User user = userService.findUserById(userId);
+        Project project = getProjectById(projectId);
+        if(user.getProjects().contains(project) || project.getOwner().getId().equals(user.getId())){
+            throw new IllegalArgumentException("This user already added to the project");
+        }
+        project.getUsers().add(user);
+        projectRepository.save(project);
+    }
 
+    public void deleteUserFromProject(Long projectId, Long userId) {
+        User user = userService.findUserById(userId);
+        Project project = getProjectById(projectId);
+
+        project.getUsers().remove(user);
+        projectRepository.save(project);
+    }
 }

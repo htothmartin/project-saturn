@@ -48,17 +48,8 @@ public class ProjectMapper {
         return projects.stream().map(project -> toDto(project, userId)).collect(Collectors.toList());
     }
 
-    public ActiveProjectDTO toActiveProjectDTO(Project project, List<Ticket> tickets, Set<User> users, Long userId) {
-        ActiveProjectDTO activeProjectDTO = new ActiveProjectDTO();
-        activeProjectDTO.setProject(toDto(project, userId));
-
-        List<TicketDTO> ticketDTOS = tickets.stream().map(ticketMapper::toDto).collect(Collectors.toList());
-        Set<UserDTO> userDTOS = users.stream().map(userMapper::toDto).collect(Collectors.toSet());
-
-        activeProjectDTO.setTickets(ticketDTOS);
-        activeProjectDTO.setUsers(userDTOS);
-
-        return activeProjectDTO;
+    public ActiveProjectDTO toActiveProjectDTO(Project project) {
+        return modelMapper.map(project, ActiveProjectDTO.class);
     }
 
 

@@ -1,10 +1,13 @@
 package com.szte.saturn.services;
 
 import com.szte.saturn.dtos.UserDTO;
+import com.szte.saturn.entities.Project;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.mapper.UserMapper;
 import com.szte.saturn.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +20,16 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final UserMapper userMapper;
+    private final ProjectService projectService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper,@Lazy ProjectService projectService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.projectService = projectService;
+    }
+
+    public User findUserById(Long userId){
+        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
     public List<UserDTO> allUsers(){
@@ -36,5 +45,12 @@ public class UserService {
             return null;
         }
         return userMapper.toDto(user);
+    }
+
+    public List<UserDTO> findUsersNotAssignedToProject(Long projectId, Long currentUserId) {
+        Project project = projectService.getProjectById(projectId);
+        List<User> users = userRepository.findUsersNotInProject(projectId, project.getOwner().getId(), currentUserId);
+
+        return userMapper.toListDto(users);
     }
 }
