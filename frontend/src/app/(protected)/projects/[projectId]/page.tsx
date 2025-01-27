@@ -1,7 +1,7 @@
 'use client';
 
-import { Board } from '@/components/Board';
-import { DraggableTicket } from '@/components/DraggableTicket';
+import { Card } from '@/components/Board/Card';
+import { Column } from '@/components/Board/Column';
 import { TicketStatus } from '@/enums/TicketStatus';
 import { useActiveJob } from '@/hooks/useActiveJob';
 import { Ticket } from '@/model/tickets';
@@ -12,16 +12,58 @@ import {
   useSensors,
   PointerSensor,
   closestCorners,
+  KeyboardSensor,
+  DragOverEvent,
+  closestCenter,
+  UniqueIdentifier,
+  TouchSensor,
+  MouseSensor,
   DragStartEvent,
   DragOverlay,
 } from '@dnd-kit/core';
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
+
+export type ColumnType = {
+  id: string;
+  title: string;
+};
+
+const columns: ColumnType[] = [
+  {
+    id: TicketStatus.COMMITED,
+    title: 'Commited',
+  },
+  {
+    id: TicketStatus.IN_PROGRESS,
+    title: 'In Progress',
+  },
+  {
+    id: TicketStatus.IN_REVIEW,
+    title: 'In Review',
+  },
+  {
+    id: TicketStatus.BLOCKED,
+    title: 'Blocked',
+  },
+  {
+    id: TicketStatus.CLOSED,
+    title: 'Closed',
+  },
+];
 
 const Project = (): JSX.Element => {
   const { activeProject } = useActiveJob();
 
-  const [activeTicket, setActiveTicket] = useState<Ticket | null>(null);
   const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [activeTicket, setActiveTicket] = useState<Ticket | null>(null);
+
+  useEffect(() => {
+    if (activeProject?.tickets) {
+      setTickets(activeProject?.tickets);
+    }
+  }, [activeProject?.tickets]);
 
   const sensors = useSensors(useSensor(PointerSensor));
 
@@ -30,63 +72,106 @@ const Project = (): JSX.Element => {
     setActiveTicket(active.data.current?.ticket ?? null);
   };
 
-  const handleDragMove = () => {};
+  const handleDragOver = (event: DragOverEvent) => {
+    const { active, over } = event;
+    if (!over) return;
+    const activeId = active.id;
+    const overId = over.id;
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { over, active } = event;
-    setActiveTicket(null);
-    setTickets((prevTickets) =>
-      prevTickets.map((ticket) =>
-        ticket.id === active.id
-          ? { ...ticket, status: over?.id as TicketStatus }
-          : ticket,
-      ),
-    );
+    if (activeId === overId) return;
+    const isActiveATask = active.data.current?.type === 'Item';
+    const isOverATask = over.data.current?.type === 'Item';
+    if (!isActiveATask) return;
+    if (isActiveATask && isOverATask) {
+      setTickets((prevTickets) => {
+        const activeIndex = prevTickets.findIndex((t) => t.id === activeId);
+        const overIndex = prevTickets.findIndex((t) => t.id === overId);
+        if (prevTickets[activeIndex].status != prevTickets[overIndex].status) {
+          const newTickets = prevTickets.map((t) => {
+            if (t.id === activeId) {
+              return { ...t, status: prevTickets[overIndex].status };
+            }
+            return t;
+          });
+          return newTickets.slice().sort((a, b) => {
+            if (a < b) {
+              return -1;
+            } else if (a > b) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+          //return arrayMove(newTickets, activeIndex, overIndex - 1);
+        }
+
+        return prevTickets.slice().sort((a, b) => {
+          if (a < b) {
+            return -1;
+          } else if (a > b) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        //return arrayMove(prevTickets, activeIndex, overIndex);
+      });
+    }
+
+    const isOverAColumn = over.data.current?.type === 'Column';
+    if (isActiveATask && isOverAColumn) {
+      console.log(isOverAColumn);
+      setTickets((prevTickets) => {
+        const newTickets = prevTickets.map((t) => {
+          if (t.id === activeId) {
+            console.log(t.status);
+            return { ...t, status: overId as TicketStatus };
+          }
+          return t;
+        });
+
+        return newTickets.sort((a, b) => {
+          if (a < b) {
+            return -1;
+          } else if (a > b) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
+        //return arrayMove(newTickets, activeIndex, activeIndex);
+      });
+    }
   };
 
-  useEffect(() => {
-    if (activeProject?.tickets) {
-      setTickets(activeProject.tickets);
-    }
-  }, [activeProject?.tickets]);
-
-  const ticketsSorted = useMemo(
-    () => ({
-      commited:
-        tickets.filter((ticket) => ticket.status === TicketStatus.COMMITED) ??
-        [],
-      inProgress:
-        tickets.filter(
-          (ticket) => ticket.status === TicketStatus.IN_PROGRESS,
-        ) ?? [],
-      inReview:
-        tickets.filter((ticket) => ticket.status === TicketStatus.IN_REVIEW) ??
-        [],
-      closed:
-        tickets.filter((ticket) => ticket.status === TicketStatus.BLOCKED) ??
-        [],
-    }),
-    [activeProject?.tickets],
-  );
+  const handleDragEnd = (event: DragEndEvent) => {
+    setActiveTicket(null);
+  };
 
   return (
-    <div className="m-4 grid h-full w-full grid-cols-4 gap-4 overflow-y-scroll">
+    <div className="h-full w-full overflow-x-auto">
       <DndContext
         sensors={sensors}
-        collisionDetection={closestCorners}
         onDragStart={handleDragStart}
-        onDragMove={handleDragMove}
-        onDragEnd={handleDragEnd}>
-        <Board id={TicketStatus.COMMITED} tickets={ticketsSorted.commited} />
-        <Board
-          id={TicketStatus.IN_PROGRESS}
-          tickets={ticketsSorted.inProgress}
-        />
-        <Board id={TicketStatus.IN_REVIEW} tickets={ticketsSorted.inReview} />
-        <Board id={TicketStatus.BLOCKED} tickets={ticketsSorted.closed} />
-        <DragOverlay>
-          {!!activeTicket && <DraggableTicket ticket={activeTicket} />}
-        </DragOverlay>
+        onDragEnd={handleDragEnd}
+        onDragOver={handleDragOver}
+        collisionDetection={closestCorners}>
+        <div className="flex">
+          {columns.map((column) => (
+            <Column
+              id={column.id.toString()}
+              title={column.title}
+              items={tickets.filter((item) => item.status === column.id)}
+            />
+          ))}
+        </div>
+        {createPortal(
+          <DragOverlay>
+            {activeTicket && <Card ticket={activeTicket} />}
+          </DragOverlay>,
+          document.body,
+        )}
       </DndContext>
     </div>
   );

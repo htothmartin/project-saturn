@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { JSX, useState } from 'react';
 
 export default function Layout({
   children,
@@ -16,7 +16,7 @@ export default function Layout({
   const params = useParams<{ projectId: string }>();
 
   return (
-    <div className="flex h-screen w-screen">
+    <div className="flex h-full w-full">
       <div
         className={`flex h-full ${isOpen ? 'w-40' : 'w-12'} flex-col gap-4 bg-background p-2 transition-all duration-200`}>
         <Button

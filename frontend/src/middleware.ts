@@ -7,7 +7,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  const refreshToken = cookies().get('refresh-token');
+  const cookieStore = await cookies();
+
+  const refreshToken = cookieStore.get('refresh-token');
   if (!refreshToken) {
     return NextResponse.redirect(new URL('/login', request.url));
   }

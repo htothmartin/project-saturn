@@ -62,7 +62,7 @@ const Tickets = (): JSX.Element => {
               <TableCell>{ticket.status}</TableCell>
               <TableCell>{ticket.ticketPriority}</TableCell>
               <TableCell className="text-right">
-                {ticket?.assigne.fullName}
+                {ticket?.assigne?.fullName ?? 'Unassigned'}
               </TableCell>
               <TableCell>
                 <Button
