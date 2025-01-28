@@ -15,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.print.attribute.standard.Destination;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -28,7 +26,6 @@ public class ProjectMapper {
 
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private TicketMapper ticketMapper;
 
@@ -49,7 +46,27 @@ public class ProjectMapper {
     }
 
     public ActiveProjectDTO toActiveProjectDTO(Project project) {
-        return modelMapper.map(project, ActiveProjectDTO.class);
+        ActiveProjectDTO activeProjectDTO = modelMapper.map(project, ActiveProjectDTO.class);
+
+        List<TicketDTO> tickets = new ArrayList<>();
+        for (Ticket ticket : project.getTickets()) {
+            tickets.add(ticketMapper.toDto(ticket));
+        }
+
+        activeProjectDTO.setTickets(tickets);
+
+        UserDTO owner = userMapper.toDto(project.getOwner());
+        activeProjectDTO.setOwner(owner);
+
+        Set<UserDTO> users = new HashSet<>();
+        users.add(owner);
+        for(User user : project.getUsers()) {
+            users.add(userMapper.toDto(user));
+        }
+
+        activeProjectDTO.setUsers(users);
+
+        return activeProjectDTO;
     }
 
 

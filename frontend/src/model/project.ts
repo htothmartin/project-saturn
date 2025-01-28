@@ -22,6 +22,7 @@ export type ProjectForm = {
 export type ActiveProject = {
   id: number;
   name: string;
+  owner: User;
   description: string;
   key: string;
   projectStatus: ProjectStatus;

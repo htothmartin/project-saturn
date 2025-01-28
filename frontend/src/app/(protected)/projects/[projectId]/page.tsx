@@ -12,12 +12,7 @@ import {
   useSensors,
   PointerSensor,
   closestCorners,
-  KeyboardSensor,
   DragOverEvent,
-  closestCenter,
-  UniqueIdentifier,
-  TouchSensor,
-  MouseSensor,
   DragStartEvent,
   DragOverlay,
 } from '@dnd-kit/core';

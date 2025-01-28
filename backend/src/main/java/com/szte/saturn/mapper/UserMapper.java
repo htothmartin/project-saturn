@@ -21,6 +21,7 @@ public class UserMapper {
         if(userDTO.getProfilePictureUrl() == null){
             userDTO.setProfilePictureUrl("");
         }
+
         userDTO.setFullName(user.getFirstname() + " " + user.getLastname());
         return userDTO;
     }

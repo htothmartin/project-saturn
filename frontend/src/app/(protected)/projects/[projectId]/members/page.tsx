@@ -69,13 +69,17 @@ const Members = (): JSX.Element => {
               <TableCell className="font-medium">
                 <UserBagde user={user} />
               </TableCell>
-              <TableCell>{user.id}</TableCell>
               <TableCell>
-                <Button
-                  onClick={() => handleDeleteFromProject(user.id)}
-                  variant="ghost">
-                  Remove user
-                </Button>
+                {user.id === activeProject?.owner.id ? 'Owner' : 'Member'}
+              </TableCell>
+              <TableCell>
+                {user.id != activeProject?.owner.id && (
+                  <Button
+                    onClick={() => handleDeleteFromProject(user.id)}
+                    variant="ghost">
+                    Remove user
+                  </Button>
+                )}
               </TableCell>
             </TableRow>
           ))}

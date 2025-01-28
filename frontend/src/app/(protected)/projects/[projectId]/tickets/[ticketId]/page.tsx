@@ -1,9 +1,11 @@
 'use client';
 
+import { PriorityLabel } from '@/components/Labels/PriorityLabel';
 import { Loader } from '@/components/Loader';
 import { StatusSelect } from '@/components/StatusSelect/StatusSelect';
 import { Button } from '@/components/ui/button';
 import { UserBagde } from '@/components/UserBadge';
+import { UserBadge2 } from '@/components/UserBadge2';
 import { useActiveJob } from '@/hooks/useActiveJob';
 import { Ticket } from '@/model/tickets';
 import { X } from 'lucide-react';
@@ -54,20 +56,15 @@ const TicketDetails = () => {
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Assigned to:</div>
-          <UserBagde user={ticket.assigne} />
+          <UserBadge2 user={ticket.assigne} />
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Reporter:</div>
-          <UserBagde
-            onClick={() => {
-              console.log('asd');
-            }}
-            user={ticket.reporter}
-          />
+          <UserBagde user={ticket.reporter} />
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Priority:</div>
-          {ticket.ticketPriority}
+          <PriorityLabel type={ticket.ticketPriority} />
         </div>
 
         <p>Created at: {new Date(ticket.createdAt).toLocaleString()}</p>

@@ -5,8 +5,8 @@ import { Ticket } from '@/model/tickets';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { JSX } from 'react';
-import { UserAvatar } from '../UserAvatar';
 import { UserBagde } from '../UserBadge';
+import { PriorityLabel } from '../Labels/PriorityLabel';
 
 type Props = {
   ticket: Ticket;
@@ -36,16 +36,7 @@ export const Card = ({ ticket }: Props): JSX.Element => {
       </div>
 
       <div className="mt-2 flex items-center justify-between">
-        <span
-          className={`rounded px-2 py-1 text-xs font-bold ${
-            ticket.ticketPriority === TicketPriority.HIGH
-              ? 'bg-red-600'
-              : ticket.ticketPriority === TicketPriority.MEDIUM
-                ? 'bg-yellow-600'
-                : 'bg-green-600'
-          } text-white`}>
-          {ticket.ticketPriority}
-        </span>
+        <PriorityLabel type={ticket.ticketPriority} />
       </div>
 
       <div className="mt-2 text-xs text-violet-200">
