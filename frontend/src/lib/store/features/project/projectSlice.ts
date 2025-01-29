@@ -2,6 +2,7 @@ import { ActiveProject, Project } from '@/model/project';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SortOrder } from '@/enums/SortOrder';
 import { Filter } from '@/model/filter';
+import { Ticket, UpdateTicket } from '@/model/tickets';
 
 type ProjectState = {
   projects: Project[];
@@ -64,6 +65,19 @@ const projectSlice = createSlice({
         return project;
       });
     },
+    updateTicketSuccess(state: ProjectState, action: PayloadAction<Ticket>) {
+      if (!state.activeProject) {
+        return;
+      }
+      state.activeProject.tickets = state.activeProject.tickets.map(
+        (ticket) => {
+          if (ticket.id === action.payload.id) {
+            return action.payload;
+          }
+          return ticket;
+        },
+      );
+    },
   },
 });
 
@@ -77,6 +91,7 @@ export const {
   setSortOrder,
   setSearchValue,
   pinProjectSuccess,
+  updateTicketSuccess,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

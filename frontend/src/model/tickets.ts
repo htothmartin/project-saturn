@@ -15,11 +15,20 @@ export type Ticket = {
   id: number;
   title: string;
   description: string;
-  assigne: User;
+  assignee: User;
   reporter: User;
   status: TicketStatus;
   issueType: IssueType;
   createdAt: Date;
   updatedAt: Date;
   ticketPriority: TicketPriority;
+};
+
+export type UpdateTicket = {
+  title?: string;
+  description?: string;
+  assigneeId?: string;
+  status?: TicketStatus;
+  issueType?: IssueType;
+  ticketPriority?: TicketPriority;
 };

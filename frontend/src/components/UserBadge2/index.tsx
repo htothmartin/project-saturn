@@ -1,6 +1,6 @@
-import { useAppSelector } from '@/lib/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { User } from '@/model/user';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { UserBagde } from '../UserBadge';
 import {
@@ -12,25 +12,41 @@ import {
   CommandList,
 } from '../ui/command';
 import { selectActiveProject } from '@/lib/store/features/project/projectSelectors';
+import { updateTicket } from '@/api/ticket';
+import { useParams } from 'next/navigation';
+import { updateTicketSuccess } from '@/lib/store/features/project/projectSlice';
 
 type Props = {
   user: User;
 };
 
 export const UserBadge2 = ({ user }: Props): JSX.Element => {
+  const dispatch = useAppDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const activeProject = useAppSelector(selectActiveProject);
   const [search, setSearch] = useState<string>('');
+  const { projectId, ticketId } = useParams<{
+    projectId: string;
+    ticketId: string;
+  }>();
 
   const { users } = activeProject!;
 
-  console.log(activeProject);
-
   const filteredUsers = users.filter((u) => u.id != user?.id);
 
-  console.log(filteredUsers);
+  console.log(user);
 
-  console.log(open);
+  const handleSelect = async (value: string) => {
+    try {
+      setOpen(false);
+      const reponse = await updateTicket(projectId, ticketId, {
+        assigneeId: value,
+      });
+      dispatch(updateTicketSuccess(reponse.data));
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -58,10 +74,7 @@ export const UserBadge2 = ({ user }: Props): JSX.Element => {
                     <CommandItem
                       key={`user-${user.id}`}
                       value={user.id.toString()}
-                      onSelect={(value) => {
-                        console.log(value);
-                        setOpen(false);
-                      }}>
+                      onSelect={handleSelect}>
                       <UserBagde user={user} />
                     </CommandItem>
                   ))}

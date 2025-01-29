@@ -115,11 +115,9 @@ const Project = (): JSX.Element => {
 
     const isOverAColumn = over.data.current?.type === 'Column';
     if (isActiveATask && isOverAColumn) {
-      console.log(isOverAColumn);
       setTickets((prevTickets) => {
         const newTickets = prevTickets.map((t) => {
           if (t.id === activeId) {
-            console.log(t.status);
             return { ...t, status: overId as TicketStatus };
           }
           return t;

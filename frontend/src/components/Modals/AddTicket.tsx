@@ -49,7 +49,7 @@ export const AddTicket = (): JSX.Element => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     try {
-      await createTicket({
+      await createTicket(projectId, {
         title: data.ticketTitle,
         description: data.ticketDescription ?? '',
         priority: data.ticketPriority,

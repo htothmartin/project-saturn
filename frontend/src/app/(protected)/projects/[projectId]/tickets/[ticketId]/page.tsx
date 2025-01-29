@@ -31,6 +31,8 @@ const TicketDetails = () => {
     return <Loader />;
   }
 
+  console.log(ticket);
+
   return (
     <div className="flex w-full flex-row border p-4 shadow-md">
       <div className="w-full flex-grow">
@@ -56,7 +58,7 @@ const TicketDetails = () => {
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Assigned to:</div>
-          <UserBadge2 user={ticket.assigne} />
+          <UserBadge2 user={ticket.assignee} />
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Reporter:</div>
