@@ -1,11 +1,11 @@
 'use client';
 
-import { PriorityLabel } from '@/components/Labels/PriorityLabel';
+import { PrioritySelect } from '@/components/LabelSelects/PrioritySelect';
+import { UserSelector } from '@/components/LabelSelects/UserSelector';
 import { Loader } from '@/components/Loader';
 import { StatusSelect } from '@/components/StatusSelect/StatusSelect';
 import { Button } from '@/components/ui/button';
-import { UserBagde } from '@/components/UserBadge';
-import { UserBadge2 } from '@/components/UserBadge2';
+import { UserBadge } from '@/components/UserBadge';
 import { useActiveJob } from '@/hooks/useActiveJob';
 import { Ticket } from '@/model/tickets';
 import { X } from 'lucide-react';
@@ -58,15 +58,15 @@ const TicketDetails = () => {
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Assigned to:</div>
-          <UserBadge2 user={ticket.assignee} />
+          <UserSelector user={ticket.assignee} />
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Reporter:</div>
-          <UserBagde user={ticket.reporter} />
+          <UserBadge user={ticket.reporter} />
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Priority:</div>
-          <PriorityLabel type={ticket.ticketPriority} />
+          <PrioritySelect type={ticket.ticketPriority} />
         </div>
 
         <p>Created at: {new Date(ticket.createdAt).toLocaleString()}</p>

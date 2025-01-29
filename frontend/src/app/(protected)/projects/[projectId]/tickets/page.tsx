@@ -1,6 +1,6 @@
 'use client';
 
-import { PriorityLabel } from '@/components/Labels/PriorityLabel';
+import { PrioritySelect } from '@/components/LabelSelects/PrioritySelect';
 import { SearchBar } from '@/components/SearchBar';
 import { Button } from '@/components/ui/button';
 import {
@@ -62,10 +62,10 @@ const Tickets = (): JSX.Element => {
               <TableCell>{ticket.title}</TableCell>
               <TableCell>{ticket.status}</TableCell>
               <TableCell>
-                <PriorityLabel type={ticket.ticketPriority} />
+                <PrioritySelect type={ticket.ticketPriority} />
               </TableCell>
               <TableCell className="text-right">
-                {ticket?.assigne?.fullName ?? 'Unassigned'}
+                {ticket?.assignee?.fullName ?? 'Unassigned'}
               </TableCell>
               <TableCell>
                 <Button

@@ -5,7 +5,7 @@ import { Ticket } from '@/model/tickets';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { JSX } from 'react';
-import { UserBagde } from '../UserBadge';
+import { UserBadge } from '../UserBadge';
 import { PriorityLabel } from '../Labels/PriorityLabel';
 
 type Props = {
@@ -32,7 +32,7 @@ export const Card = ({ ticket }: Props): JSX.Element => {
 
       <div className="flex flex-col items-center gap-2 text-sm text-white xl:flex-row">
         <span className="font-medium">Assigned:</span>{' '}
-        <UserBagde user={ticket.assigne} />
+        <UserBadge user={ticket.assignee} />
       </div>
 
       <div className="mt-2 flex items-center justify-between">

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 import { fetchUsersNotAssignedToProject } from '@/api/user';
 import { User } from '@/model/user';
-import { UserBagde } from '../UserBadge';
+import { UserBadge } from '../UserBadge';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import {
   Command,
@@ -73,7 +73,7 @@ export const AddMemeber = (): JSX.Element => {
             aria-expanded={open}
             className="h-full w-fit justify-start">
             {selectedUser ? (
-              <UserBagde user={selectedUser} />
+              <UserBadge user={selectedUser} />
             ) : (
               'Select user...'
             )}
@@ -112,7 +112,7 @@ export const AddMemeber = (): JSX.Element => {
                         );
                         setOpen(false);
                       }}>
-                      <UserBagde user={user} />
+                      <UserBadge user={user} />
                       {user.id === selectedUser?.id && (
                         <Check className="ml-auto" />
                       )}

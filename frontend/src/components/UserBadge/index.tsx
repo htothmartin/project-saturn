@@ -8,7 +8,7 @@ type Props = {
   selected?: boolean;
 };
 
-export const UserBagde = ({ user, onClick, selected }: Props): JSX.Element => {
+export const UserBadge = ({ user, onClick, selected }: Props): JSX.Element => {
   return (
     <div
       onClick={onClick}

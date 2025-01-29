@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { UserBagde } from '@/components/UserBadge';
+import { UserBadge } from '@/components/UserBadge';
 import { ModalTypes } from '@/enums/ModalTypes';
 import { useActiveJob } from '@/hooks/useActiveJob';
 import { useModal } from '@/hooks/useModal';
@@ -67,7 +67,7 @@ const Members = (): JSX.Element => {
               key={`ticket-${user.id}`}
               onClick={() => console.log(user.id)}>
               <TableCell className="font-medium">
-                <UserBagde user={user} />
+                <UserBadge user={user} />
               </TableCell>
               <TableCell>
                 {user.id === activeProject?.owner.id ? 'Owner' : 'Member'}

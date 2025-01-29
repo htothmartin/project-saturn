@@ -6,3 +6,6 @@ export const selectActiveProject = (state: RootState) =>
   state.project.activeProject;
 
 export const selectFilter = (state: RootState) => state.project.filter;
+
+export const selectActiveProjectUsers = (state: RootState) =>
+  state.project.activeProject?.users ?? [];

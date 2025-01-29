@@ -30,5 +30,5 @@ export type UpdateTicket = {
   assigneeId?: string;
   status?: TicketStatus;
   issueType?: IssueType;
-  ticketPriority?: TicketPriority;
+  priority?: TicketPriority;
 };
