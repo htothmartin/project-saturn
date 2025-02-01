@@ -1,5 +1,6 @@
 'use client';
 
+import { updateTicket } from '@/api/ticket';
 import { Card } from '@/components/Board/Card';
 import { Column } from '@/components/Board/Column';
 import { TicketStatus } from '@/enums/TicketStatus';
@@ -17,6 +18,7 @@ import {
   DragOverlay,
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -53,6 +55,7 @@ const Project = (): JSX.Element => {
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [activeTicket, setActiveTicket] = useState<Ticket | null>(null);
+  const { projectId } = useParams<{ projectId: string }>();
 
   useEffect(() => {
     if (activeProject?.tickets) {
@@ -138,7 +141,20 @@ const Project = (): JSX.Element => {
     }
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { over, active } = event;
+    if (!activeTicket || !active) {
+      return;
+    }
+    console.log(active.data.current?.ticket.status);
+
+    try {
+      const data = await updateTicket(projectId, activeTicket.id.toString(), {
+        status: active.data.current?.ticket.status as TicketStatus,
+      });
+    } catch (error) {
+      console.error(error);
+    }
     setActiveTicket(null);
   };
 

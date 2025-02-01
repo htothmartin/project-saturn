@@ -66,7 +66,7 @@ const TicketDetails = () => {
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Priority:</div>
-          <PrioritySelect type={ticket.ticketPriority} />
+          <PrioritySelect type={ticket.ticketPriority} ticketId={ticket.id} />
         </div>
 
         <p>Created at: {new Date(ticket.createdAt).toLocaleString()}</p>

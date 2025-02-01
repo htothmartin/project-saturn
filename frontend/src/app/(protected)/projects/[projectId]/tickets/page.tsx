@@ -62,7 +62,10 @@ const Tickets = (): JSX.Element => {
               <TableCell>{ticket.title}</TableCell>
               <TableCell>{ticket.status}</TableCell>
               <TableCell>
-                <PrioritySelect type={ticket.ticketPriority} />
+                <PrioritySelect
+                  type={ticket.ticketPriority}
+                  ticketId={ticket.id}
+                />
               </TableCell>
               <TableCell className="text-right">
                 {ticket?.assignee?.fullName ?? 'Unassigned'}

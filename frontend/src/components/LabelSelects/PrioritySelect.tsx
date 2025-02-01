@@ -10,12 +10,12 @@ import { DropdownSelect } from '../Input/DrowdownSelect';
 
 type Props = {
   type: TicketPriority;
+  ticketId: number;
 };
 
-export const PrioritySelect = ({ type }: Props): JSX.Element => {
-  const { projectId, ticketId } = useParams<{
+export const PrioritySelect = ({ type, ticketId }: Props): JSX.Element => {
+  const { projectId } = useParams<{
     projectId: string;
-    ticketId: string;
   }>();
   const dispatch = useAppDispatch();
 
@@ -44,7 +44,7 @@ export const PrioritySelect = ({ type }: Props): JSX.Element => {
 
   const onSelect = async ({ data }: SelectOption<TicketPriority>) => {
     try {
-      const reponse = await updateTicket(projectId, ticketId, {
+      const reponse = await updateTicket(projectId, ticketId.toString(), {
         priority: data,
       });
       dispatch(updateTicketSuccess(reponse.data));

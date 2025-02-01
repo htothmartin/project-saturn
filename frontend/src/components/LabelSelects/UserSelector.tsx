@@ -25,10 +25,16 @@ export const UserSelector = ({ user }: Props): JSX.Element => {
     data: user,
   }));
 
+  users.push({
+    id: v4(),
+    data: { id: -1, fullName: 'Unassigned', profileImgUrl: '' },
+  });
+
   const filterItems = useMemo(
     () => (search: string) =>
       users.filter((u) => {
         if (!user) {
+          if (u.data.id === -1) return false;
           return u.data.fullName.toLowerCase().includes(search);
         } else {
           return (
