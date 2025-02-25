@@ -12,22 +12,24 @@ import {
 type Props<T> = {
   item: T;
   render: (item: T) => JSX.Element;
-  filterItems: (search: string) => T[];
+  filterItems?: (search: string) => T[];
+  items?: T[];
   onSelect: (item: T) => void;
-  searchPlaceHolder: string;
+  searchPlaceHolder?: string;
 };
 
 export const DropdownSelect = <T extends { id: string }>({
   item,
   render,
   filterItems,
+  items,
   onSelect,
   searchPlaceHolder,
 }: Props<T>): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
 
-  const filteredItems = filterItems(search);
+  const filteredItems = filterItems ? filterItems(search) : items;
 
   const onSelectItem = (item: T) => {
     setOpen(false);
@@ -42,17 +44,19 @@ export const DropdownSelect = <T extends { id: string }>({
         </PopoverTrigger>
         <PopoverContent className="w-fit" align="start">
           <Command shouldFilter={false}>
-            <CommandInput
-              value={search}
-              onValueChange={(value) =>
-                setSearch(value.toLowerCase().trimStart())
-              }
-              placeholder={searchPlaceHolder}
-            />
+            {searchPlaceHolder && (
+              <CommandInput
+                value={search}
+                onValueChange={(value) =>
+                  setSearch(value.toLowerCase().trimStart())
+                }
+                placeholder={searchPlaceHolder}
+              />
+            )}
             <CommandList>
               <CommandEmpty>No results found.</CommandEmpty>
               <CommandGroup>
-                {filteredItems.map((item) => (
+                {filteredItems?.map((item) => (
                   <CommandItem
                     key={`item-${item.id}`}
                     value={item.id.toString()}

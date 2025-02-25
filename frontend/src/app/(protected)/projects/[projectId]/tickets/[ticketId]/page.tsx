@@ -34,10 +34,18 @@ const TicketDetails = () => {
   console.log(ticket);
 
   return (
-    <div className="flex w-full flex-row border p-4 shadow-md">
+    <div className="flex w-full flex-row gap-2 border p-4 shadow-md">
       <div className="w-full flex-grow">
-        <h1 className="m-4 text-xl font-bold">{ticket.title}</h1>
-        <p className="m-4 text-gray-600">{ticket.description}</p>
+        <div>
+          <h1 className="m-4 text-xl font-bold">{ticket.title}</h1>
+          <p className="m-4 text-gray-600">{ticket.description}</p>
+        </div>
+        <div className="h-28 bg-slate-400">
+          Comments
+          <div>
+            <input></input>
+          </div>
+        </div>
       </div>
       <div className="flex w-1/3 flex-shrink-0 flex-col gap-4 rounded border-2 p-4">
         <Button className="ml-auto" variant="ghost" size="icon" asChild>
@@ -58,7 +66,11 @@ const TicketDetails = () => {
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Assigned to:</div>
-          <UserSelector user={ticket.assignee} />
+          <UserSelector
+            user={ticket.assignee}
+            ticketId={params.ticketId}
+            projectId={params.projectId}
+          />
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Reporter:</div>

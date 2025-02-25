@@ -10,13 +10,13 @@ type Props = {
   type: TicketPriority;
 };
 
-export const PriorityLabel = ({ type }: Props): JSX.Element => {
-  type LabelData = {
-    color: string;
-    text: string;
-    icon: React.ElementType;
-  };
+type LabelData = {
+  color: string;
+  text: string;
+  icon: React.ElementType;
+};
 
+export const PriorityLabel = ({ type }: Props): JSX.Element => {
   const content = (): LabelData => {
     switch (type) {
       case TicketPriority.LOW:

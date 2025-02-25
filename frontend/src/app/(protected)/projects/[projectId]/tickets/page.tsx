@@ -1,6 +1,8 @@
 'use client';
 
+import { IssueTypeSelect } from '@/components/LabelSelects/IssueTypesSelect';
 import { PrioritySelect } from '@/components/LabelSelects/PrioritySelect';
+import { UserSelector } from '@/components/LabelSelects/UserSelector';
 import { SearchBar } from '@/components/SearchBar';
 import { Button } from '@/components/ui/button';
 import {
@@ -20,7 +22,7 @@ import { selectFilter } from '@/lib/store/features/project/projectSelectors';
 import { useAppSelector } from '@/lib/store/hooks';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 
 const Tickets = (): JSX.Element => {
   const { activeProject } = useActiveJob();
@@ -30,6 +32,10 @@ const Tickets = (): JSX.Element => {
   const filter = useAppSelector(selectFilter);
 
   const tickets = activeProject?.tickets;
+
+  const { projectId } = useParams<{
+    projectId: string;
+  }>();
 
   return (
     <div className="flex w-full flex-col p-4">
@@ -45,7 +51,7 @@ const Tickets = (): JSX.Element => {
         <TableCaption>Tickets</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Type</TableHead>
+            <TableHead className="w-[20px]">Type</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="w-[100px]">Priority</TableHead>
@@ -55,10 +61,10 @@ const Tickets = (): JSX.Element => {
         </TableHeader>
         <TableBody>
           {tickets?.map((ticket) => (
-            <TableRow
-              key={`ticket-${ticket.id}`}
-              onClick={() => console.log(ticket.reporter)}>
-              <TableCell className="font-medium">{ticket.issueType}</TableCell>
+            <TableRow key={`ticket-${ticket.id}`}>
+              <TableCell className="font-medium">
+                <IssueTypeSelect type={ticket.issueType} ticketId={ticket.id} />
+              </TableCell>
               <TableCell>{ticket.title}</TableCell>
               <TableCell>{ticket.status}</TableCell>
               <TableCell>
@@ -68,7 +74,11 @@ const Tickets = (): JSX.Element => {
                 />
               </TableCell>
               <TableCell className="text-right">
-                {ticket?.assignee?.fullName ?? 'Unassigned'}
+                <UserSelector
+                  user={ticket.assignee}
+                  ticketId={ticket.id.toString()}
+                  projectId={projectId}
+                />
               </TableCell>
               <TableCell>
                 <Button

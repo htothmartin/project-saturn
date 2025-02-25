@@ -11,13 +11,15 @@ import { v4 } from 'uuid';
 
 type Props = {
   user: User;
+  ticketId: string;
+  projectId: string;
 };
 
-export const UserSelector = ({ user }: Props): JSX.Element => {
-  const { projectId, ticketId } = useParams<{
-    projectId: string;
-    ticketId: string;
-  }>();
+export const UserSelector = ({
+  user,
+  ticketId,
+  projectId,
+}: Props): JSX.Element => {
   const dispatch = useAppDispatch();
 
   const users = useAppSelector(selectActiveProjectUsers).map((user) => ({
