@@ -8,6 +8,7 @@ import {
 
 type Props = {
   type: TicketPriority;
+  className?: string;
 };
 
 type LabelData = {
@@ -16,7 +17,7 @@ type LabelData = {
   icon: React.ElementType;
 };
 
-export const PriorityLabel = ({ type }: Props): JSX.Element => {
+export const PriorityLabel = ({ type, className = '' }: Props): JSX.Element => {
   const content = (): LabelData => {
     switch (type) {
       case TicketPriority.LOW:
@@ -50,7 +51,7 @@ export const PriorityLabel = ({ type }: Props): JSX.Element => {
 
   return (
     <div
-      className={`flex w-fit items-center rounded bg-opacity-80 p-2 dark:bg-opacity-95 ${color}`}>
+      className={`flex w-fit items-center rounded bg-opacity-80 p-2 dark:bg-opacity-95 ${color} ${className}`}>
       <Icon className="h-5 w-5" />
       <span className="font-semibold">{text}</span>
     </div>

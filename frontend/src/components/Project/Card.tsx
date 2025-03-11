@@ -17,6 +17,7 @@ import { Pin } from '@/assets/icons/Pin';
 import { pinProject } from '@/api/project';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { pinProjectSuccess } from '@/lib/store/features/project/projectSlice';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   project: Project;
@@ -24,6 +25,7 @@ type Props = {
 
 export const ProjectCard = ({ project }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const handlePinProject = async () => {
     try {
@@ -51,7 +53,12 @@ export const ProjectCard = ({ project }: Props): JSX.Element => {
               <DropdownMenuLabel>Project actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Mark as closed</DropdownMenuItem>
-              <DropdownMenuItem>Add new member</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  router.push(`projects/${project.id}/members?modal=add-member`)
+                }>
+                Add new member
+              </DropdownMenuItem>
               <DropdownMenuItem>Delete</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

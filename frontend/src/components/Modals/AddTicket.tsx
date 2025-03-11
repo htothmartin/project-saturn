@@ -29,6 +29,7 @@ import { Textarea } from '../ui/textarea';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/lib/store/hooks';
 import { fetchActiveProject } from '@/lib/store/features/project/projectSlice';
+import { PriorityLabel } from '../Labels/PriorityLabel';
 
 export const AddTicket = (): JSX.Element => {
   type Inputs = z.infer<typeof addTicketSchema>;
@@ -109,7 +110,7 @@ export const AddTicket = (): JSX.Element => {
                   <SelectGroup>
                     {Object.values(TicketPriority).map((priority) => (
                       <SelectItem key={priority} value={priority}>
-                        {priority}
+                        <PriorityLabel className="" type={priority} />
                       </SelectItem>
                     ))}
                   </SelectGroup>

@@ -2,7 +2,7 @@ import { ActiveProject, Project } from '@/model/project';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SortOrder } from '@/enums/SortOrder';
 import { Filter } from '@/model/filter';
-import { Ticket, UpdateTicket } from '@/model/tickets';
+import { Ticket } from '@/model/tickets';
 
 type ProjectState = {
   projects: Project[];

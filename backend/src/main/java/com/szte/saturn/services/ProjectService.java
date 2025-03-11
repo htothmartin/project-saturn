@@ -49,6 +49,7 @@ public class ProjectService {
     public List<ProjectDTO> getProjectsByUser(User user, String sortOrder, String name){
         Sort.Direction direction = sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "name");
+        System.out.println(name);
         List<Project> projects = projectRepository.findProjectsByUser(user.getId(), name, sort);
 
         return projectMapper.toListDto(projects, user.getId());

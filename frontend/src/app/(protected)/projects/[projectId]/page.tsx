@@ -146,7 +146,6 @@ const Project = (): JSX.Element => {
     if (!activeTicket || !active) {
       return;
     }
-    console.log(active.data.current?.ticket.status);
 
     try {
       const data = await updateTicket(projectId, activeTicket.id.toString(), {

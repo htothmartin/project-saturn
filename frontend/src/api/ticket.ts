@@ -16,3 +16,21 @@ export const updateTicket = async (
     ...updateTicket,
   });
 };
+
+export const createMessage = async (
+  projectId: string,
+  ticketId: string,
+  authorId: number,
+  content: string,
+) => {
+  return await protectedApi.post(
+    `projects/${projectId}/tickets/${ticketId}/comments`,
+    { authorId, content },
+  );
+};
+
+export const getMessages = async (projectId: string, ticketId: string) => {
+  return await protectedApi.get(
+    `projects/${projectId}/tickets/${ticketId}/comments`,
+  );
+};

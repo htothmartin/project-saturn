@@ -2,6 +2,7 @@ package com.szte.saturn.controllers;
 
 import com.szte.saturn.controllers.dtos.CreateProjectDto;
 import com.szte.saturn.dtos.ActiveProjectDTO;
+import com.szte.saturn.dtos.CommentDTO;
 import com.szte.saturn.dtos.ProjectDTO;
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.Project;

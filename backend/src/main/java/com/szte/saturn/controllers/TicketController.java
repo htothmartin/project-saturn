@@ -1,7 +1,9 @@
 package com.szte.saturn.controllers;
 
+import com.szte.saturn.controllers.dtos.CreateCommentDto;
 import com.szte.saturn.controllers.dtos.CreateTicketDto;
 import com.szte.saturn.controllers.dtos.UpdateTicketDto;
+import com.szte.saturn.dtos.CommentDTO;
 import com.szte.saturn.dtos.TicketDTO;
 import com.szte.saturn.entities.Ticket;
 import com.szte.saturn.entities.User;
@@ -49,5 +51,21 @@ public class TicketController {
         List<Ticket> tickets = ticketService.getTicketsByProjects(projectId);
 
         return ResponseEntity.ok(tickets);
+    }
+
+    //Comments
+    @PostMapping("/{ticketId}/comments")
+    public ResponseEntity<CommentDTO> addCommentToProject(@PathVariable Long projectId, @PathVariable Long ticketId, @RequestBody CreateCommentDto commentDTO) {
+
+        CommentDTO comment = ticketService.createComment(projectId, ticketId, commentDTO);
+
+        return ResponseEntity.ok(comment);
+    }
+
+    @GetMapping("/{ticketId}/comments")
+    public ResponseEntity<List<CommentDTO>> getTicket(@PathVariable Long projectId, @PathVariable Long ticketId) {
+        List<CommentDTO> comments = ticketService.getComments(ticketId);
+
+        return ResponseEntity.ok(comments);
     }
 }

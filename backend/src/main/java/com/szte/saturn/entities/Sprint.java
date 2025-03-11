@@ -16,7 +16,7 @@ import java.util.Date;
 public class Sprint {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "number", nullable = false)

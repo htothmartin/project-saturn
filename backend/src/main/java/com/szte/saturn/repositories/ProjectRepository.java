@@ -26,7 +26,7 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
             "LEFT JOIN p.users pu " +
             "LEFT JOIN p.pinnedProjects pp " +
             "WHERE (pu.id = :userId OR pp.id = :userId OR p.owner.id = :userId)" +
-            "AND p.name LIKE %:name%")
+            "AND LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     List<Project> findProjectsByUser(@Param("userId") Long userId, @Param("name") String name, Sort sort);
 
     @Query("SELECT p.users FROM Project p")

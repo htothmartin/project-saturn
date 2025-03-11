@@ -1,12 +1,21 @@
 'use client';
 
 import { PrioritySelect } from '@/components/LabelSelects/PrioritySelect';
+import { StatusSelect } from '@/components/LabelSelects/StatusSelect';
 import { UserSelector } from '@/components/LabelSelects/UserSelector';
 import { Loader } from '@/components/Loader';
-import { StatusSelect } from '@/components/StatusSelect/StatusSelect';
+import { MessageInput } from '@/components/Message/MessageInput';
+import { MessageList } from '@/components/Message/MessageList';
+import Tiptap from '@/components/TipTap';
 import { Button } from '@/components/ui/button';
 import { UserBadge } from '@/components/UserBadge';
 import { useActiveJob } from '@/hooks/useActiveJob';
+import {
+  selectComments,
+  selectIsCommentsFetching,
+} from '@/lib/store/features/comments/commentSelectors';
+import { fetchComments } from '@/lib/store/features/comments/commentSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
 import { Ticket } from '@/model/tickets';
 import { X } from 'lucide-react';
 import Link from 'next/link';
@@ -17,6 +26,10 @@ const TicketDetails = () => {
   const { activeProject } = useActiveJob();
   const params = useParams<{ ticketId: string; projectId: string }>();
   const [ticket, setTicket] = useState<Ticket | null>(null);
+  const useDispatch = useAppDispatch();
+
+  const isFetchingComments = useAppSelector(selectIsCommentsFetching);
+  const comments = useAppSelector(selectComments);
 
   useEffect(() => {
     if (activeProject)
@@ -27,24 +40,32 @@ const TicketDetails = () => {
       );
   }, [activeProject?.tickets, params.ticketId]);
 
+  useEffect(() => {
+    if (comments.length == 0 && !isFetchingComments) {
+      useDispatch(
+        fetchComments({
+          projectId: params.projectId,
+          ticketId: params.ticketId,
+        }),
+      );
+    }
+  }, [comments, isFetchingComments]);
+
   if (!ticket) {
     return <Loader />;
   }
 
-  console.log(ticket);
-
   return (
     <div className="flex w-full flex-row gap-2 border p-4 shadow-md">
-      <div className="w-full flex-grow">
-        <div>
+      <div className="flex w-full flex-col">
+        <div className="flex-grow">
           <h1 className="m-4 text-xl font-bold">{ticket.title}</h1>
           <p className="m-4 text-gray-600">{ticket.description}</p>
         </div>
-        <div className="h-28 bg-slate-400">
-          Comments
-          <div>
-            <input></input>
-          </div>
+        <div className="mt-auto">
+          Messages
+          <MessageInput />
+          <MessageList messages={comments} />
         </div>
       </div>
       <div className="flex w-1/3 flex-shrink-0 flex-col gap-4 rounded border-2 p-4">
@@ -57,12 +78,7 @@ const TicketDetails = () => {
         <h2 className="mb-2 text-lg font-semibold">Details</h2>
         <div className="flex items-center gap-4">
           <span className="font-medium">Status:</span>
-          <StatusSelect
-            selectedStatus={ticket.status}
-            onChange={(value) => {
-              setTicket({ ...ticket, status: value });
-            }}
-          />
+          <StatusSelect type={ticket.status} ticketId={ticket.id} />
         </div>
         <div className="flex flex-row items-center gap-2">
           <div>Assigned to:</div>
