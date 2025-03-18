@@ -53,4 +53,10 @@ public class UserService {
 
         return userMapper.toListDto(users);
     }
+
+    public void updateProfilePictureUrl(String fileUrl, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.setProfilePictureUrl(fileUrl);
+        userRepository.save(user);
+    }
 }

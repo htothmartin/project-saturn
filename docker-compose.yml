@@ -12,6 +12,9 @@ x-minio-common: &minio-common
 
 services:
   backend:
+    profiles:
+      - prod
+
     build:
       context: ./backend
     ports:
@@ -22,12 +25,14 @@ services:
       - db
 
   frontend:
+    profiles:
+      - prod
     build:
       context: ./frontend
+    env_file:
+      - .env.local
     ports:
       - "3000:3000"
-    depends_on:
-      - backend
   db:
     image: postgres:17.4
     ports:
@@ -42,8 +47,19 @@ services:
   minio:
     <<: *minio-common
     hostname: minio
+    environment:
+      MINIO_SERVER_URL: http://localhost:9000
+      MINIO_PUBLIC_URL: http://localhost:9000
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - minio_data:/data
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
 
 volumes:
   postgres_data:

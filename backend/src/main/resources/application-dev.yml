@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: saturn
+  datasource:
+    url: jdbc:postgresql://localhost:5432/saturn_db
+    driver-class-name: org.postgresql.Driver
+    username: user
+    password: szakdolgozat
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+    schemas: public
+
+security:
+  jwt:
+    access-key: 9eb2b4f247af085673eb9fcca6e29fcc22e4580f9419e8fbdac49186f41d59f4
+    refresh-key: 187a8901aebccf0afca5f043eb4426c405162a62bb8148460787e4824224600d
+    expiration-time-access: 300000000000
+    expiration-time-refresh: 100000000000
+
+minio:
+  url: http://localhost:9000
+  access-key: A0spRc30CcxE44F2JUYG
+  secret-key: ZdvomwhUuBcSt1eZj1KUruErVOWsbYhDJudbdjwt
+
