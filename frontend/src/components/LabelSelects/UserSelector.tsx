@@ -29,7 +29,7 @@ export const UserSelector = ({
 
   users.push({
     id: v4(),
-    data: { id: -1, fullName: 'Unassigned', profileImgUrl: '' },
+    data: { id: -1, fullName: 'Unassigned', profilePictureUrl: '' },
   });
 
   const filterItems = useMemo(

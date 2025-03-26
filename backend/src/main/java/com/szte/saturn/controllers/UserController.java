@@ -1,9 +1,12 @@
 package com.szte.saturn.controllers;
 
+import com.szte.saturn.controllers.dtos.UpdateUserRequestDTO;
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
+import com.szte.saturn.mapper.UserMapper;
 import com.szte.saturn.services.MinioService;
 import com.szte.saturn.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +22,8 @@ public class UserController {
 
     private final UserService userService;
     private final MinioService minioService;
+    @Autowired
+    private UserMapper userMapper;
 
     public UserController(UserService userService, MinioService minioService){
         this.userService = userService;
@@ -26,12 +31,12 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> authenticatedUser(){
+    public ResponseEntity<UserDTO> authenticatedUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User currentUser = (User) authentication.getPrincipal();
 
-        return ResponseEntity.ok(currentUser);
+        return ResponseEntity.ok(userMapper.toDto(currentUser));
     }
 
     @GetMapping
@@ -40,6 +45,16 @@ public class UserController {
 
         return ResponseEntity.ok(users);
     }
+
+    @PatchMapping
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UpdateUserRequestDTO updateUserRequestDTO){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = (User) authentication.getPrincipal();
+        UserDTO userDTO = userService.updateUser(currentUser.getId(), updateUserRequestDTO);
+
+        return ResponseEntity.ok(userDTO);
+    }
+
 
     @GetMapping("/not-in-project/{projectId}")
     public ResponseEntity<List<UserDTO>> getUsersNotInProject(@PathVariable Long projectId) {
@@ -55,11 +70,13 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
 
-        String fileUrl = minioService.uploadFile(file);
+        String fileName = minioService.uploadFile(file);
 
-        userService.updateProfilePictureUrl(fileUrl, currentUser.getId());
+        String signedUrl = minioService.generatePresignedUrl(fileName);
 
-        return ResponseEntity.ok(Map.of("message", "File uploaded successfully", "filePath", fileUrl));
+        userService.updateProfilePictureUrl(fileName, currentUser.getId());
+
+        return ResponseEntity.ok(Map.of("message", "File uploaded successfully", "profilePictureUrl", signedUrl));
     }
 
 

@@ -44,14 +44,14 @@ public class MinioService {
 
 
 
-            return url;
+            return fileName;
 
         } catch (Exception e) {
             throw new RuntimeException("File upload failed", e);
         }
     }
 
-    public String generatePresignedGetUrl(String objectName) {
+    public String generatePresignedUrl(String objectName) {
         try {
             return minioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()

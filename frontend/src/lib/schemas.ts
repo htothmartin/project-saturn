@@ -21,3 +21,8 @@ export const addTicketSchema = z.object({
 export const addMemeberSchema = z.object({
   email: z.string().email(),
 });
+
+export const updateUserDetialsSchema = z.object({
+  firstname: z.string().min(1, 'Please enter your firstname.'),
+  lastname: z.string().min(1, 'Please enter your lastname.'),
+});

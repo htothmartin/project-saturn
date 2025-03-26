@@ -1,5 +1,6 @@
 package com.szte.saturn.services;
 
+import com.szte.saturn.controllers.dtos.UpdateUserRequestDTO;
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.Project;
 import com.szte.saturn.entities.User;
@@ -58,5 +59,18 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
         user.setProfilePictureUrl(fileUrl);
         userRepository.save(user);
+    }
+
+    public UserDTO updateUser(Long id, UpdateUserRequestDTO request) {
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        if(request.getFirstname() != null){
+            user.setFirstname(request.getFirstname());
+        }
+        if(request.getLastname() != null){
+            user.setLastname(request.getLastname());
+        }
+
+        userRepository.save(user);
+        return userMapper.toDto(user);
     }
 }

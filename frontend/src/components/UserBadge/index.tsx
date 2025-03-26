@@ -17,7 +17,10 @@ export const UserBadge = ({ user, onClick, selected }: Props): JSX.Element => {
           !!onClick,
         'bg-slate-200 dark:bg-slate-600': selected,
       })}>
-      <UserAvatar imageUrl={user?.profileImgUrl ?? ''} />
+      <UserAvatar
+        imageUrl={user?.profilePictureUrl ?? ''}
+        fullName={user?.fullName ?? ''}
+      />
       <div>{user ? user.fullName : 'Unassigned'} </div>
     </div>
   );

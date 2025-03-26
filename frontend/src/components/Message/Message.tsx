@@ -11,7 +11,10 @@ export const Message = ({ id, content, author }: Props) => {
   return (
     <div className="flex flex-row gap-2">
       <div>{content}</div>
-      <UserAvatar imageUrl={author.profileImgUrl} />
+      <UserAvatar
+        imageUrl={author.profilePictureUrl}
+        fullName={author?.fullName ?? ''}
+      />
     </div>
   );
 };

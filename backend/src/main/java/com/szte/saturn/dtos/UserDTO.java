@@ -7,7 +7,13 @@ public class UserDTO {
 
     private Long id;
 
-    private String fullName;
+    private String firstname;
+
+    private String lastname;
+
+    private String FullName;
 
     private String profilePictureUrl;
+
+    private String email;
 }

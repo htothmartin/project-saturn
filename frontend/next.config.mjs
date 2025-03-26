@@ -6,7 +6,7 @@ const nextConfig = {
     includePaths: [path.join(process.cwd(), 'src/app/scss')],
   },
   images: {
-    domains: ['utfs.io'],
+    domains: ['localhost'],
   },
 };
 

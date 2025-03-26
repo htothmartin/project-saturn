@@ -2,13 +2,14 @@ package com.szte.saturn.mapper;
 
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
+import com.szte.saturn.services.MinioService;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Component
 public class UserMapper {
@@ -16,11 +17,12 @@ public class UserMapper {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private MinioService minioService;
+
     public UserDTO toDto(User user) {
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
-        if(userDTO.getProfilePictureUrl() == null){
-            userDTO.setProfilePictureUrl("");
-        }
+        userDTO.setProfilePictureUrl(minioService.generatePresignedUrl(user.getProfilePictureUrl()));
 
         userDTO.setFullName(user.getFirstname() + " " + user.getLastname());
         return userDTO;
