@@ -1,6 +1,9 @@
 package com.szte.saturn.dtos;
 
+import com.szte.saturn.enums.Provider;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class UserDTO {
@@ -16,4 +19,9 @@ public class UserDTO {
     private String profilePictureUrl;
 
     private String email;
+
+    private Provider provider;
+
+    private List<ConnectedAccountDTO> connectedAccounts;
+
 }

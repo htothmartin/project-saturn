@@ -22,7 +22,7 @@ import { UserAvatar } from '@/components/UserAvatar';
 export default function Layout({
   children,
 }: Readonly<{ children: JSX.Element }>) {
-  useAuth();
+  const { setAuth } = useAuth();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -31,6 +31,7 @@ export default function Layout({
 
   const logout = async () => {
     await Logout();
+    setAuth({ user: null, accessToken: '' });
     router.push('/login');
   };
 

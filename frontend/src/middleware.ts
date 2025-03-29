@@ -6,15 +6,6 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === '/') {
     return NextResponse.redirect(new URL('/login', request.url));
   }
-
-  const cookieStore = await cookies();
-
-  const refreshToken = cookieStore.get('refresh-token');
-  if (!refreshToken) {
-    return NextResponse.redirect(new URL('/login', request.url));
-  }
-
-  return NextResponse.next();
 }
 
 export const config = {

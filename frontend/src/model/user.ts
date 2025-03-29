@@ -1,3 +1,5 @@
+import { ConnectedAccount } from './connected-accounts';
+
 export type User = {
   id: number;
   profilePictureUrl: string;
@@ -5,4 +7,5 @@ export type User = {
   firstname: string;
   lastname: string;
   email: string;
+  connectedAccounts: ConnectedAccount[];
 };

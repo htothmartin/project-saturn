@@ -1,40 +1,51 @@
 package com.szte.saturn.services;
 
 import com.szte.saturn.controllers.AuthenticationController;
-import com.szte.saturn.controllers.dtos.RegisterUserDto;
+import com.szte.saturn.controllers.dtos.CreateUserRequest;
+import com.szte.saturn.controllers.dtos.LoginUserRequest;
+import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
+import com.szte.saturn.mapper.UserMapper;
 import com.szte.saturn.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository userRepository;
-
-    private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
+    private final UserMapper userMapper;
+    private final SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
 
-    public AuthenticationService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
+
+    public UserDTO login(LoginUserRequest request) {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                user,
+                null,
+                user.getAuthorities()
+        );
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+        return userMapper.toDto(user);
     }
 
-    public User signUp(RegisterUserDto request) {
-        User user = new User(request);
-        user.setPassword(passwordEncoder.encode((request.getPassword())));
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        this.logoutHandler.logout(request, response, authentication);
 
-        return userRepository.save(user);
+
     }
-
-    public User signIn(AuthenticationController.LoginUserDto request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-
-        return userRepository.findByEmail(request.getEmail()).orElseThrow();
-    }
-
 }

@@ -11,7 +11,6 @@ import {
   FormLabel,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { UserAvatar } from '@/components/UserAvatar';
 import useAuth from '@/hooks/useAuth';
 import { updateUserDetialsSchema } from '@/lib/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,6 +20,9 @@ import { ChangeEvent, useMemo, useRef, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
+import { ConnectedAccounts } from './components/connected-accounts';
+import { Separator } from '@/components/ui/separator';
+import { getMonogram } from '@/lib/utils';
 
 export const Profile = (): JSX.Element => {
   const { auth, setAuth } = useAuth();
@@ -49,8 +51,6 @@ export const Profile = (): JSX.Element => {
       values.lastname !== auth.user?.lastname
     );
   }, [values, auth.user]);
-
-  console.log(auth);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -93,31 +93,38 @@ export const Profile = (): JSX.Element => {
 
   const onSave = async (values: z.infer<typeof updateUserDetialsSchema>) => {
     try {
-      //const values = updateUserDetailsForm.getValues();
+      setIsEditing(false);
       const { data } = await updateUser(values);
       setAuth((prev) => ({ ...prev, user: data }));
+      toast.success('Successfully updated profile data');
     } catch (error) {
       console.error(error);
     }
   };
 
-  if (auth.user === null) {
+  if (currentUser === null) {
     return <></>;
   }
 
   return (
     <div className="mt-12 flex h-full w-full justify-center">
-      <div className="flex w-full flex-col items-center gap-4">
-        <div className="h-[250px] w-[250px] overflow-hidden rounded-full border">
-          <Image
-            src={currentUser?.profilePictureUrl ?? ''}
-            alt="Profile picture"
-            width={250}
-            height={250}
-            className="h-full w-full object-cover"
-          />
+      <div className="flex w-1/2 flex-col items-center gap-4">
+        <div className="flex h-[250px] w-[250px] items-center justify-center overflow-hidden rounded-full border bg-purple-900">
+          {!currentUser.profilePictureUrl ? (
+            <div className="text-center text-7xl">
+              {getMonogram(currentUser.fullName)}
+            </div>
+          ) : (
+            <Image
+              src={currentUser.profilePictureUrl ?? ''}
+              alt="Profile picture"
+              width={250}
+              height={250}
+              className="h-full w-full object-cover"
+            />
+          )}
         </div>
-        <div>{currentUser?.fullName}</div>
+        <div>{currentUser.fullName}</div>
         <div>Upload new profile image</div>
         <div className="flex flex-row gap-2">
           <Input
@@ -134,12 +141,12 @@ export const Profile = (): JSX.Element => {
           <ErrorMessage>Please select an image before upload</ErrorMessage>
         )}
       </div>
-      <div className="w-full">
+      <div className="flex w-1/2 flex-col items-center gap-2 p-12">
         <Form {...updateUserDetailsForm}>
           <form
             method="POST"
             onSubmit={updateUserDetailsForm.handleSubmit(onSave)}
-            className="w-72">
+            className="max-w-[50%]">
             <FormField
               control={updateUserDetailsForm.control}
               name="firstname"
@@ -174,6 +181,8 @@ export const Profile = (): JSX.Element => {
             </div>
           </form>
         </Form>
+        <Separator />
+        <ConnectedAccounts connectedAccounts={currentUser.connectedAccounts} />
       </div>
     </div>
   );

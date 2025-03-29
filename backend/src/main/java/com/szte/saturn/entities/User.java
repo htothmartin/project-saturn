@@ -1,7 +1,9 @@
 package com.szte.saturn.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.szte.saturn.controllers.dtos.RegisterUserDto;
+import com.szte.saturn.controllers.dtos.CreateUserRequest;
+import com.szte.saturn.enums.Provider;
+import com.szte.saturn.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +11,11 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Table(name="users")
@@ -37,12 +42,16 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role;
+
     @Column(name = "registered_at")
     @CreationTimestamp
-    private Date registeredAt;
+    private LocalDateTime registeredAt;
 
     @Column(name = "profile_picture_url")
-    private String profilePictureUrl;
+    private String profilePictureUrl = "";
 
     @ManyToMany(mappedBy = "users")
     @JsonIgnore
@@ -52,16 +61,54 @@ public class User implements UserDetails {
     @JsonIgnore
     private Set<Project> pinnedProjects = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<ConnectedAccount> connectedAccounts = new ArrayList<>();
 
-    public User(RegisterUserDto request) {
+    @OneToOne(mappedBy = "user")
+    private VerificationCode verificationCode;
+
+    @Column(name = "verified")
+    private Boolean verified = false;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "provider", nullable = false)
+    private Provider provider;
+
+    public User(CreateUserRequest request) {
         this.firstname = request.getFirstname();
         this.lastname = request.getLastname();
         this.email = request.getEmail();
+        this.role = Role.USER;
+        this.provider = Provider.EMAIL;
+    }
+
+    public User(OAuth2User oAuth2User){
+        this.email = oAuth2User.getAttribute("email");
+        String name = oAuth2User.getAttribute("name");
+        String profilePictureUrl = oAuth2User.getAttribute("profile_picture_url");
+
+        if(name != null){
+            List<String> names = List.of(name.split(" "));
+            if(names.size() > 1){
+                this.firstname = names.get(0);
+                this.lastname = names.get(1);
+            } else {
+                this.firstname = names.getFirst();
+                this.setLastname("");
+            }
+        }
+        this.verified = true;
+        this.setRole(Role.USER);
+        this.setPassword("");
+    }
+
+    public void addConnectedAcoount(ConnectedAccount connectedAccount){
+        connectedAccounts.add(connectedAccount);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.szte.saturn.controllers;
 
-import com.szte.saturn.controllers.dtos.RegisterUserDto;
+import com.szte.saturn.controllers.dtos.CreateUserRequest;
+import com.szte.saturn.controllers.dtos.LoginUserRequest;
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.responses.LoginResponse;
@@ -35,14 +36,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
-        User registeredUser = authenticationService.signUp(registerUserDto);
+    public ResponseEntity<UserDTO> register(@RequestBody CreateUserRequest request) {
+        UserDTO registeredUser = userService.create(request);
         return ResponseEntity.ok(registeredUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        User authenticatedUser = authenticationService.signIn(loginUserDto);
+    public ResponseEntity<?> authenticate(@RequestBody LoginUserRequest request) {
+        UserDTO authenticatedUser = authenticationService.login(request);
 
         String accessToken = jwtService.generateToken(authenticatedUser.getId(), false);
         String refreshToken = jwtService.generateToken(authenticatedUser.getId(), true);
@@ -104,14 +105,5 @@ public class AuthenticationController {
                 .build();
 
         return ResponseEntity.ok().header("Set-Cookie", cookie.toString()).body("Successfully logged out");
-    }
-
-    @Getter
-    @Setter
-    public static class LoginUserDto {
-
-        private String email;
-
-        private String password;
     }
 }

@@ -21,16 +21,17 @@ import java.util.function.Function;
 public class JwtService {
 
     private final UserRepository userRepository;
-    @Value("${security.jwt.access-key}")
+
+    @Value("${spring.security.jwt.access-key}")
     private String accessSecretKey;
 
-    @Value("${security.jwt.refresh-key}")
+    @Value("${spring.security.jwt.refresh-key}")
     private String refresSecretKey;
 
-    @Value("${security.jwt.expiration-time-access}")
+    @Value("${spring.security.jwt.expiration-time-access}")
     private long accessExpiration ;
 
-    @Value("${security.jwt.expiration-time-refresh}")
+    @Value("${spring.security.jwt.expiration-time-refresh}")
     private long refreshExpiration;
 
     public JwtService(UserRepository userRepository) {

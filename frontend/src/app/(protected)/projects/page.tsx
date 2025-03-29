@@ -16,26 +16,26 @@ import { ArrowDownAZ, ArrowUpAZIcon } from 'lucide-react';
 import { useEffect, useMemo } from 'react';
 
 const Home = (): JSX.Element => {
-  const { sort, q } = useAppSelector(selectFilter);
   const dispatch = useAppDispatch();
 
+  const { sort, q } = useAppSelector(selectFilter);
   const { projects, isProjectsFetching } = useAppSelector(selectProjects);
 
+  useEffect(() => {
+    if (!isProjectsFetching && !projects) {
+      dispatch(fetchProjects());
+    }
+  }, [sort]);
+
   const pinnedProjects = useMemo(
-    () => projects.filter((project) => project.pin),
+    () => projects?.filter((project) => project.pin),
     [projects],
   );
 
   const notPinnedProjects = useMemo(
-    () => projects.filter((project) => !project.pin),
+    () => projects?.filter((project) => !project.pin),
     [projects],
   );
-
-  useEffect(() => {
-    if (!isProjectsFetching) {
-      dispatch(fetchProjects());
-    }
-  }, [sort]);
 
   return (
     <>

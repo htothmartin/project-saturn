@@ -23,6 +23,10 @@ import { useState } from 'react';
 import useAuth from '@/hooks/useAuth';
 import { Auth } from '@/context/AuthProvider';
 import { toast } from 'sonner';
+import { Github } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { FaGithub } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
 
 const loginSchema = z.object({
   email: z.string().email('This is not a valid email address.'),
@@ -38,16 +42,14 @@ const Login = () => {
     },
   });
   const router = useRouter();
-  const [pending, setPending] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { setAuth } = useAuth();
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
-    setPending(true);
+    setIsLoading(true);
     try {
       const data = await LoginReq(values.email, values.password);
-      setAuth((prev: Auth) => {
-        return { ...prev, accessToken: data.accessToken };
-      });
+      setAuth((prev: Auth) => ({ ...prev, accessToken: data.accessToken }));
 
       router.push('/projects');
     } catch (error) {
@@ -56,7 +58,13 @@ const Login = () => {
         description: 'Login failed.',
       });
     }
-    setPending(false);
+    setIsLoading(false);
+  };
+
+  const getProviderLoginUrl = (provider: 'google' | 'github') => {
+    return (
+      process.env.NEXT_PUBLIC_API_URL + `/oauth2/authorization/${provider}`
+    );
   };
 
   return (
@@ -106,14 +114,49 @@ const Login = () => {
                 )}
               />
               <div className="mx-auto my-4">
-                <Button className="text-xl" type="submit" disabled={pending}>
+                <Button
+                  className="w-full text-xl"
+                  type="submit"
+                  disabled={isLoading}>
                   Login
                 </Button>
               </div>
             </form>
           </Form>
-          <p className="text-center">
-            You don &apos;t have an account? Register{' '}
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="rounded bg-card px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-y-2 pt-4">
+            <Link href={getProviderLoginUrl('google')}>
+              <Button
+                variant="outline"
+                type="button"
+                disabled={isLoading}
+                className="w-full gap-2">
+                <FcGoogle /> Google
+              </Button>
+            </Link>
+            <Link href={getProviderLoginUrl('github')}>
+              <Button
+                variant="outline"
+                type="button"
+                disabled={isLoading}
+                className="w-full gap-2">
+                <FaGithub /> GitHub
+              </Button>
+            </Link>
+          </div>
+          <p className="mt-2 text-center">
+            You don&apos;t have an account? Register{' '}
             <Link className="underline" href="/register">
               here
             </Link>{' '}

@@ -43,8 +43,8 @@ export const AuthProvider = ({ children }: Props) => {
   useEffect(() => {
     const requestIntercept = protectedApi.interceptors.request.use(
       (config) => {
-        if (!config.headers['Authorization']) {
-          config.headers['Authorization'] = `Bearer ${auth?.accessToken}`;
+        if (auth.user && auth.accessToken) {
+          config.headers['Authorization'] = `Bearer ${auth.accessToken}`;
         }
         return config;
       },
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }: Props) => {
       (response) => response,
       async (error) => {
         const originalRequest = error.config;
-        if (error.response.status === 403 && !originalRequest?._retry) {
+        if (error.response.status === 401 && !originalRequest?._retry) {
           originalRequest._retry = true;
           try {
             const newAccessToken = await refreshAccessToken();
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }: Props) => {
       protectedApi.interceptors.request.eject(requestIntercept);
       protectedApi.interceptors.response.eject(responseIntercept);
     };
-  }, []);
+  }, [auth.accessToken]);
 
   useEffect(() => {
     (async () => {
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }: Props) => {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [auth.accessToken]);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth, isLoading }}>

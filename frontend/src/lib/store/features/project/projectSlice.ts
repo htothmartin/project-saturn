@@ -5,7 +5,7 @@ import { Filter } from '@/model/filter';
 import { Ticket } from '@/model/tickets';
 
 type ProjectState = {
-  projects: Project[];
+  projects: Project[] | null;
   activeProject: ActiveProject | null;
   isProjectsFetching: boolean;
   isActiveJobFetching: boolean;
@@ -13,7 +13,7 @@ type ProjectState = {
 };
 
 const initialState: ProjectState = {
-  projects: [],
+  projects: null,
   activeProject: null,
   isProjectsFetching: false,
   isActiveJobFetching: false,
@@ -36,6 +36,7 @@ const projectSlice = createSlice({
     },
     fetchProjectsError(state: ProjectState) {
       state.isProjectsFetching = false;
+      state.projects == null;
     },
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     fetchActiveProject(state: ProjectState, _: PayloadAction<string>) {
@@ -58,12 +59,14 @@ const projectSlice = createSlice({
       state.filter.q = action.payload;
     },
     pinProjectSuccess(state: ProjectState, action: PayloadAction<Project>) {
-      state.projects = state.projects.map((project) => {
-        if (project.id === action.payload.id) {
-          return action.payload;
-        }
-        return project;
-      });
+      if (state.projects) {
+        state.projects = state.projects.map((project) => {
+          if (project.id === action.payload.id) {
+            return action.payload;
+          }
+          return project;
+        });
+      }
     },
     updateTicketSuccess(state: ProjectState, action: PayloadAction<Ticket>) {
       if (!state.activeProject) {

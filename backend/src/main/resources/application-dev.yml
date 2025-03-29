@@ -2,10 +2,11 @@ spring:
   application:
     name: saturn
   datasource:
-    url: jdbc:postgresql://localhost:5432/saturn_db
+    url: jdbc:postgresql://${DB_URL}:${DB_PORT}/${DB_NAME}
     driver-class-name: org.postgresql.Driver
-    username: user
-    password: szakdolgozat
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
   jpa:
     properties:
       hibernate:
@@ -19,15 +20,49 @@ spring:
     enabled: true
     schemas: public
 
-security:
-  jwt:
-    access-key: 9eb2b4f247af085673eb9fcca6e29fcc22e4580f9419e8fbdac49186f41d59f4
-    refresh-key: 187a8901aebccf0afca5f043eb4426c405162a62bb8148460787e4824224600d
-    expiration-time-access: 300000000000
-    expiration-time-refresh: 100000000000
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: profile, email
+            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+            client-name: Google
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope: read:user, user:email
+            redirect-uri: "{baseUrl}/login/oauth2/code/github"
+            client-name: GitHub
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+
+    jwt:
+      access-key: ${JWT_ACCESS_KEY}
+      refresh-key: ${JWT_REFRESH_KEY}
+      expiration-time-access: ${JWT_ACCESS_KEY_EXPIRATION_TIME}
+      expiration-time-refresh: ${JWT_REFRESH_KEY_EXPIRATION_TIME}
 
 minio:
-  url: http://localhost:9000
-  access-key: A0spRc30CcxE44F2JUYG
-  secret-key: ZdvomwhUuBcSt1eZj1KUruErVOWsbYhDJudbdjwt
+  url: ${MINIO_URL}
+  access-key: ${MINIO_ACCESS_KEY}
+  secret-key: ${MINIO_SECRET_KEY}
 
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+server:
+  servlet:
+    context-path: /api
