@@ -11,6 +11,7 @@ import {
   Dispatch,
   SetStateAction,
   useEffect,
+  useLayoutEffect,
   useState,
 } from 'react';
 
@@ -40,12 +41,13 @@ export const AuthProvider = ({ children }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const requestIntercept = protectedApi.interceptors.request.use(
       (config) => {
         if (auth.user && auth.accessToken) {
           config.headers['Authorization'] = `Bearer ${auth.accessToken}`;
         }
+
         return config;
       },
       (error) => Promise.reject(error),
@@ -64,12 +66,9 @@ export const AuthProvider = ({ children }: Props) => {
             });
             originalRequest.headers['Authorization'] =
               `Bearer ${newAccessToken}`;
-            protectedApi.defaults.headers.common['Authorization'] =
-              `Bearer ${newAccessToken}`;
           } catch (error) {
             setAuth({ user: null, accessToken: '' });
-            router.push('/login');
-            return Promise.reject(error);
+            router.replace('/login');
           }
 
           return protectedApi(originalRequest);
@@ -92,12 +91,13 @@ export const AuthProvider = ({ children }: Props) => {
           return { ...prev, user: user };
         });
       } catch (error) {
-        console.error(error);
+        setAuth({ user: null, accessToken: '' });
+        router.push('/login');
       } finally {
         setIsLoading(false);
       }
     })();
-  }, [auth.accessToken]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ auth, setAuth, isLoading }}>

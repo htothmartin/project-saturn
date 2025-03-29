@@ -29,7 +29,7 @@ export const Column = ({ id, title, items }: Props): JSX.Element => {
         <div className="pb-4 text-center font-bold">{title}</div>
         <div className="flex flex-col gap-4">
           {items.map((item) => (
-            <Card ticket={item} />
+            <Card key={`item-${item.id}`} ticket={item} />
           ))}
         </div>
       </div>

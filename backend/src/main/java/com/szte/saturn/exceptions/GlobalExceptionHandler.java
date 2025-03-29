@@ -1,5 +1,6 @@
 package com.szte.saturn.exceptions;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.*;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
@@ -10,10 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -50,6 +48,31 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatus()));
     }
 
+    @ExceptionHandler(ExpiredRefreshTokenException.class)
+    public ResponseEntity<HttpErrorResponse> handleException(ExpiredRefreshTokenException ex) {
+        HttpErrorResponse response = new HttpErrorResponse("Expired refresh token", HttpStatus.UNAUTHORIZED.value());
+
+        ResponseCookie cookie = ResponseCookie.from("refresh-token", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/api")
+                .maxAge(0)
+                .sameSite("Strict")
+                .build();
+
+
+        return ResponseEntity
+                .status(response.getStatus())
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body(response);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<HttpErrorResponse> handleException(ExpiredJwtException ex) {
+        HttpErrorResponse response = new HttpErrorResponse("Expired token", HttpStatus.UNAUTHORIZED.value());
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatus()));
+    }
+
     @ExceptionHandler(AuthorizationDeniedException.class)
     public ResponseEntity<HttpErrorResponse> handleException(AuthorizationDeniedException ex) {
         HttpErrorResponse response = new HttpErrorResponse(ex.getMessage(), HttpStatus.FORBIDDEN.value());
@@ -58,7 +81,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<HttpErrorResponse> handleException(Exception ex) {
-        HttpErrorResponse response = new HttpErrorResponse("Unexpected error", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        HttpErrorResponse response = new HttpErrorResponse("Unexpected error", HttpStatus.INTERNAL_SERVER_ERROR.value(), null, Arrays.asList(ex.getMessage()));
         return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatus()));
     }
 

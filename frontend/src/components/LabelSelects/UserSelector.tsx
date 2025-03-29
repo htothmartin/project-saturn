@@ -8,9 +8,10 @@ import { updateTicket } from '@/api/ticket';
 import { updateTicketSuccess } from '@/lib/store/features/project/projectSlice';
 import { DropdownSelect } from '../Input/DrowdownSelect';
 import { v4 } from 'uuid';
+import { noop, unassigned } from '@/lib/constants';
 
 type Props = {
-  user: User;
+  user: User | null;
   ticketId: string;
   projectId: string;
 };
@@ -22,14 +23,14 @@ export const UserSelector = ({
 }: Props): JSX.Element => {
   const dispatch = useAppDispatch();
 
-  const users = useAppSelector(selectActiveProjectUsers).map((user) => ({
+  const users = useAppSelector(selectActiveProjectUsers).map((u) => ({
     id: v4(),
-    data: user,
+    data: u,
   }));
 
   users.push({
     id: v4(),
-    data: { id: -1, fullName: 'Unassigned', profilePictureUrl: '' },
+    data: unassigned,
   });
 
   const filterItems = useMemo(
@@ -49,7 +50,7 @@ export const UserSelector = ({
   );
 
   const render = ({ data }: SelectOption<User>) => (
-    <UserBadge user={data} onClick={() => {}} />
+    <UserBadge user={data} onClick={noop} />
   );
 
   const onSelect = async ({ data }: SelectOption<User>) => {
@@ -65,7 +66,7 @@ export const UserSelector = ({
 
   return (
     <DropdownSelect
-      item={{ id: v4(), data: user }}
+      item={{ id: v4(), data: user ?? unassigned }}
       render={render}
       filterItems={filterItems}
       searchPlaceHolder="Search for user"

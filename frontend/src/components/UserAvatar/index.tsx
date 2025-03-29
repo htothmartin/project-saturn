@@ -16,7 +16,9 @@ export const UserAvatar = ({ imageUrl, fullName }: Props) => {
   return (
     <Avatar onClick={() => router.push('/profile')}>
       <AvatarImage src={imageUrl} alt="Profile picture" asChild>
-        <Image src={imageUrl} width={60} height={90} alt="Profile picture" />
+        {imageUrl && (
+          <Image src={imageUrl} width={60} height={90} alt="Profile picture" />
+        )}
       </AvatarImage>
       <AvatarFallback>{getMonogram(fullName)}</AvatarFallback>
     </Avatar>

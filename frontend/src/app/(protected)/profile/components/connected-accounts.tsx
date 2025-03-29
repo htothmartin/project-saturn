@@ -37,7 +37,7 @@ export const ConnectedAccounts = ({
     <div className="w-full">
       <h2 className="pb-4 text-2xl">Connected accounts</h2>
       {connectedAccounts.map((connectedAccount, index) => (
-        <>
+        <div key={`connected-account-${index}`}>
           <div className="mx-6 flex justify-between gap-4">
             <div>{getProviderIcon(connectedAccount.provider)}</div>
             <div>
@@ -46,7 +46,7 @@ export const ConnectedAccounts = ({
             </div>
           </div>
           {index !== connectedAccounts.length - 1 && <Separator />}
-        </>
+        </div>
       ))}
     </div>
   );

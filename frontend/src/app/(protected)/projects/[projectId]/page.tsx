@@ -3,6 +3,7 @@
 import { updateTicket } from '@/api/ticket';
 import { Card } from '@/components/Board/Card';
 import { Column } from '@/components/Board/Column';
+import { Loader } from '@/components/Loader';
 import { TicketStatus } from '@/enums/TicketStatus';
 import { useActiveJob } from '@/hooks/useActiveJob';
 import { Ticket } from '@/model/tickets';
@@ -51,7 +52,7 @@ const columns: ColumnType[] = [
 ];
 
 const Project = (): JSX.Element => {
-  const { activeProject } = useActiveJob();
+  const { activeProject, isActiveJobFetching } = useActiveJob();
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [activeTicket, setActiveTicket] = useState<Ticket | null>(null);
@@ -157,6 +158,10 @@ const Project = (): JSX.Element => {
     setActiveTicket(null);
   };
 
+  if (isActiveJobFetching || !activeProject) {
+    return <Loader />;
+  }
+
   return (
     <div className="h-full w-full overflow-x-auto">
       <DndContext
@@ -168,6 +173,7 @@ const Project = (): JSX.Element => {
         <div className="flex">
           {columns.map((column) => (
             <Column
+              key={`column-${column.id}`}
               id={column.id.toString()}
               title={column.title}
               items={tickets.filter((item) => item.status === column.id)}

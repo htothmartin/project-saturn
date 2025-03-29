@@ -15,7 +15,7 @@ export type Ticket = {
   id: number;
   title: string;
   description: string;
-  assignee: User;
+  assignee: User | null;
   reporter: User;
   status: TicketStatus;
   issueType: IssueType;

@@ -6,6 +6,11 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const getMonogram = (fullName: string) => {
-  if (!fullName) return '';
-  return `${fullName.split(' ')[0].at(0)}${fullName.split(' ')[1].at(0)}`;
+  if (!fullName) return '?';
+  const fullNameSplit = fullName.split(' ');
+  if (fullNameSplit.length < 2) {
+    return '?';
+  }
+
+  return `${fullNameSplit[0].at(0)}${fullNameSplit[1].at(0)}`;
 };

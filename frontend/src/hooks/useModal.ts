@@ -15,8 +15,11 @@ export const useModal = () => {
     },
     [searchParams],
   );
-  const getModalUrl = (modalType: ModalTypes) =>
-    `${pathname}?${createQueryString('modal', modalType)}`;
+  const getModalUrl = useCallback(
+    (modalType: ModalTypes) =>
+      `${pathname}?${createQueryString('modal', modalType)}`,
+    [pathname, createQueryString],
+  );
 
   return { getModalUrl };
 };

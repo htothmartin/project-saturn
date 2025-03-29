@@ -1,9 +1,10 @@
 import { User } from '@/model/user';
 import { UserAvatar } from '../UserAvatar';
 import clsx from 'clsx';
+import { unassigned } from '@/lib/constants';
 
 type Props = {
-  user: User;
+  user: User | null;
   onClick?: () => void;
   selected?: boolean;
 };
@@ -18,10 +19,10 @@ export const UserBadge = ({ user, onClick, selected }: Props): JSX.Element => {
         'bg-slate-200 dark:bg-slate-600': selected,
       })}>
       <UserAvatar
-        imageUrl={user?.profilePictureUrl ?? ''}
-        fullName={user?.fullName ?? ''}
+        imageUrl={user?.profilePictureUrl ?? unassigned.profilePictureUrl}
+        fullName={user?.fullName ?? unassigned.fullName}
       />
-      <div>{user ? user.fullName : 'Unassigned'} </div>
+      <div>{user?.fullName ?? unassigned.fullName} </div>
     </div>
   );
 };
