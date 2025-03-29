@@ -1,10 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit';
-import createSagaMiddleware from 'redux-saga';
-import projectWatcher from './features/project/projectSaga';
-import projectReducer from './features/project/projectSlice';
-import commentReducer from './features/comments/commentSlice';
-import commentsWatcher from './features/comments/commentSaga';
-import { all } from 'redux-saga/effects';
+import { configureStore } from "@reduxjs/toolkit";
+import createSagaMiddleware from "redux-saga";
+import projectWatcher from "./features/project/projectSaga";
+import projectReducer from "./features/project/projectSlice";
+import commentReducer from "./features/comments/commentSlice";
+import commentsWatcher from "./features/comments/commentSaga";
+import { all } from "redux-saga/effects";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -27,5 +27,5 @@ function* rootSaga() {
 }
 
 export type AppStore = ReturnType<typeof makeStore>;
-export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
+export type RootState = ReturnType<AppStore["getState"]>;
+export type AppDispatch = AppStore["dispatch"];

@@ -1,10 +1,10 @@
-import { getMessages } from '@/api/ticket';
+import { getMessages } from "@/api/ticket";
 import {
   fetchComments,
   fetchCommentsError,
   fetchCommentsSuccess,
-} from './commentSlice';
-import { put, takeEvery } from 'redux-saga/effects';
+} from "./commentSlice";
+import { put, takeEvery } from "redux-saga/effects";
 
 function* handleFetchComments(action: ReturnType<typeof fetchComments>) {
   try {
@@ -15,6 +15,7 @@ function* handleFetchComments(action: ReturnType<typeof fetchComments>) {
 
     yield put(fetchCommentsSuccess(data));
   } catch (error) {
+    console.error(error);
     yield put(fetchCommentsError());
   }
 }

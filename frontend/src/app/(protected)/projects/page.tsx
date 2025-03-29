@@ -1,21 +1,21 @@
-'use client';
-import { ProjectCard } from '@/components/Project/Card';
-import { SearchBar } from '@/components/SearchBar';
-import { Button } from '@/components/ui/button';
-import { SortOrder } from '@/enums/SortOrder';
+"use client";
+import { ProjectCard } from "@/components/Project/Card";
+import { SearchBar } from "@/components/SearchBar";
+import { Button } from "@/components/ui/button";
+import { SortOrder } from "@/enums/SortOrder";
 import {
   selectFilter,
   selectProjects,
-} from '@/lib/store/features/project/projectSelectors';
+} from "@/lib/store/features/project/projectSelectors";
 import {
   fetchProjects,
   setSortOrder,
-} from '@/lib/store/features/project/projectSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { ArrowDownAZ, ArrowUpAZIcon } from 'lucide-react';
-import { useEffect, useMemo } from 'react';
+} from "@/lib/store/features/project/projectSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { ArrowDownAZ, ArrowUpAZIcon } from "lucide-react";
+import { useEffect, useMemo } from "react";
 
-const Home = (): JSX.Element => {
+const Home = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
 
   const { sort, q } = useAppSelector(selectFilter);
@@ -42,12 +42,13 @@ const Home = (): JSX.Element => {
       <div className="flex items-center gap-2 p-4">
         <h3 className="text-2xl font-bold">Your projects</h3>
         <div className="ml-auto">Sorting order:</div>
-        {sort === 'asc' ? (
+        {sort === "asc" ? (
           <Button
             onClick={() => {
               dispatch(setSortOrder(SortOrder.Descending));
             }}
-            variant="ghost">
+            variant="ghost"
+          >
             <ArrowDownAZ />
           </Button>
         ) : (
@@ -55,7 +56,8 @@ const Home = (): JSX.Element => {
             onClick={() => {
               dispatch(setSortOrder(SortOrder.Ascending));
             }}
-            variant="ghost">
+            variant="ghost"
+          >
             <ArrowUpAZIcon />
           </Button>
         )}

@@ -1,4 +1,4 @@
-import { RootState } from '../../store';
+import { RootState } from "../../store";
 
 export const selectComments = (state: RootState) => state.comment.comments;
 

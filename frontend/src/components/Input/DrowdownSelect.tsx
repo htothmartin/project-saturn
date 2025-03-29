@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -7,11 +7,11 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '../ui/command';
+} from "../ui/command";
 
 type Props<T> = {
   item: T;
-  render: (item: T) => JSX.Element;
+  render: (item: T) => React.JSX.Element;
   filterItems?: (search: string) => T[];
   items?: T[];
   onSelect: (item: T) => void;
@@ -25,9 +25,9 @@ export const DropdownSelect = <T extends { id: string }>({
   items,
   onSelect,
   searchPlaceHolder,
-}: Props<T>): JSX.Element => {
+}: Props<T>): React.JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>("");
 
   const filteredItems = filterItems ? filterItems(search) : items;
 
@@ -60,7 +60,8 @@ export const DropdownSelect = <T extends { id: string }>({
                   <CommandItem
                     key={`item-${item.id}`}
                     value={item.id.toString()}
-                    onSelect={() => onSelectItem(item)}>
+                    onSelect={() => onSelectItem(item)}
+                  >
                     {render(item)}
                   </CommandItem>
                 ))}

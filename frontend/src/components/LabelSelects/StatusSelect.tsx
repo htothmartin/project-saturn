@@ -1,19 +1,20 @@
-import { TicketStatus } from '@/enums/TicketStatus';
-import { useAppDispatch } from '@/lib/store/hooks';
-import { useParams } from 'next/navigation';
-import { useMemo } from 'react';
-import { v4 } from 'uuid';
-import { StatusLabel } from '../Labels/StatusLabel';
-import { updateTicket } from '@/api/ticket';
-import { updateTicketSuccess } from '@/lib/store/features/project/projectSlice';
-import { DropdownSelect } from '../Input/DrowdownSelect';
+import { TicketStatus } from "@/enums/TicketStatus";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { useParams } from "next/navigation";
+import { useMemo } from "react";
+import { v4 } from "uuid";
+import { StatusLabel } from "../Labels/StatusLabel";
+import { updateTicket } from "@/api/ticket";
+import { updateTicketSuccess } from "@/lib/store/features/project/projectSlice";
+import { DropdownSelect } from "../Input/DrowdownSelect";
+import { SelectOption } from "../Input/type";
 
 type Props = {
   type: TicketStatus;
   ticketId: number;
 };
 
-export const StatusSelect = ({ type, ticketId }: Props): JSX.Element => {
+export const StatusSelect = ({ type, ticketId }: Props): React.JSX.Element => {
   const { projectId } = useParams<{
     projectId: string;
   }>();
@@ -25,7 +26,7 @@ export const StatusSelect = ({ type, ticketId }: Props): JSX.Element => {
         id: v4(),
         data: value,
       })),
-    [TicketStatus],
+    [],
   );
 
   const render = ({ data }: SelectOption<TicketStatus>) => (

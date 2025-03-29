@@ -1,5 +1,5 @@
-import { Project as ProjectApi } from '@/api';
-import { put, select, takeEvery } from 'redux-saga/effects';
+import { Project as ProjectApi } from "@/api";
+import { put, select, takeEvery } from "redux-saga/effects";
 import {
   fetchProjectsError,
   fetchProjectsSuccess,
@@ -7,12 +7,12 @@ import {
   fetchActiveProject as fetchActiveProjectAction,
   fetchActiveProjectSuccess,
   fetchActiveProjectError,
-} from './projectSlice';
-import { PayloadAction } from '@reduxjs/toolkit';
-import { AxiosResponse } from 'axios';
-import type { ActiveProject, Project } from '@/model/project';
-import { Filter } from '@/model/filter';
-import { selectFilter } from './projectSelectors';
+} from "./projectSlice";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { AxiosResponse } from "axios";
+import type { ActiveProject, Project } from "@/model/project";
+import { Filter } from "@/model/filter";
+import { selectFilter } from "./projectSelectors";
 
 function* fetchProjects() {
   try {
@@ -21,6 +21,7 @@ function* fetchProjects() {
       yield ProjectApi.getProjectForUser(filter);
     yield put(fetchProjectsSuccess(projects.data));
   } catch (error) {
+    console.error(error);
     yield put(fetchProjectsError());
   }
 }
@@ -32,6 +33,7 @@ function* fetchActiveProject(action: PayloadAction<string>) {
       yield ProjectApi.getActiveProject(id);
     yield put(fetchActiveProjectSuccess(activeProject.data));
   } catch (error) {
+    console.error(error);
     yield put(fetchActiveProjectError());
   }
 }

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Form,
@@ -7,29 +7,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { RegisterReq } from '@/api/auth';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useState } from 'react';
-import { HttpErrorResponse } from '@/model/http-error-response';
-import { AxiosError } from 'axios';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { HttpErrorMessage } from '@/components/Error/http-error-message';
-import { registerSchema } from '@/lib/schemas';
+} from "@/components/ui/form";
+import { RegisterReq } from "@/api/auth";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useState } from "react";
+import { HttpErrorResponse } from "@/model/http-error-response";
+import { AxiosError } from "axios";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { HttpErrorMessage } from "@/components/Error/http-error-message";
+import { registerSchema } from "@/lib/schemas";
 
-export const RegisterForm = (): JSX.Element => {
+export const RegisterForm = (): React.JSX.Element => {
   const registerForm = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      email: '',
-      firstname: '',
-      lastname: '',
-      password: '',
-      confirmPassword: '',
+      email: "",
+      firstname: "",
+      lastname: "",
+      password: "",
+      confirmPassword: "",
     },
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -44,7 +44,7 @@ export const RegisterForm = (): JSX.Element => {
         values.lastname,
         values.password,
       );
-      toast.success('Sucessfully registered.');
+      toast.success("Sucessfully registered.");
     } catch (error) {
       if (error instanceof AxiosError) {
         const errors = error?.response?.data as HttpErrorResponse;
@@ -52,7 +52,7 @@ export const RegisterForm = (): JSX.Element => {
           setErrors(errors);
         }
       } else {
-        toast.error('Register failed');
+        toast.error("Register failed");
       }
     }
     setIsLoading(false);
@@ -62,7 +62,8 @@ export const RegisterForm = (): JSX.Element => {
       <form
         method="POST"
         onSubmit={registerForm.handleSubmit(onSubmit)}
-        className="my-4">
+        className="my-4"
+      >
         <FormField
           control={registerForm.control}
           name="email"

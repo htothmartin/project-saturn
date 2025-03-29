@@ -1,26 +1,26 @@
-'use client';
+"use client";
 
-import { PrioritySelect } from '@/components/LabelSelects/PrioritySelect';
-import { StatusSelect } from '@/components/LabelSelects/StatusSelect';
-import { UserSelector } from '@/components/LabelSelects/UserSelector';
-import { Loader } from '@/components/Loader';
-import { MessageInput } from '@/components/Message/MessageInput';
-import { MessageList } from '@/components/Message/MessageList';
-import Tiptap from '@/components/TipTap';
-import { Button } from '@/components/ui/button';
-import { UserBadge } from '@/components/UserBadge';
-import { useActiveJob } from '@/hooks/useActiveJob';
+import { PrioritySelect } from "@/components/LabelSelects/PrioritySelect";
+import { StatusSelect } from "@/components/LabelSelects/StatusSelect";
+import { UserSelector } from "@/components/LabelSelects/UserSelector";
+import { Loader } from "@/components/Loader";
+import { MessageInput } from "@/components/Message/MessageInput";
+import { MessageList } from "@/components/Message/MessageList";
+import Tiptap from "@/components/TipTap";
+import { Button } from "@/components/ui/button";
+import { UserBadge } from "@/components/UserBadge";
+import { useActiveJob } from "@/hooks/useActiveJob";
 import {
   selectComments,
   selectIsCommentsFetching,
-} from '@/lib/store/features/comments/commentSelectors';
-import { fetchComments } from '@/lib/store/features/comments/commentSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { Ticket } from '@/model/tickets';
-import { X } from 'lucide-react';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+} from "@/lib/store/features/comments/commentSelectors";
+import { fetchComments } from "@/lib/store/features/comments/commentSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { Ticket } from "@/model/tickets";
+import { X } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const TicketDetails = () => {
   const { activeProject } = useActiveJob();

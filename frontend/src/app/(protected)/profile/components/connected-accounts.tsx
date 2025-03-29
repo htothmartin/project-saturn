@@ -1,7 +1,7 @@
-import { Separator } from '@/components/ui/separator';
-import { ConnectedAccount } from '@/model/connected-accounts';
-import { FcGoogle } from 'react-icons/fc';
-import { FaGithub } from 'react-icons/fa';
+import { Separator } from "@/components/ui/separator";
+import { ConnectedAccount } from "@/model/connected-accounts";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 
 type Props = {
   connectedAccounts: ConnectedAccount[];
@@ -9,17 +9,17 @@ type Props = {
 
 export const ConnectedAccounts = ({
   connectedAccounts,
-}: Props): JSX.Element => {
-  const getProviderIcon = (provider: 'google' | 'github') => {
+}: Props): React.JSX.Element => {
+  const getProviderIcon = (provider: "google" | "github") => {
     switch (provider) {
-      case 'github':
+      case "github":
         return (
           <div className="flex items-center gap-4">
             <FaGithub />
             <p>Google</p>
           </div>
         );
-      case 'google':
+      case "google":
         return (
           <div className="flex items-center gap-4">
             <FcGoogle />
@@ -41,7 +41,7 @@ export const ConnectedAccounts = ({
           <div className="mx-6 flex justify-between gap-4">
             <div>{getProviderIcon(connectedAccount.provider)}</div>
             <div>
-              Connected at:{' '}
+              Connected at:{" "}
               {new Date(connectedAccount.createdAt).toDateString()}
             </div>
           </div>

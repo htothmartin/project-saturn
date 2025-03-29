@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { selectProjects } from '@/lib/store/features/project/projectSelectors';
-import { fetchActiveProject } from '@/lib/store/features/project/projectSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { useParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { selectProjects } from "@/lib/store/features/project/projectSelectors";
+import { fetchActiveProject } from "@/lib/store/features/project/projectSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { useParams } from "next/navigation";
+import { useEffect } from "react";
 
 export const useActiveJob = () => {
   const params = useParams<{ projectId: string }>();
@@ -15,7 +15,7 @@ export const useActiveJob = () => {
     if (!isActiveJobFetching && !activeProject) {
       dispatch(fetchActiveProject(params.projectId));
     }
-  }, [params.projectId]);
+  }, [params.projectId]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   return { activeProject, isActiveJobFetching };
 };

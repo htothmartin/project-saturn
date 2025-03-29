@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { Button } from '../ui/button';
-import { useEffect, useState } from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { fetchUsersNotAssignedToProject } from '@/api/user';
-import { User } from '@/model/user';
-import { UserBadge } from '../UserBadge';
-import { Check, ChevronsUpDown } from 'lucide-react';
+import { Button } from "../ui/button";
+import { useEffect, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { fetchUsersNotAssignedToProject } from "@/api/user";
+import { User } from "@/model/user";
+import { UserBadge } from "../UserBadge";
+import { Check, ChevronsUpDown } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -14,15 +14,15 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '../ui/command';
-import { addUserToProject } from '@/api/project';
-import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useAppDispatch } from '@/lib/store/hooks';
-import { fetchActiveProject } from '@/lib/store/features/project/projectSlice';
-import MoonLoader from 'react-spinners/MoonLoader';
-import { CommandLoading } from 'cmdk';
+} from "../ui/command";
+import { addUserToProject } from "@/api/project";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { fetchActiveProject } from "@/lib/store/features/project/projectSlice";
+import MoonLoader from "react-spinners/MoonLoader";
+import { CommandLoading } from "cmdk";
 
-export const AddMemeber = (): JSX.Element => {
+export const AddMemeber = (): React.JSX.Element => {
   const pathname = usePathname();
   const router = useRouter();
   const dispacth = useAppDispatch();
@@ -31,7 +31,7 @@ export const AddMemeber = (): JSX.Element => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[] | null>(null);
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
   const fetchUsers = async () => {
@@ -61,7 +61,7 @@ export const AddMemeber = (): JSX.Element => {
       setLoading(true);
       fetchUsers();
     }
-  }, [users]);
+  }, [users]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex flex-col items-center justify-center gap-4">
@@ -71,11 +71,12 @@ export const AddMemeber = (): JSX.Element => {
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="h-full w-fit justify-start">
+            className="h-full w-fit justify-start"
+          >
             {selectedUser ? (
               <UserBadge user={selectedUser} />
             ) : (
-              'Select user...'
+              "Select user..."
             )}
             <ChevronsUpDown className="opacity-50" />
           </Button>
@@ -111,7 +112,8 @@ export const AddMemeber = (): JSX.Element => {
                             null,
                         );
                         setOpen(false);
-                      }}>
+                      }}
+                    >
                       <UserBadge user={user} />
                       {user.id === selectedUser?.id && (
                         <Check className="ml-auto" />

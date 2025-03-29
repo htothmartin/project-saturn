@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { SaturnLogo } from '@/assets';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { Button } from '@/components/ui/button';
+import { SaturnLogo } from "@/assets";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
-import { NavigationMenuList } from '@radix-ui/react-navigation-menu';
-import Link from 'next/link';
-import { ModalTypes } from '@/enums/ModalTypes';
-import { UserAvatar } from '@/components/UserAvatar';
-import { Logout } from '@/api/auth';
-import useAuth from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
-import { useModal } from '@/hooks/useModal';
+} from "@/components/ui/navigation-menu";
+import { NavigationMenuList } from "@radix-ui/react-navigation-menu";
+import Link from "next/link";
+import { ModalTypes } from "@/enums/ModalTypes";
+import { UserAvatar } from "@/components/UserAvatar";
+import { Logout } from "@/api/auth";
+import useAuth from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import { useModal } from "@/hooks/useModal";
 
-export const Header = (): JSX.Element => {
+export const Header = (): React.JSX.Element => {
   const router = useRouter();
   const { setAuth, auth } = useAuth();
   const { getModalUrl } = useModal();
 
   const logout = async () => {
     await Logout();
-    router.push('/login');
-    setAuth({ user: null, accessToken: '' });
+    router.push("/login");
+    setAuth({ user: null, accessToken: "" });
   };
 
   if (!auth.user) {
@@ -59,7 +59,8 @@ export const Header = (): JSX.Element => {
             <Link
               href={getModalUrl(ModalTypes.CreateProject)}
               legacyBehavior
-              passHref>
+              passHref
+            >
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 New Project
               </NavigationMenuLink>
@@ -80,8 +81,8 @@ export const Header = (): JSX.Element => {
         </Button>
         <ThemeToggle />
         <UserAvatar
-          imageUrl={auth.user?.profilePictureUrl ?? ''}
-          fullName={auth.user?.fullName ?? ''}
+          imageUrl={auth.user?.profilePictureUrl ?? ""}
+          fullName={auth.user?.fullName ?? ""}
         />
       </div>
     </div>

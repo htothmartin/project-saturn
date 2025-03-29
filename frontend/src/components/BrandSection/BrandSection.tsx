@@ -1,6 +1,6 @@
-import { SaturnLogo } from '@/assets';
+import { SaturnLogo } from "@/assets";
 
-export const BrandSection = (): JSX.Element => {
+export const BrandSection = (): React.JSX.Element => {
   return (
     <>
       <div className="d relative mx-auto hidden md:block">

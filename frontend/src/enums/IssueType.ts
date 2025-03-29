@@ -1,5 +1,5 @@
 export enum IssueType {
-  BUG = 'BUG',
-  FEATURE = 'FEATURE',
-  TASK = 'TASK',
+  BUG = "BUG",
+  FEATURE = "FEATURE",
+  TASK = "TASK",
 }

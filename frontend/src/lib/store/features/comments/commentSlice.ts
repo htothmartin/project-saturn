@@ -1,5 +1,5 @@
-import { Comment } from '@/model/comment';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Comment } from "@/model/comment";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type CommentState = {
   comments: Comment[];
@@ -12,7 +12,7 @@ const initialState: CommentState = {
 };
 
 const commentSlice = createSlice({
-  name: 'comment',
+  name: "comment",
   initialState,
   reducers: {
     fetchComments: (

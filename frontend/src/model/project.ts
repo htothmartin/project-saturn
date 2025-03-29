@@ -1,6 +1,6 @@
-import { ProjectStatus } from '@/enums/ProjectStatus';
-import { Ticket } from './tickets';
-import { User } from './user';
+import { ProjectStatus } from "@/enums/ProjectStatus";
+import { Ticket } from "./tickets";
+import { User } from "./user";
 
 export type Project = {
   id: number;

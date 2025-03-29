@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { updateTicket } from '@/api/ticket';
-import { Card } from '@/components/Board/Card';
-import { Column } from '@/components/Board/Column';
-import { Loader } from '@/components/Loader';
-import { TicketStatus } from '@/enums/TicketStatus';
-import { useActiveJob } from '@/hooks/useActiveJob';
-import { Ticket } from '@/model/tickets';
+import { updateTicket } from "@/api/ticket";
+import { Card } from "@/components/Board/Card";
+import { Column } from "@/components/Board/Column";
+import { Loader } from "@/components/Loader";
+import { TicketStatus } from "@/enums/TicketStatus";
+import { useActiveJob } from "@/hooks/useActiveJob";
+import { Ticket } from "@/model/tickets";
 import {
   DragEndEvent,
   DndContext,
@@ -17,11 +17,11 @@ import {
   DragOverEvent,
   DragStartEvent,
   DragOverlay,
-} from '@dnd-kit/core';
-import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
+} from "@dnd-kit/core";
+import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
 export type ColumnType = {
   id: string;
@@ -31,27 +31,27 @@ export type ColumnType = {
 const columns: ColumnType[] = [
   {
     id: TicketStatus.COMMITED,
-    title: 'Commited',
+    title: "Commited",
   },
   {
     id: TicketStatus.IN_PROGRESS,
-    title: 'In Progress',
+    title: "In Progress",
   },
   {
     id: TicketStatus.IN_REVIEW,
-    title: 'In Review',
+    title: "In Review",
   },
   {
     id: TicketStatus.BLOCKED,
-    title: 'Blocked',
+    title: "Blocked",
   },
   {
     id: TicketStatus.CLOSED,
-    title: 'Closed',
+    title: "Closed",
   },
 ];
 
-const Project = (): JSX.Element => {
+const Project = (): React.JSX.Element => {
   const { activeProject, isActiveJobFetching } = useActiveJob();
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -78,8 +78,8 @@ const Project = (): JSX.Element => {
     const overId = over.id;
 
     if (activeId === overId) return;
-    const isActiveATask = active.data.current?.type === 'Item';
-    const isOverATask = over.data.current?.type === 'Item';
+    const isActiveATask = active.data.current?.type === "Item";
+    const isOverATask = over.data.current?.type === "Item";
     if (!isActiveATask) return;
     if (isActiveATask && isOverATask) {
       setTickets((prevTickets) => {
@@ -117,7 +117,7 @@ const Project = (): JSX.Element => {
       });
     }
 
-    const isOverAColumn = over.data.current?.type === 'Column';
+    const isOverAColumn = over.data.current?.type === "Column";
     if (isActiveATask && isOverAColumn) {
       setTickets((prevTickets) => {
         const newTickets = prevTickets.map((t) => {
@@ -169,7 +169,8 @@ const Project = (): JSX.Element => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onDragOver={handleDragOver}
-        collisionDetection={closestCorners}>
+        collisionDetection={closestCorners}
+      >
         <div className="flex">
           {columns.map((column) => (
             <Column

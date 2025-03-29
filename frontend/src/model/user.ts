@@ -1,4 +1,4 @@
-import { ConnectedAccount } from './connected-accounts';
+import { ConnectedAccount } from "./connected-accounts";
 
 export type User = {
   id: number;

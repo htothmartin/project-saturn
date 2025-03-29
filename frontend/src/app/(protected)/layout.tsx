@@ -1,11 +1,11 @@
-import { Modal } from '@/components/Modals';
-import StoreProvider from '@/context/StoreProvider';
-import { AuthProvider } from '@/context/AuthProvider';
-import { Header } from './components/header';
+import { Modal } from "@/components/Modals";
+import StoreProvider from "@/context/StoreProvider";
+import { AuthProvider } from "@/context/AuthProvider";
+import { Header } from "./components/header";
 
 export default function Layout({
   children,
-}: Readonly<{ children: JSX.Element }>) {
+}: Readonly<{ children: React.JSX.Element }>) {
   return (
     <AuthProvider>
       <StoreProvider>

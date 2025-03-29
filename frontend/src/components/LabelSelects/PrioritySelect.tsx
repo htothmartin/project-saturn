@@ -1,19 +1,23 @@
-import { TicketPriority } from '@/enums/TicketPriority';
-import { v4 } from 'uuid';
-import { PriorityLabel } from '../Labels/PriorityLabel';
-import { updateTicket } from '@/api/ticket';
-import { useParams } from 'next/navigation';
-import { useAppDispatch } from '@/lib/store/hooks';
-import { updateTicketSuccess } from '@/lib/store/features/project/projectSlice';
-import { useMemo } from 'react';
-import { DropdownSelect } from '../Input/DrowdownSelect';
+import { TicketPriority } from "@/enums/TicketPriority";
+import { v4 } from "uuid";
+import { PriorityLabel } from "../Labels/PriorityLabel";
+import { updateTicket } from "@/api/ticket";
+import { useParams } from "next/navigation";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { updateTicketSuccess } from "@/lib/store/features/project/projectSlice";
+import { useMemo } from "react";
+import { DropdownSelect } from "../Input/DrowdownSelect";
+import { SelectOption } from "../Input/type";
 
 type Props = {
   type: TicketPriority;
   ticketId: number;
 };
 
-export const PrioritySelect = ({ type, ticketId }: Props): JSX.Element => {
+export const PrioritySelect = ({
+  type,
+  ticketId,
+}: Props): React.JSX.Element => {
   const { projectId } = useParams<{
     projectId: string;
   }>();
@@ -25,7 +29,7 @@ export const PrioritySelect = ({ type, ticketId }: Props): JSX.Element => {
         id: v4(),
         data: value,
       })),
-    [PriorityLabel],
+    [],
   );
 
   const filteredItems = useMemo(

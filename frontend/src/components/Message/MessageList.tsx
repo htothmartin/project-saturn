@@ -1,5 +1,5 @@
-import type { Comment } from '@/model/comment';
-import { Message } from './Message';
+import type { Comment } from "@/model/comment";
+import { Message } from "./Message";
 
 export type Props = {
   messages: Comment[];

@@ -1,7 +1,7 @@
-import { publicApi } from './axios';
+import { publicApi } from "./axios";
 
 export const LoginReq = async (email: string, password: string) => {
-  const { data } = await publicApi.post('/auth/login', { email, password });
+  const { data } = await publicApi.post("/auth/login", { email, password });
   return data;
 };
 
@@ -11,7 +11,7 @@ export const RegisterReq = async (
   lastname: string,
   password: string,
 ) => {
-  await publicApi.post('/auth/signup', {
+  await publicApi.post("/auth/signup", {
     email,
     firstname,
     lastname,
@@ -20,10 +20,10 @@ export const RegisterReq = async (
 };
 
 export const refreshAccessToken = async () => {
-  const { data } = await publicApi.post('/auth/refresh-token');
+  const { data } = await publicApi.post("/auth/refresh-token");
   return data.accessToken;
 };
 
 export const Logout = async () => {
-  await publicApi.post('/auth/logout');
+  await publicApi.post("/auth/logout");
 };

@@ -1,17 +1,21 @@
-'use client';
+"use client";
 
-import { X } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { usePathname } from 'next/navigation';
-import Link from 'next/link';
+import { X } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 type Props = {
-  children: JSX.Element;
+  children: React.JSX.Element;
   title: string;
   closeable?: boolean;
 };
 
-export function ModalBase({ children, title, closeable }: Props): JSX.Element {
+export function ModalBase({
+  children,
+  title,
+  closeable,
+}: Props): React.JSX.Element {
   const pathname = usePathname();
   return (
     <>

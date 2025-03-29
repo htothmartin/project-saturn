@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { TicketStatus } from '@/enums/TicketStatus';
+import { TicketStatus } from "@/enums/TicketStatus";
 
 const statuses: { label: string; value: TicketStatus; color: string }[] = [
   {
-    label: 'Commited',
+    label: "Commited",
     value: TicketStatus.COMMITED,
-    color: 'bg-grey-500',
+    color: "bg-grey-500",
   },
   {
-    label: 'In Progress',
+    label: "In Progress",
     value: TicketStatus.IN_PROGRESS,
-    color: 'bg-blue-500',
+    color: "bg-blue-500",
   },
   {
-    label: 'In Review',
+    label: "In Review",
     value: TicketStatus.IN_REVIEW,
-    color: 'bg-yellow-500',
+    color: "bg-yellow-500",
   },
   {
-    label: 'Blocked',
+    label: "Blocked",
     value: TicketStatus.BLOCKED,
-    color: 'bg-red-500',
+    color: "bg-red-500",
   },
   {
-    label: 'Closed',
+    label: "Closed",
     value: TicketStatus.CLOSED,
-    color: 'bg-grey-500',
+    color: "bg-grey-500",
   },
 ];
 
@@ -40,7 +40,7 @@ export const StatusSelect = ({ selectedStatus, onChange }: Props) => {
     onChange(event.target.value as TicketStatus);
 
   const selectedColor =
-    statuses.find((task) => task.value === selectedStatus)?.color || '';
+    statuses.find((task) => task.value === selectedStatus)?.color || "";
 
   return (
     <div className="w-full">
@@ -52,7 +52,7 @@ export const StatusSelect = ({ selectedStatus, onChange }: Props) => {
           <option
             key={task.value}
             value={task.value}
-            className={`text-primary-foreground`}>
+            className={"text-primary-foreground"}>
             {task.label}
           </option>
         ))}

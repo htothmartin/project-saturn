@@ -1,6 +1,6 @@
-import { ModalTypes } from '@/enums/ModalTypes';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import { ModalTypes } from "@/enums/ModalTypes";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
 export const useModal = () => {
   const pathname = usePathname();
@@ -17,7 +17,7 @@ export const useModal = () => {
   );
   const getModalUrl = useCallback(
     (modalType: ModalTypes) =>
-      `${pathname}?${createQueryString('modal', modalType)}`,
+      `${pathname}?${createQueryString("modal", modalType)}`,
     [pathname, createQueryString],
   );
 

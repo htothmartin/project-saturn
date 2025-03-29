@@ -1,8 +1,8 @@
-import { ActiveProject, Project } from '@/model/project';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SortOrder } from '@/enums/SortOrder';
-import { Filter } from '@/model/filter';
-import { Ticket } from '@/model/tickets';
+import { ActiveProject, Project } from "@/model/project";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { SortOrder } from "@/enums/SortOrder";
+import { Filter } from "@/model/filter";
+import { Ticket } from "@/model/tickets";
 
 type ProjectState = {
   projects: Project[] | null;
@@ -17,11 +17,11 @@ const initialState: ProjectState = {
   activeProject: null,
   isProjectsFetching: false,
   isActiveJobFetching: false,
-  filter: { sort: SortOrder.Ascending, q: '' },
+  filter: { sort: SortOrder.Ascending, q: "" },
 };
 
 const projectSlice = createSlice({
-  name: 'project',
+  name: "project",
   initialState,
   reducers: {
     fetchProjects(state: ProjectState) {
@@ -36,9 +36,9 @@ const projectSlice = createSlice({
     },
     fetchProjectsError(state: ProjectState) {
       state.isProjectsFetching = false;
-      state.projects == null;
+      state.projects = null;
     },
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     fetchActiveProject(state: ProjectState, _: PayloadAction<string>) {
       state.isActiveJobFetching = true;
     },

@@ -1,10 +1,10 @@
-import { Send } from 'lucide-react';
-import { Input } from '../ui/input';
-import { Button } from '../ui/button';
-import { ChangeEvent, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { createMessage } from '@/api/ticket';
-import useAuth from '@/hooks/useAuth';
+import { Send } from "lucide-react";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { ChangeEvent, useState } from "react";
+import { useParams } from "next/navigation";
+import { createMessage } from "@/api/ticket";
+import useAuth from "@/hooks/useAuth";
 
 export const MessageInput = () => {
   const { projectId, ticketId } = useParams<{
@@ -12,7 +12,7 @@ export const MessageInput = () => {
     ticketId: string;
   }>();
   const { auth } = useAuth();
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState<string>("");
 
   const sendMessage = async () => {
     if (auth.user) {

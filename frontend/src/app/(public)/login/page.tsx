@@ -1,7 +1,7 @@
-import { BrandSection } from '@/components/BrandSection';
-import Link from 'next/link';
-import { AuthLayout } from '@/components/AuthLayout/AuthLayout';
-import { LoginForm } from './components/login-form';
+import { BrandSection } from "@/components/BrandSection";
+import Link from "next/link";
+import { AuthLayout } from "@/components/AuthLayout/AuthLayout";
+import { LoginForm } from "./components/login-form";
 
 const Login = () => {
   return (
@@ -11,7 +11,7 @@ const Login = () => {
         <h1 className="pb-4 text-4xl font-bold">Sign In</h1>
         <LoginForm />
         <p className="mt-2 text-center">
-          You don&apos;t have an account? Register{' '}
+          You don&apos;t have an account? Register{" "}
           <Link className="underline" href="/register">
             here
           </Link>

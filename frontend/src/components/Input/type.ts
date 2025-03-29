@@ -1,4 +1,4 @@
-type SelectOption<T> = {
+export type SelectOption<T> = {
   id: string;
   data: T;
 };

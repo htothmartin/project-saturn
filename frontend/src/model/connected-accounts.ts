@@ -1,4 +1,4 @@
 export type ConnectedAccount = {
-  provider: 'google' | 'github';
+  provider: "google" | "github";
   createdAt: Date;
 };

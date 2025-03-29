@@ -1,11 +1,11 @@
-import { createTicket } from '@/api/ticket';
-import { IssueType } from '@/enums/IssueType';
-import { TicketPriority } from '@/enums/TicketPriority';
-import { addTicketSchema } from '@/lib/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { createTicket } from "@/api/ticket";
+import { IssueType } from "@/enums/IssueType";
+import { TicketPriority } from "@/enums/TicketPriority";
+import { addTicketSchema } from "@/lib/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -13,8 +13,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form';
-import { Input } from '../ui/input';
+} from "../ui/form";
+import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
@@ -23,15 +23,15 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '../ui/select';
-import { Button } from '../ui/button';
-import { Textarea } from '../ui/textarea';
-import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useAppDispatch } from '@/lib/store/hooks';
-import { fetchActiveProject } from '@/lib/store/features/project/projectSlice';
-import { PriorityLabel } from '../Labels/PriorityLabel';
+} from "../ui/select";
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { fetchActiveProject } from "@/lib/store/features/project/projectSlice";
+import { PriorityLabel } from "../Labels/PriorityLabel";
 
-export const AddTicket = (): JSX.Element => {
+export const AddTicket = (): React.JSX.Element => {
   type Inputs = z.infer<typeof addTicketSchema>;
   const { projectId } = useParams<{ projectId: string }>();
   const pathname = usePathname();
@@ -41,8 +41,8 @@ export const AddTicket = (): JSX.Element => {
   const ticketForm = useForm<Inputs>({
     resolver: zodResolver(addTicketSchema),
     defaultValues: {
-      ticketTitle: '',
-      ticketDescription: '',
+      ticketTitle: "",
+      ticketDescription: "",
       ticketPriority: TicketPriority.MEDIUM,
       issueType: IssueType.TASK,
     },
@@ -52,16 +52,16 @@ export const AddTicket = (): JSX.Element => {
     try {
       await createTicket(projectId, {
         title: data.ticketTitle,
-        description: data.ticketDescription ?? '',
+        description: data.ticketDescription ?? "",
         priority: data.ticketPriority,
         type: data.issueType,
         projectId: Number(projectId),
       });
-      toast('Ticket successfully added');
+      toast("Ticket successfully added");
       dispatch(fetchActiveProject(projectId));
       router.push(pathname);
     } catch {
-      toast('An error occured');
+      toast("An error occured");
     }
   };
 

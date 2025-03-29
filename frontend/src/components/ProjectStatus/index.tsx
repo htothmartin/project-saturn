@@ -1,11 +1,13 @@
-import { ProjectStatus } from '@/enums/ProjectStatus';
-import { Badge } from '../ui/badge';
+import { ProjectStatus } from "@/enums/ProjectStatus";
+import { Badge } from "../ui/badge";
 
 type Props = {
   statusType: string;
 };
 
-export const ProjectStatusBadge = ({ statusType }: Props): JSX.Element => {
+export const ProjectStatusBadge = ({
+  statusType,
+}: Props): React.JSX.Element => {
   switch (statusType) {
     case ProjectStatus.ACTIVE:
       return <Badge variant="green">{ProjectStatus.ACTIVE}</Badge>;

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { IssueTypeSelect } from '@/components/LabelSelects/IssueTypesSelect';
-import { PrioritySelect } from '@/components/LabelSelects/PrioritySelect';
-import { UserSelector } from '@/components/LabelSelects/UserSelector';
-import { SearchBar } from '@/components/SearchBar';
-import { Button } from '@/components/ui/button';
+import { IssueTypeSelect } from "@/components/LabelSelects/IssueTypesSelect";
+import { PrioritySelect } from "@/components/LabelSelects/PrioritySelect";
+import { UserSelector } from "@/components/LabelSelects/UserSelector";
+import { SearchBar } from "@/components/SearchBar";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -14,17 +14,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { ModalTypes } from '@/enums/ModalTypes';
-import { useActiveJob } from '@/hooks/useActiveJob';
-import { useModal } from '@/hooks/useModal';
-import { selectFilter } from '@/lib/store/features/project/projectSelectors';
-import { useAppSelector } from '@/lib/store/hooks';
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+} from "@/components/ui/table";
+import { ModalTypes } from "@/enums/ModalTypes";
+import { useActiveJob } from "@/hooks/useActiveJob";
+import { useModal } from "@/hooks/useModal";
+import { selectFilter } from "@/lib/store/features/project/projectSelectors";
+import { useAppSelector } from "@/lib/store/hooks";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 
-const Tickets = (): JSX.Element => {
+const Tickets = (): React.JSX.Element => {
   const { activeProject } = useActiveJob();
   const { getModalUrl } = useModal();
   const router = useRouter();
@@ -83,7 +83,8 @@ const Tickets = (): JSX.Element => {
               <TableCell>
                 <Button
                   onClick={() => router.push(`tickets/${ticket.id}`)}
-                  variant="ghost">
+                  variant="ghost"
+                >
                   <ArrowRight />
                 </Button>
               </TableCell>

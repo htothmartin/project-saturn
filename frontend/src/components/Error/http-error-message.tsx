@@ -1,5 +1,5 @@
-import { HttpErrorResponse } from '@/model/http-error-response';
-import { ErrorMessage } from './error-message';
+import { HttpErrorResponse } from "@/model/http-error-response";
+import { ErrorMessage } from "./error-message";
 
 type Props = {
   data: HttpErrorResponse;
@@ -8,8 +8,8 @@ type Props = {
 
 export const HttpErrorMessage = ({
   data,
-  className = '',
-}: Props): JSX.Element => {
+  className = "",
+}: Props): React.JSX.Element => {
   return (
     <div className={`flex flex-col ${className}`}>
       {data.message && <ErrorMessage>{data.message}</ErrorMessage>}

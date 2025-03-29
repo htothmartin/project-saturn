@@ -2,7 +2,7 @@ type Props = {
   size: number;
 };
 
-export const Circles = ({ size }: Props): JSX.Element => {
+export const Circles = ({ size }: Props): React.JSX.Element => {
   const pxSize = `${size}px`;
   return (
     <svg
@@ -11,14 +11,16 @@ export const Circles = ({ size }: Props): JSX.Element => {
       width={pxSize}
       height={pxSize}
       viewBox="0 0 1280.000000 1280.000000"
-      preserveAspectRatio="xMidYMid meet">
+      preserveAspectRatio="xMidYMid meet"
+    >
       <metadata>
         Created by potrace 1.15, written by Peter Selinger 2001-2017
       </metadata>
       <g
         transform="translate(0.000000,1280.000000) scale(0.100000,-0.100000)"
         fill="#FFF"
-        stroke="none">
+        stroke="none"
+      >
         <title>Circles</title>
         <path
           d="M6130 12474 c-41 -2 -175 -13 -296 -24 -1621 -147 -3142 -963 -4160

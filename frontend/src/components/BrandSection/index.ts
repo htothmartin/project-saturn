@@ -1,3 +1,3 @@
-import { BrandSection } from './BrandSection';
+import { BrandSection } from "./BrandSection";
 
 export { BrandSection };

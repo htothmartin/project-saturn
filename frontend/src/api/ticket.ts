@@ -1,5 +1,5 @@
-import { TicketForm, UpdateTicket } from '@/model/tickets';
-import { protectedApi } from './axios';
+import { TicketForm, UpdateTicket } from "@/model/tickets";
+import { protectedApi } from "./axios";
 
 export const createTicket = async (projectId: string, ticket: TicketForm) => {
   return await protectedApi.post(`/projects/${projectId}/tickets`, {

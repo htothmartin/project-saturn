@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { refreshAccessToken } from '@/api/auth';
-import { protectedApi } from '@/api/axios';
-import { me } from '@/api/user';
-import { SplashScreen } from '@/components/SplashScreen';
-import { User } from '@/model/user';
-import { useRouter } from 'next/navigation';
+import { refreshAccessToken } from "@/api/auth";
+import { protectedApi } from "@/api/axios";
+import { me } from "@/api/user";
+import { SplashScreen } from "@/components/SplashScreen";
+import { User } from "@/model/user";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   Dispatch,
@@ -13,7 +13,7 @@ import {
   useEffect,
   useLayoutEffect,
   useState,
-} from 'react';
+} from "react";
 
 type AuthContext = {
   auth: Auth;
@@ -22,13 +22,13 @@ type AuthContext = {
 };
 
 export const AuthContext = createContext<AuthContext>({
-  auth: { user: null, accessToken: '' },
+  auth: { user: null, accessToken: "" },
   setAuth: () => {},
   isLoading: true,
 });
 
 type Props = {
-  children: JSX.Element;
+  children: React.JSX.Element;
 };
 
 export type Auth = {
@@ -37,7 +37,7 @@ export type Auth = {
 };
 
 export const AuthProvider = ({ children }: Props) => {
-  const [auth, setAuth] = useState<Auth>({ user: null, accessToken: '' });
+  const [auth, setAuth] = useState<Auth>({ user: null, accessToken: "" });
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: Props) => {
     const requestIntercept = protectedApi.interceptors.request.use(
       (config) => {
         if (auth.user && auth.accessToken) {
-          config.headers['Authorization'] = `Bearer ${auth.accessToken}`;
+          config.headers["Authorization"] = `Bearer ${auth.accessToken}`;
         }
 
         return config;
@@ -64,11 +64,11 @@ export const AuthProvider = ({ children }: Props) => {
             setAuth((prev) => {
               return { ...prev, accessToken: newAccessToken };
             });
-            originalRequest.headers['Authorization'] =
+            originalRequest.headers["Authorization"] =
               `Bearer ${newAccessToken}`;
           } catch (error) {
-            setAuth({ user: null, accessToken: '' });
-            router.replace('/login');
+            setAuth({ user: null, accessToken: "" });
+            router.replace("/login");
           }
 
           return protectedApi(originalRequest);
@@ -91,8 +91,9 @@ export const AuthProvider = ({ children }: Props) => {
           return { ...prev, user: user };
         });
       } catch (error) {
-        setAuth({ user: null, accessToken: '' });
-        router.push('/login');
+        console.error(error);
+        setAuth({ user: null, accessToken: "" });
+        router.push("/login");
       } finally {
         setIsLoading(false);
       }

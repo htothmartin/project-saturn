@@ -1,10 +1,10 @@
-import { TicketPriority } from '@/enums/TicketPriority';
+import { TicketPriority } from "@/enums/TicketPriority";
 import {
   ChevronDown,
   ChevronsUp,
   ChevronUp,
   StretchHorizontal,
-} from 'lucide-react';
+} from "lucide-react";
 
 type Props = {
   type: TicketPriority;
@@ -17,31 +17,34 @@ type LabelData = {
   icon: React.ElementType;
 };
 
-export const PriorityLabel = ({ type, className = '' }: Props): JSX.Element => {
+export const PriorityLabel = ({
+  type,
+  className = "",
+}: Props): React.JSX.Element => {
   const content = (): LabelData => {
     switch (type) {
       case TicketPriority.LOW:
         return {
-          color: 'bg-green-100 text-green-500',
-          text: 'Low',
+          color: "bg-green-100 text-green-500",
+          text: "Low",
           icon: ChevronDown,
         };
       case TicketPriority.MEDIUM:
         return {
-          color: 'bg-yellow-100 text-yellow-500',
-          text: 'Medium',
+          color: "bg-yellow-100 text-yellow-500",
+          text: "Medium",
           icon: StretchHorizontal,
         };
       case TicketPriority.HIGH:
         return {
-          color: 'bg-orange-100 text-orange-500',
-          text: 'High',
+          color: "bg-orange-100 text-orange-500",
+          text: "High",
           icon: ChevronUp,
         };
       case TicketPriority.CRITICAL:
         return {
-          color: 'bg-red-100 text-red-500',
-          text: 'Critical',
+          color: "bg-red-100 text-red-500",
+          text: "Critical",
           icon: ChevronsUp,
         };
     }
@@ -51,7 +54,8 @@ export const PriorityLabel = ({ type, className = '' }: Props): JSX.Element => {
 
   return (
     <div
-      className={`flex w-fit items-center rounded bg-opacity-80 p-2 dark:bg-opacity-95 ${color} ${className}`}>
+      className={`flex w-fit items-center rounded bg-opacity-80 p-2 dark:bg-opacity-95 ${color} ${className}`}
+    >
       <Icon className="h-5 w-5" />
       <span className="font-semibold">{text}</span>
     </div>

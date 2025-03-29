@@ -1,30 +1,30 @@
-'use client';
+"use client";
 
-import { updateUser, uploadProfileImage } from '@/api/user';
-import { ErrorMessage } from '@/components/Error/error-message';
-import { Button } from '@/components/ui/button';
+import { updateUser, uploadProfileImage } from "@/api/user";
+import { ErrorMessage } from "@/components/Error/error-message";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import useAuth from '@/hooks/useAuth';
-import { updateUserDetialsSchema } from '@/lib/schemas';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Upload } from 'lucide-react';
-import Image from 'next/image';
-import { ChangeEvent, useMemo, useRef, useState } from 'react';
-import { useForm, useWatch } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
-import { ConnectedAccounts } from './components/connected-accounts';
-import { Separator } from '@/components/ui/separator';
-import { getMonogram } from '@/lib/utils';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import useAuth from "@/hooks/useAuth";
+import { updateUserDetialsSchema } from "@/lib/schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Upload } from "lucide-react";
+import Image from "next/image";
+import { ChangeEvent, useMemo, useRef, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import { ConnectedAccounts } from "./components/connected-accounts";
+import { Separator } from "@/components/ui/separator";
+import { getMonogram } from "@/lib/utils";
 
-export const Profile = (): JSX.Element => {
+export const Profile = (): React.JSX.Element => {
   const { auth, setAuth } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -76,17 +76,17 @@ export const Profile = (): JSX.Element => {
       }));
 
       setFile(null);
-      toast('Image upload', {
-        description: 'Image succesfully uploaded',
+      toast("Image upload", {
+        description: "Image succesfully uploaded",
       });
 
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
     } catch (e) {
       console.error(e);
-      toast('Image upload error', {
-        description: 'An error occured',
+      toast("Image upload error", {
+        description: "An error occured",
       });
     }
   };
@@ -96,7 +96,7 @@ export const Profile = (): JSX.Element => {
       setIsEditing(false);
       const { data } = await updateUser(values);
       setAuth((prev) => ({ ...prev, user: data }));
-      toast.success('Successfully updated profile data');
+      toast.success("Successfully updated profile data");
     } catch (error) {
       console.error(error);
     }
@@ -116,7 +116,7 @@ export const Profile = (): JSX.Element => {
             </div>
           ) : (
             <Image
-              src={currentUser.profilePictureUrl ?? ''}
+              src={currentUser.profilePictureUrl ?? ""}
               alt="Profile picture"
               width={250}
               height={250}
@@ -146,7 +146,8 @@ export const Profile = (): JSX.Element => {
           <form
             method="POST"
             onSubmit={updateUserDetailsForm.handleSubmit(onSave)}
-            className="max-w-[50%]">
+            className="max-w-[50%]"
+          >
             <FormField
               control={updateUserDetailsForm.control}
               name="firstname"

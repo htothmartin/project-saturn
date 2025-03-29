@@ -1,4 +1,4 @@
-import { SaturnLogo } from './SatrurnLogo';
-import { Circles } from './Circles';
+import { SaturnLogo } from "./SatrurnLogo";
+import { Circles } from "./Circles";
 
 export { SaturnLogo, Circles };

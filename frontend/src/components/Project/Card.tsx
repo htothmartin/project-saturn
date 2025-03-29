@@ -1,7 +1,7 @@
-import { Project } from '@/model/project';
-import { Card, CardContent, CardHeader } from '../ui/card';
-import { Progress } from '../ui/progress';
-import { Button } from '../ui/button';
+import { Project } from "@/model/project";
+import { Card, CardContent, CardHeader } from "../ui/card";
+import { Progress } from "../ui/progress";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,21 +9,21 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../ui/dropdown-menu';
-import { MoreVertical } from 'lucide-react';
-import { ProjectStatusBadge } from '../ProjectStatus';
-import Link from 'next/link';
-import { Pin } from '@/assets/icons/Pin';
-import { pinProject } from '@/api/project';
-import { useAppDispatch } from '@/lib/store/hooks';
-import { pinProjectSuccess } from '@/lib/store/features/project/projectSlice';
-import { useRouter } from 'next/navigation';
+} from "../ui/dropdown-menu";
+import { MoreVertical } from "lucide-react";
+import { ProjectStatusBadge } from "../ProjectStatus";
+import Link from "next/link";
+import { Pin } from "@/assets/icons/Pin";
+import { pinProject } from "@/api/project";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { pinProjectSuccess } from "@/lib/store/features/project/projectSlice";
+import { useRouter } from "next/navigation";
 
 type Props = {
   project: Project;
 };
 
-export const ProjectCard = ({ project }: Props): JSX.Element => {
+export const ProjectCard = ({ project }: Props): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -56,7 +56,8 @@ export const ProjectCard = ({ project }: Props): JSX.Element => {
               <DropdownMenuItem
                 onClick={() =>
                   router.push(`projects/${project.id}/members?modal=add-member`)
-                }>
+                }
+              >
                 Add new member
               </DropdownMenuItem>
               <DropdownMenuItem>Delete</DropdownMenuItem>

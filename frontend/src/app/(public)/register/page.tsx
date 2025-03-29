@@ -1,10 +1,10 @@
-import { BrandSection } from '@/components/BrandSection';
-import Link from 'next/link';
+import { BrandSection } from "@/components/BrandSection";
+import Link from "next/link";
 
-import { AuthLayout } from '@/components/AuthLayout/AuthLayout';
-import { RegisterForm } from './components/register-form';
+import { AuthLayout } from "@/components/AuthLayout/AuthLayout";
+import { RegisterForm } from "./components/register-form";
 
-const Register = (): JSX.Element => {
+const Register = (): React.JSX.Element => {
   return (
     <AuthLayout>
       <BrandSection />
@@ -12,7 +12,7 @@ const Register = (): JSX.Element => {
         <h1 className="pb-4 text-4xl font-bold">Register</h1>
         <RegisterForm />
         <p className="text-center">
-          You already have an account? Login{' '}
+          You already have an account? Login{" "}
           <Link className="underline" href="/login">
             here
           </Link>

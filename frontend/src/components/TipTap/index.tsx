@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import { MenuBar } from './MenuBar';
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { MenuBar } from "./MenuBar";
 
 const Tiptap = () => {
   const editor = useEditor({
     extensions: [StarterKit],
-    content: '<p></p>',
+    content: "<p></p>",
   });
 
   return (

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { z } from 'zod';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -13,16 +13,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { createProjectSchema } from '@/lib/schemas';
-import { useState } from 'react';
-import { createNewProject } from '@/api/project';
-import { toast } from 'sonner';
-import { usePathname, useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
-import { fetchProjects } from '@/lib/store/features/project/projectSlice';
+} from "@/components/ui/form";
+import { createProjectSchema } from "@/lib/schemas";
+import { useState } from "react";
+import { createNewProject } from "@/api/project";
+import { toast } from "sonner";
+import { usePathname, useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { fetchProjects } from "@/lib/store/features/project/projectSlice";
 
-export const CreateProject = (): JSX.Element => {
+export const CreateProject = (): React.JSX.Element => {
   type Inputs = z.infer<typeof createProjectSchema>;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -32,9 +32,9 @@ export const CreateProject = (): JSX.Element => {
   const projectForm = useForm<Inputs>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
-      projectName: '',
-      projectDescription: '',
-      projectKey: '',
+      projectName: "",
+      projectDescription: "",
+      projectKey: "",
     },
   });
 
@@ -43,15 +43,15 @@ export const CreateProject = (): JSX.Element => {
     try {
       await createNewProject({
         name: data.projectName,
-        description: data.projectDescription ?? '',
+        description: data.projectDescription ?? "",
         key: data.projectKey,
       });
 
-      toast('Project successfuly created');
+      toast("Project successfuly created");
       dispatch(fetchProjects());
       router.push(pathname);
     } catch {
-      toast('An error occured');
+      toast("An error occured");
     } finally {
       setIsLoading(false);
     }

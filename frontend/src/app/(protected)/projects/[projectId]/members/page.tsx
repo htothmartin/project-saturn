@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { deleteUserfromProject } from '@/api/project';
-import { SearchBar } from '@/components/SearchBar';
-import { Button } from '@/components/ui/button';
+import { deleteUserfromProject } from "@/api/project";
+import { SearchBar } from "@/components/SearchBar";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -12,18 +12,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import { UserBadge } from '@/components/UserBadge';
-import { ModalTypes } from '@/enums/ModalTypes';
-import { useActiveJob } from '@/hooks/useActiveJob';
-import { useModal } from '@/hooks/useModal';
-import { selectFilter } from '@/lib/store/features/project/projectSelectors';
-import { fetchActiveProject } from '@/lib/store/features/project/projectSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
+} from "@/components/ui/table";
+import { UserBadge } from "@/components/UserBadge";
+import { ModalTypes } from "@/enums/ModalTypes";
+import { useActiveJob } from "@/hooks/useActiveJob";
+import { useModal } from "@/hooks/useModal";
+import { selectFilter } from "@/lib/store/features/project/projectSelectors";
+import { fetchActiveProject } from "@/lib/store/features/project/projectSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
-const Members = (): JSX.Element => {
+const Members = (): React.JSX.Element => {
   const { activeProject } = useActiveJob();
   const { getModalUrl } = useModal();
   const { projectId } = useParams<{ projectId: string }>();
@@ -65,18 +65,20 @@ const Members = (): JSX.Element => {
           {users?.map((user) => (
             <TableRow
               key={`ticket-${user.id}`}
-              onClick={() => console.log(user.id)}>
+              onClick={() => console.log(user.id)}
+            >
               <TableCell className="font-medium">
                 <UserBadge user={user} />
               </TableCell>
               <TableCell>
-                {user.id === activeProject?.owner.id ? 'Owner' : 'Member'}
+                {user.id === activeProject?.owner.id ? "Owner" : "Member"}
               </TableCell>
               <TableCell>
                 {user.id != activeProject?.owner.id && (
                   <Button
                     onClick={() => handleDeleteFromProject(user.id)}
-                    variant="ghost">
+                    variant="ghost"
+                  >
                     Remove user
                   </Button>
                 )}

@@ -1,19 +1,23 @@
-import { IssueType } from '@/enums/IssueType';
-import { useParams } from 'next/navigation';
-import { useMemo } from 'react';
-import { v4 } from 'uuid';
-import { IssueTypeLabel } from '../Labels/IssueTypeLabel';
-import { updateTicket } from '@/api/ticket';
-import { useAppDispatch } from '@/lib/store/hooks';
-import { updateTicketSuccess } from '@/lib/store/features/project/projectSlice';
-import { DropdownSelect } from '../Input/DrowdownSelect';
+import { IssueType } from "@/enums/IssueType";
+import { useParams } from "next/navigation";
+import { useMemo } from "react";
+import { v4 } from "uuid";
+import { IssueTypeLabel } from "../Labels/IssueTypeLabel";
+import { updateTicket } from "@/api/ticket";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { updateTicketSuccess } from "@/lib/store/features/project/projectSlice";
+import { DropdownSelect } from "../Input/DrowdownSelect";
+import { SelectOption } from "../Input/type";
 
 type Props = {
   type: IssueType;
   ticketId: number;
 };
 
-export const IssueTypeSelect = ({ type, ticketId }: Props): JSX.Element => {
+export const IssueTypeSelect = ({
+  type,
+  ticketId,
+}: Props): React.JSX.Element => {
   const { projectId } = useParams<{
     projectId: string;
   }>();
@@ -26,7 +30,7 @@ export const IssueTypeSelect = ({ type, ticketId }: Props): JSX.Element => {
         .map((value) => {
           return { id: v4(), data: value };
         }),
-    [IssueType, type],
+    [type],
   );
 
   const render = ({ data }: SelectOption<IssueType>) =>

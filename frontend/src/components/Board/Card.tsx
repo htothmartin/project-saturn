@@ -1,20 +1,18 @@
-'use client';
+"use client";
 
-import { TicketPriority } from '@/enums/TicketPriority';
-import { Ticket } from '@/model/tickets';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { JSX } from 'react';
-import { UserBadge } from '../UserBadge';
-import { PriorityLabel } from '../Labels/PriorityLabel';
+import { Ticket } from "@/model/tickets";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { UserBadge } from "../UserBadge";
+import { PriorityLabel } from "../Labels/PriorityLabel";
 
 type Props = {
   ticket: Ticket;
 };
 
-export const Card = ({ ticket }: Props): JSX.Element => {
+export const Card = ({ ticket }: Props): React.JSX.Element => {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: ticket.id, data: { ticket, type: 'Item' } });
+    useSortable({ id: ticket.id, data: { ticket, type: "Item" } });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -27,11 +25,12 @@ export const Card = ({ ticket }: Props): JSX.Element => {
       style={style}
       {...attributes}
       {...listeners}
-      className="flex flex-col gap-3 rounded-2xl bg-violet-950 p-4 shadow-lg">
+      className="flex flex-col gap-3 rounded-2xl bg-violet-950 p-4 shadow-lg"
+    >
       <h2 className="text-lg font-semibold text-white">{ticket.title}</h2>
 
       <div className="flex flex-col items-center gap-2 text-sm text-white xl:flex-row">
-        <span className="font-medium">Assigned:</span>{' '}
+        <span className="font-medium">Assigned:</span>{" "}
         <UserBadge user={ticket.assignee} />
       </div>
 

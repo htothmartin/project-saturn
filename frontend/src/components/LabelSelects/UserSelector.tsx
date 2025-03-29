@@ -1,14 +1,14 @@
-import { User } from '@/model/user';
-import { useParams } from 'next/navigation';
-import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
-import { selectActiveProjectUsers } from '@/lib/store/features/project/projectSelectors';
-import { useMemo } from 'react';
-import { UserBadge } from '../UserBadge';
-import { updateTicket } from '@/api/ticket';
-import { updateTicketSuccess } from '@/lib/store/features/project/projectSlice';
-import { DropdownSelect } from '../Input/DrowdownSelect';
-import { v4 } from 'uuid';
-import { noop, unassigned } from '@/lib/constants';
+import { User } from "@/model/user";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { selectActiveProjectUsers } from "@/lib/store/features/project/projectSelectors";
+import { useMemo } from "react";
+import { UserBadge } from "../UserBadge";
+import { updateTicket } from "@/api/ticket";
+import { updateTicketSuccess } from "@/lib/store/features/project/projectSlice";
+import { DropdownSelect } from "../Input/DrowdownSelect";
+import { v4 } from "uuid";
+import { noop, unassigned } from "@/lib/constants";
+import { SelectOption } from "../Input/type";
 
 type Props = {
   user: User | null;
@@ -20,7 +20,7 @@ export const UserSelector = ({
   user,
   ticketId,
   projectId,
-}: Props): JSX.Element => {
+}: Props): React.JSX.Element => {
   const dispatch = useAppDispatch();
 
   const users = useAppSelector(selectActiveProjectUsers).map((u) => ({

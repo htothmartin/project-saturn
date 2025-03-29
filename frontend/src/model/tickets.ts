@@ -1,7 +1,7 @@
-import { IssueType } from '@/enums/IssueType';
-import { TicketPriority } from '@/enums/TicketPriority';
-import { User } from './user';
-import { TicketStatus } from '@/enums/TicketStatus';
+import { IssueType } from "@/enums/IssueType";
+import { TicketPriority } from "@/enums/TicketPriority";
+import { User } from "./user";
+import { TicketStatus } from "@/enums/TicketStatus";
 
 export type TicketForm = {
   title: string;

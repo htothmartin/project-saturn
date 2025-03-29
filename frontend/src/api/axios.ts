@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const publicApi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   withCredentials: true,
 });
@@ -11,7 +11,7 @@ export const publicApi = axios.create({
 export const protectedApi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   withCredentials: true,
 });

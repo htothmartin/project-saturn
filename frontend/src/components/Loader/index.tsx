@@ -1,4 +1,4 @@
-import MoonLoader from 'react-spinners/MoonLoader';
+import MoonLoader from "react-spinners/MoonLoader";
 
 export const Loader = () => {
   return (

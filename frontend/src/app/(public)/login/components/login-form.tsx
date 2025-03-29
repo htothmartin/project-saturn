@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { LoginReq } from '@/api/auth';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import useAuth from '@/hooks/useAuth';
-import { Auth } from '@/context/AuthProvider';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { LoginReq } from "@/api/auth";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import useAuth from "@/hooks/useAuth";
+import { Auth } from "@/context/AuthProvider";
+import { toast } from "sonner";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -14,23 +14,23 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { AxiosError } from 'axios';
-import { HttpErrorResponse } from '@/model/http-error-response';
-import { HttpErrorMessage } from '@/components/Error/http-error-message';
-import { useForm } from 'react-hook-form';
-import { loginSchema } from '@/lib/schemas';
-import { Button } from '@/components/ui/button';
-import { OAuthLogin } from './oauth-login';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AxiosError } from "axios";
+import { HttpErrorResponse } from "@/model/http-error-response";
+import { HttpErrorMessage } from "@/components/Error/http-error-message";
+import { useForm } from "react-hook-form";
+import { loginSchema } from "@/lib/schemas";
+import { Button } from "@/components/ui/button";
+import { OAuthLogin } from "./oauth-login";
 
-export const LoginForm = (): JSX.Element => {
+export const LoginForm = (): React.JSX.Element => {
   const loginForm = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
   const router = useRouter();
@@ -44,7 +44,7 @@ export const LoginForm = (): JSX.Element => {
       const data = await LoginReq(values.email, values.password);
       setAuth((prev: Auth) => ({ ...prev, accessToken: data.accessToken }));
 
-      router.push('/projects');
+      router.push("/projects");
     } catch (error) {
       if (error instanceof AxiosError) {
         const errors = error?.response?.data as HttpErrorResponse;
@@ -52,7 +52,7 @@ export const LoginForm = (): JSX.Element => {
           setErrors(errors);
         }
       } else {
-        toast.error('Login failed');
+        toast.error("Login failed");
       }
     }
     setIsLoading(false);
@@ -64,7 +64,8 @@ export const LoginForm = (): JSX.Element => {
         <form
           method="POST"
           onSubmit={loginForm.handleSubmit(onSubmit)}
-          className="my-4">
+          className="my-4"
+        >
           <FormField
             control={loginForm.control}
             name="email"
@@ -105,7 +106,8 @@ export const LoginForm = (): JSX.Element => {
             <Button
               className="w-full text-xl"
               type="submit"
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               Login
             </Button>
           </div>

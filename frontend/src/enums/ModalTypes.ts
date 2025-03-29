@@ -1,5 +1,5 @@
 export enum ModalTypes {
-  CreateProject = 'create-project',
-  AddTicket = 'add-ticket',
-  AddMember = 'add-member',
+  CreateProject = "create-project",
+  AddTicket = "add-ticket",
+  AddMember = "add-member",
 }

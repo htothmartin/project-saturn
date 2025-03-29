@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { JSX, useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { JSX, useState } from "react";
 
 export default function Layout({
   children,
 }: Readonly<{
-  children: JSX.Element;
+  children: React.JSX.Element;
 }>) {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
@@ -18,11 +18,13 @@ export default function Layout({
   return (
     <div className="flex h-full w-full">
       <div
-        className={`flex h-full ${isOpen ? 'w-40' : 'w-12'} flex-col gap-4 bg-background p-2 transition-all duration-200`}>
+        className={`flex h-full ${isOpen ? "w-40" : "w-12"} flex-col gap-4 bg-background p-2 transition-all duration-200`}
+      >
         <Button
           onClick={() => setIsOpen(!isOpen)}
           variant="ghost"
-          className={`justify-start ${!isOpen && 'justify-center p-0'}`}>
+          className={`justify-start ${!isOpen && "justify-center p-0"}`}
+        >
           {isOpen ? <ArrowLeft /> : <ArrowRight />}
         </Button>
         {isOpen && (
