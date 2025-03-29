@@ -5,10 +5,13 @@ import com.szte.saturn.controllers.dtos.UpdateUserRequestDTO;
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.Project;
 import com.szte.saturn.entities.User;
+import com.szte.saturn.exceptions.ApiException;
 import com.szte.saturn.mapper.UserMapper;
 import com.szte.saturn.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,9 @@ public class UserService {
 
     @Transactional
     public UserDTO create(CreateUserRequest request){
+        if(userRepository.existsByEmail(request.getEmail())){
+            throw ApiException.builder().message("This email is already taken").status(HttpStatus.BAD_REQUEST.value()).build();
+        }
         User user = new User(request);
         user.setPassword(passwordEncoder.encode((request.getPassword())));
         return userMapper.toDto(userRepository.save(user));
@@ -34,7 +40,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User findUserById(Long userId){
-        return userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return userRepository.findById(userId).orElseThrow(() -> new BadCredentialsException("User not found"));
     }
 
     @Transactional(readOnly = true)
@@ -46,10 +52,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserDTO getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElse(null);
-        if (user == null) {
-            return null;
-        }
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new BadCredentialsException("User not found"));
         return userMapper.toDto(user);
     }
 
@@ -57,20 +60,19 @@ public class UserService {
     public List<UserDTO> findUsersNotAssignedToProject(Long projectId, Long currentUserId) {
         Project project = projectService.getProjectById(projectId);
         List<User> users = userRepository.findUsersNotInProject(projectId, project.getOwner().getId(), currentUserId);
-
         return userMapper.toListDto(users);
     }
 
     @Transactional
     public void updateProfilePictureUrl(String fileUrl, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        User user = findUserById(userId);
         user.setProfilePictureUrl(fileUrl);
         userRepository.save(user);
     }
 
     @Transactional
     public UserDTO updateUser(Long id, UpdateUserRequestDTO request) {
-        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        User user = findUserById(id);
         if(request.getFirstname() != null){
             user.setFirstname(request.getFirstname());
         }

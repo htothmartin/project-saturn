@@ -1,7 +1,7 @@
 'use client';
 
 import { updateUser, uploadProfileImage } from '@/api/user';
-import { ErrorMessage } from '@/components/ErrorMessage';
+import { ErrorMessage } from '@/components/Error/error-message';
 import { Button } from '@/components/ui/button';
 import {
   Form,

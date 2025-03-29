@@ -8,6 +8,7 @@ import com.szte.saturn.entities.Project;
 import com.szte.saturn.entities.Ticket;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.enums.ProjectStatus;
+import com.szte.saturn.exceptions.ApiException;
 import com.szte.saturn.mapper.ProjectMapper;
 import com.szte.saturn.repositories.ProjectRepository;
 import com.szte.saturn.repositories.TicketRepository;
@@ -15,6 +16,8 @@ import com.szte.saturn.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -35,30 +38,30 @@ public class ProjectService {
     }
 
     public Project getProjectById(Long projectId){
-        return projectRepository.findById(projectId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        return projectRepository.findById(projectId).orElseThrow(() -> ApiException.builder().message("Project not found").status(HttpStatus.NOT_FOUND.value()).build());
     }
 
     public Project createProject(CreateProjectDto request, User user){
         Project project = new Project(request);
         project.setOwner(user);
         project.setStatus(ProjectStatus.ACTIVE);
-
         return projectRepository.save(project);
     }
 
     public List<ProjectDTO> getProjectsByUser(User user, String sortOrder, String name){
         Sort.Direction direction = sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "name");
-        System.out.println(name);
         List<Project> projects = projectRepository.findProjectsByUser(user.getId(), name, sort);
 
         return projectMapper.toListDto(projects, user.getId());
     }
 
     public ActiveProjectDTO getProject(Long projectId){
+        if(!projectRepository.existsById(projectId)){
+            throw ApiException.builder().message("Project not found").status(HttpStatus.NOT_FOUND.value()).build();
+        }
 
         Project project = getProjectById(projectId);
-
         return projectMapper.toActiveProjectDTO(project);
     }
 

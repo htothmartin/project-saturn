@@ -18,6 +18,8 @@ public interface ProjectRepository extends CrudRepository<Project, Long> {
 
     Optional<Project> findById(Long id);
 
+    boolean existsById(Long id);
+
     /*@Query(value = "SELECT * FROM projects\n" +
            "    LEFT JOIN user_projects ON projects.id = user_projects.project_id\n" +
            "    LEFT JOIN pinned_projects ON projects.id = pinned_projects.project_id\n" +

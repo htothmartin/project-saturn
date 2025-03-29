@@ -1,7 +1,7 @@
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 
 type Props = {
-  children: ReactElement;
+  children: ReactNode;
 };
 
 export const AuthLayout = ({ children }: Props): JSX.Element => {
