@@ -4,19 +4,20 @@ import { Button } from "../ui/button";
 import { ChangeEvent, useState } from "react";
 import { useParams } from "next/navigation";
 import { createMessage } from "@/api/ticket";
-import useAuth from "@/hooks/useAuth";
+import { useAppSelector } from "@/lib/store/hooks";
+import { selectSession } from "@/lib/store/features/session/session-selectors";
 
 export const MessageInput = () => {
   const { projectId, ticketId } = useParams<{
     projectId: string;
     ticketId: string;
   }>();
-  const { auth } = useAuth();
   const [message, setMessage] = useState<string>("");
+  const { currentUser } = useAppSelector(selectSession);
 
   const sendMessage = async () => {
-    if (auth.user) {
-      await createMessage(projectId, ticketId, auth.user.id, message);
+    if (currentUser) {
+      await createMessage(projectId, ticketId, currentUser.id, message);
     }
   };
 

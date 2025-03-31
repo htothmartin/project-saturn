@@ -4,6 +4,7 @@ import projectWatcher from "./features/project/projectSaga";
 import projectReducer from "./features/project/projectSlice";
 import commentReducer from "./features/comments/commentSlice";
 import commentsWatcher from "./features/comments/commentSaga";
+import sessionReducer from "./features/session/session-slice";
 import { all } from "redux-saga/effects";
 
 const sagaMiddleware = createSagaMiddleware();
@@ -11,6 +12,7 @@ const sagaMiddleware = createSagaMiddleware();
 export const makeStore = () => {
   const store = configureStore({
     reducer: {
+      session: sessionReducer,
       project: projectReducer,
       comment: commentReducer,
     },

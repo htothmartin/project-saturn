@@ -19,15 +19,15 @@ import { useState } from "react";
 import { createNewProject } from "@/api/project";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
 import { fetchProjects } from "@/lib/store/features/project/projectSlice";
+import { useAppDispatch } from "@/lib/store/hooks";
 
 export const CreateProject = (): React.JSX.Element => {
   type Inputs = z.infer<typeof createProjectSchema>;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const projectForm = useForm<Inputs>({
     resolver: zodResolver(createProjectSchema),

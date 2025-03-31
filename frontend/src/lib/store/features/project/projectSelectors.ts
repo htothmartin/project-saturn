@@ -9,3 +9,6 @@ export const selectFilter = (state: RootState) => state.project.filter;
 
 export const selectActiveProjectUsers = (state: RootState) =>
   state.project.activeProject?.users ?? [];
+
+export const selectIsProjectOwner = (state: RootState) =>
+  state.project.activeProject?.owner.id == state.session.currentUser?.id;

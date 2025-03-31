@@ -14,22 +14,25 @@ import Link from "next/link";
 import { ModalTypes } from "@/enums/ModalTypes";
 import { UserAvatar } from "@/components/UserAvatar";
 import { Logout } from "@/api/auth";
-import useAuth from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/useModal";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { logout } from "@/lib/store/features/session/session-slice";
+import { selectSession } from "@/lib/store/features/session/session-selectors";
 
 export const Header = (): React.JSX.Element => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
-  const { setAuth, auth } = useAuth();
   const { getModalUrl } = useModal();
+  const { currentUser } = useAppSelector(selectSession);
 
-  const logout = async () => {
+  const handleLogout = async () => {
     await Logout();
     router.push("/login");
-    setAuth({ user: null, accessToken: "" });
+    dispatch(logout());
   };
 
-  if (!auth.user) {
+  if (!currentUser) {
     return <></>;
   }
 
@@ -76,13 +79,13 @@ export const Header = (): React.JSX.Element => {
         </NavigationMenuList>
       </NavigationMenu>
       <div className="ml-auto mr-4 flex flex-row gap-4">
-        <Button variant="outline" onClick={logout}>
+        <Button variant="outline" onClick={handleLogout}>
           Logout
         </Button>
         <ThemeToggle />
         <UserAvatar
-          imageUrl={auth.user?.profilePictureUrl ?? ""}
-          fullName={auth.user?.fullName ?? ""}
+          imageUrl={currentUser.profilePictureUrl}
+          fullName={currentUser.fullName}
         />
       </div>
     </div>

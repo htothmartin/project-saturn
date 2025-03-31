@@ -7,15 +7,16 @@ import { useParams } from "next/navigation";
 import { useEffect } from "react";
 
 export const useActiveJob = () => {
-  const params = useParams<{ projectId: string }>();
+  const { projectId } = useParams<{ projectId: string }>();
   const dispatch = useAppDispatch();
   const { activeProject, isActiveJobFetching } = useAppSelector(selectProjects);
 
   useEffect(() => {
     if (!isActiveJobFetching && !activeProject) {
-      dispatch(fetchActiveProject(params.projectId));
+      dispatch(fetchActiveProject(projectId));
     }
-  }, [params.projectId]); // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId]);
 
   return { activeProject, isActiveJobFetching };
 };

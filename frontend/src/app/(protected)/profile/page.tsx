@@ -11,7 +11,6 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import useAuth from "@/hooks/useAuth";
 import { updateUserDetialsSchema } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Upload } from "lucide-react";
@@ -23,15 +22,18 @@ import { z } from "zod";
 import { ConnectedAccounts } from "./components/connected-accounts";
 import { Separator } from "@/components/ui/separator";
 import { getMonogram } from "@/lib/utils";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { selectSession } from "@/lib/store/features/session/session-selectors";
+import { setCurrentUser } from "@/lib/store/features/session/session-slice";
 
 export const Profile = (): React.JSX.Element => {
-  const { auth, setAuth } = useAuth();
+  const dispatch = useAppDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [imageUploadError, setImageUploadError] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const currentUser = auth.user;
+  const { currentUser } = useAppSelector(selectSession);
 
   const updateUserDetailsForm = useForm<
     z.infer<typeof updateUserDetialsSchema>
@@ -47,10 +49,10 @@ export const Profile = (): React.JSX.Element => {
 
   const hasChangedValue = useMemo(() => {
     return (
-      values.firstname !== auth.user?.firstname ||
-      values.lastname !== auth.user?.lastname
+      values.firstname !== currentUser?.firstname ||
+      values.lastname !== currentUser?.lastname
     );
-  }, [values, auth.user]);
+  }, [values, currentUser]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -66,14 +68,15 @@ export const Profile = (): React.JSX.Element => {
     }
 
     try {
+      if (!currentUser) return;
       const { data } = await uploadProfileImage(file);
 
-      setAuth((prev) => ({
-        ...prev,
-        user: prev?.user
-          ? { ...prev.user, profilePictureUrl: data.profilePictureUrl }
-          : null,
-      }));
+      dispatch(
+        setCurrentUser({
+          ...currentUser,
+          profilePictureUrl: data.profilePictureUrl,
+        }),
+      );
 
       setFile(null);
       toast("Image upload", {
@@ -95,7 +98,7 @@ export const Profile = (): React.JSX.Element => {
     try {
       setIsEditing(false);
       const { data } = await updateUser(values);
-      setAuth((prev) => ({ ...prev, user: data }));
+      dispatch(setCurrentUser(data));
       toast.success("Successfully updated profile data");
     } catch (error) {
       console.error(error);

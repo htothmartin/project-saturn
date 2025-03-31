@@ -1,10 +1,76 @@
-import { useContext, useDebugValue } from "react";
-import { AuthContext } from "../context/AuthProvider";
+import { useEffect, useLayoutEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { selectSession } from "@/lib/store/features/session/session-selectors";
+import { protectedApi } from "@/api/axios";
+import { refreshAccessToken } from "@/api/auth";
+import {
+  logout,
+  setAccessToken,
+  setCurrentUser,
+} from "@/lib/store/features/session/session-slice";
+import { me } from "@/api/user";
+import { useRouter } from "next/navigation";
 
-const useAuth = () => {
-  const { auth } = useContext(AuthContext);
-  useDebugValue(auth, (auth) => (auth?.user ? "Logged In" : "Logged Out"));
-  return useContext(AuthContext);
+export const useAuth = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  const { currentUser, accessToken } = useAppSelector(selectSession);
+
+  useLayoutEffect(() => {
+    const requestIntercept = protectedApi.interceptors.request.use(
+      (config) => {
+        if (currentUser && accessToken) {
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
+
+        return config;
+      },
+      (error) => Promise.reject(error),
+    );
+
+    const responseIntercept = protectedApi.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        const originalRequest = error.config;
+        if (error.response.status === 401 && !originalRequest?._retry) {
+          originalRequest._retry = true;
+          try {
+            const newAccessToken = await refreshAccessToken();
+            dispatch(setAccessToken(newAccessToken));
+            originalRequest.headers["Authorization"] =
+              `Bearer ${newAccessToken}`;
+          } catch (error) {
+            console.error(error);
+            dispatch(logout());
+            router.replace("/login");
+          }
+
+          return protectedApi(originalRequest);
+        }
+        return Promise.reject(error);
+      },
+    );
+
+    return () => {
+      protectedApi.interceptors.request.eject(requestIntercept);
+      protectedApi.interceptors.response.eject(responseIntercept);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [accessToken]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const user = await me();
+        dispatch(setCurrentUser(user));
+      } catch (error) {
+        console.error(error);
+        dispatch(logout());
+        router.push("/login");
+      }
+    })();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };
-
-export default useAuth;

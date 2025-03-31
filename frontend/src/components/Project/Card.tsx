@@ -15,15 +15,15 @@ import { ProjectStatusBadge } from "../ProjectStatus";
 import Link from "next/link";
 import { Pin } from "@/assets/icons/Pin";
 import { deleteProject, pinProject } from "@/api/project";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
   fetchProjects,
   pinProjectSuccess,
 } from "@/lib/store/features/project/projectSlice";
-import useAuth from "@/hooks/useAuth";
 import { Badge } from "../ui/badge";
 import { useModal } from "@/hooks/useModal";
 import { ModalTypes } from "@/enums/ModalTypes";
+import { selectSession } from "@/lib/store/features/session/session-selectors";
 
 type Props = {
   project: Project;
@@ -32,7 +32,7 @@ type Props = {
 export const ProjectCard = ({ project }: Props): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const { getModalUrl } = useModal();
-  const { auth } = useAuth();
+  const { currentUser } = useAppSelector(selectSession);
 
   const handlePinProject = async () => {
     try {
@@ -52,7 +52,7 @@ export const ProjectCard = ({ project }: Props): React.JSX.Element => {
     }
   };
 
-  const isOwner = auth.user?.id === project.owner.id;
+  const isOwner = currentUser?.id === project.owner.id;
 
   return (
     <Card className="h-60 w-[450px]">

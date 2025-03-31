@@ -1,20 +1,30 @@
+"use client";
+
 import { Modal } from "@/components/Modals";
-import StoreProvider from "@/context/StoreProvider";
-import { AuthProvider } from "@/context/AuthProvider";
 import { Header } from "./components/header";
+import { useAppSelector } from "@/lib/store/hooks";
+import { selectSession } from "@/lib/store/features/session/session-selectors";
+import { SplashScreen } from "@/components/SplashScreen";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Layout({
   children,
 }: Readonly<{ children: React.JSX.Element }>) {
+  const { isAuthenticating } = useAppSelector(selectSession);
+
+  useAuth();
+
+  if (isAuthenticating) {
+    return <SplashScreen />;
+  }
+
   return (
-    <AuthProvider>
-      <StoreProvider>
-        <div className="flex h-screen w-screen flex-col">
-          <Header />
-          {children}
-        </div>
-        <Modal />
-      </StoreProvider>
-    </AuthProvider>
+    <>
+      <div className="flex h-screen w-screen flex-col">
+        <Header />
+        {children}
+      </div>
+      <Modal />
+    </>
   );
 }

@@ -3,8 +3,6 @@
 import { LoginReq } from "@/api/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import useAuth from "@/hooks/useAuth";
-import { Auth } from "@/context/AuthProvider";
 import { toast } from "sonner";
 import { z } from "zod";
 import {
@@ -24,6 +22,8 @@ import { useForm } from "react-hook-form";
 import { loginSchema } from "@/lib/schemas";
 import { Button } from "@/components/ui/button";
 import { OAuthLogin } from "./oauth-login";
+import { setAccessToken } from "@/lib/store/features/session/session-slice";
+import { useAppDispatch } from "@/lib/store/hooks";
 
 export const LoginForm = (): React.JSX.Element => {
   const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -33,17 +33,16 @@ export const LoginForm = (): React.JSX.Element => {
       password: "",
     },
   });
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const [errors, setErrors] = useState<HttpErrorResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { setAuth } = useAuth();
 
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     setIsLoading(true);
     try {
       const data = await LoginReq(values.email, values.password);
-      setAuth((prev: Auth) => ({ ...prev, accessToken: data.accessToken }));
-
+      dispatch(setAccessToken(data.accessToken));
       router.push("/projects");
     } catch (error) {
       if (error instanceof AxiosError) {

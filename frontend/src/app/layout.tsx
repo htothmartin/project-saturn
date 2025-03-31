@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Suspense } from "react";
 import Loading from "./loading";
+import StoreProvider from "@/context/StoreProvider";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -36,7 +37,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <StoreProvider>{children}</StoreProvider>
           </ThemeProvider>
           <Toaster />
         </Suspense>
