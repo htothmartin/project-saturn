@@ -14,10 +14,16 @@ import { MoreVertical } from "lucide-react";
 import { ProjectStatusBadge } from "../ProjectStatus";
 import Link from "next/link";
 import { Pin } from "@/assets/icons/Pin";
-import { pinProject } from "@/api/project";
+import { deleteProject, pinProject } from "@/api/project";
 import { useAppDispatch } from "@/lib/store/hooks";
-import { pinProjectSuccess } from "@/lib/store/features/project/projectSlice";
-import { useRouter } from "next/navigation";
+import {
+  fetchProjects,
+  pinProjectSuccess,
+} from "@/lib/store/features/project/projectSlice";
+import useAuth from "@/hooks/useAuth";
+import { Badge } from "../ui/badge";
+import { useModal } from "@/hooks/useModal";
+import { ModalTypes } from "@/enums/ModalTypes";
 
 type Props = {
   project: Project;
@@ -25,7 +31,8 @@ type Props = {
 
 export const ProjectCard = ({ project }: Props): React.JSX.Element => {
   const dispatch = useAppDispatch();
-  const router = useRouter();
+  const { getModalUrl } = useModal();
+  const { auth } = useAuth();
 
   const handlePinProject = async () => {
     try {
@@ -36,38 +43,58 @@ export const ProjectCard = ({ project }: Props): React.JSX.Element => {
     }
   };
 
+  const handleDeleteProject = async (projectId: number) => {
+    try {
+      await deleteProject(projectId);
+      dispatch(fetchProjects());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const isOwner = auth.user?.id === project.owner.id;
+
   return (
     <Card className="h-60 w-[450px]">
-      <CardHeader className="flex flex-row gap-8 text-center">
+      <CardHeader className="flex flex-row items-center gap-6 text-center">
         <Button variant="ghost" onClick={handlePinProject}>
           <Pin filled={project.pin} />
         </Button>
-
-        {project.name}
-        <div className="ml-auto">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <MoreVertical />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Project actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Mark as closed</DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() =>
-                  router.push(`projects/${project.id}/members?modal=add-member`)
-                }
-              >
-                Add new member
-              </DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <p>{project.name}</p>
+        {isOwner && (
+          <div className="ml-auto">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <MoreVertical />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Project actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Mark as closed</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    getModalUrl(
+                      ModalTypes.AddMember,
+                      `projects/${project.id}/members`,
+                    )
+                  }
+                >
+                  Add new member
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleDeleteProject(project.id)}
+                >
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-row py-4">
+      <CardContent className="flex flex-col gap-6">
+        <div className="flex flex-row gap-2 py-4">
           <ProjectStatusBadge statusType={project.projectStatus} />
+          {isOwner && <Badge>Owner</Badge>}
           <div className="ml-auto">
             <Link href={`projects/${project.id}`}>
               <Button>Open</Button>

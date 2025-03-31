@@ -70,6 +70,12 @@ public class ProjectController {
         return ResponseEntity.ok().body("Successfully added to project");
     }
 
+    @DeleteMapping("{projectId}")
+    public ResponseEntity<?> deleteProject(@PathVariable Long projectId){
+        projectService.delete(projectId);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{projectId}/users/{userId}")
     public ResponseEntity<String> deleteUserFromProject(@PathVariable Long projectId,  @PathVariable Long userId) {
         projectService.deleteUserFromProject(projectId, userId);

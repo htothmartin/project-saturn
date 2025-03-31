@@ -67,6 +67,7 @@ export const AuthProvider = ({ children }: Props) => {
             originalRequest.headers["Authorization"] =
               `Bearer ${newAccessToken}`;
           } catch (error) {
+            console.error(error);
             setAuth({ user: null, accessToken: "" });
             router.replace("/login");
           }
@@ -81,7 +82,7 @@ export const AuthProvider = ({ children }: Props) => {
       protectedApi.interceptors.request.eject(requestIntercept);
       protectedApi.interceptors.response.eject(responseIntercept);
     };
-  }, [auth.accessToken]);
+  }, [auth.accessToken]); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     (async () => {
@@ -98,7 +99,7 @@ export const AuthProvider = ({ children }: Props) => {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
 
   return (
     <AuthContext.Provider value={{ auth, setAuth, isLoading }}>

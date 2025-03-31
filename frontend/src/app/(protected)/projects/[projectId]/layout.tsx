@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { JSX, useState } from "react";
+import { useState } from "react";
 
 export default function Layout({
   children,

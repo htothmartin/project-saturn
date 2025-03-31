@@ -96,4 +96,11 @@ public class ProjectService {
         project.getUsers().remove(user);
         projectRepository.save(project);
     }
+
+    public void delete(Long projectId){
+        if(!projectRepository.existsById(projectId)){
+            throw ApiException.builder().message("Project not found").status(HttpStatus.NOT_FOUND.value()).build();
+        }
+        projectRepository.deleteById(projectId);
+    }
 }

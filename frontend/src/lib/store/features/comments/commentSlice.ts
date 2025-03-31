@@ -2,12 +2,12 @@ import { Comment } from "@/model/comment";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type CommentState = {
-  comments: Comment[];
+  comments: Comment[] | null;
   isCommentsFetching: boolean;
 };
 
 const initialState: CommentState = {
-  comments: [],
+  comments: null,
   isCommentsFetching: false,
 };
 
@@ -30,6 +30,7 @@ const commentSlice = createSlice({
     },
     fetchCommentsError: (state: CommentState) => {
       state.isCommentsFetching = false;
+      state.comments = null;
     },
   },
 });

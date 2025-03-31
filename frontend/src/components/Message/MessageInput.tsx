@@ -16,12 +16,7 @@ export const MessageInput = () => {
 
   const sendMessage = async () => {
     if (auth.user) {
-      const result = await createMessage(
-        projectId,
-        ticketId,
-        auth.user.id,
-        message,
-      );
+      await createMessage(projectId, ticketId, auth.user.id, message);
     }
   };
 

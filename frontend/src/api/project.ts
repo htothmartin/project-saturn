@@ -17,6 +17,10 @@ export const getActiveProject = async (id: string) => {
   return await protectedApi.get(`/projects/${id}`);
 };
 
+export const deleteProject = async (id: number) => {
+  return await protectedApi.delete(`/project/${id}`);
+};
+
 export const pinProject = async (id: number) => {
   return await protectedApi.post(`/projects/${id}/pin`);
 };

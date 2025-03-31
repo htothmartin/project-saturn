@@ -18,9 +18,8 @@ import {
   DragStartEvent,
   DragOverlay,
 } from "@dnd-kit/core";
-import { arrayMove, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
 export type ColumnType = {
@@ -143,13 +142,13 @@ const Project = (): React.JSX.Element => {
   };
 
   const handleDragEnd = async (event: DragEndEvent) => {
-    const { over, active } = event;
+    const { active } = event;
     if (!activeTicket || !active) {
       return;
     }
 
     try {
-      const data = await updateTicket(projectId, activeTicket.id.toString(), {
+      await updateTicket(projectId, activeTicket.id.toString(), {
         status: active.data.current?.ticket.status as TicketStatus,
       });
     } catch (error) {

@@ -6,7 +6,6 @@ import { UserSelector } from "@/components/LabelSelects/UserSelector";
 import { Loader } from "@/components/Loader";
 import { MessageInput } from "@/components/Message/MessageInput";
 import { MessageList } from "@/components/Message/MessageList";
-import Tiptap from "@/components/TipTap";
 import { Button } from "@/components/ui/button";
 import { UserBadge } from "@/components/UserBadge";
 import { useActiveJob } from "@/hooks/useActiveJob";
@@ -24,9 +23,12 @@ import { useEffect, useState } from "react";
 
 const TicketDetails = () => {
   const { activeProject } = useActiveJob();
-  const params = useParams<{ ticketId: string; projectId: string }>();
+  const { ticketId, projectId } = useParams<{
+    ticketId: string;
+    projectId: string;
+  }>();
   const [ticket, setTicket] = useState<Ticket | null>(null);
-  const useDispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const isFetchingComments = useAppSelector(selectIsCommentsFetching);
   const comments = useAppSelector(selectComments);
@@ -35,17 +37,17 @@ const TicketDetails = () => {
     if (activeProject)
       setTicket(
         activeProject.tickets.find(
-          (ticket) => ticket.id.toString() === params.ticketId,
+          (ticket) => ticket.id.toString() === ticketId,
         ) ?? null,
       );
-  }, [activeProject?.tickets, params.ticketId]);
+  }, [activeProject?.tickets, ticketId]);
 
   useEffect(() => {
-    if (comments.length == 0 && !isFetchingComments) {
-      useDispatch(
+    if (!comments && !isFetchingComments) {
+      dispatch(
         fetchComments({
-          projectId: params.projectId,
-          ticketId: params.ticketId,
+          projectId: projectId,
+          ticketId: ticketId,
         }),
       );
     }
@@ -70,7 +72,7 @@ const TicketDetails = () => {
       </div>
       <div className="flex w-1/3 flex-shrink-0 flex-col gap-4 rounded border-2 p-4">
         <Button className="ml-auto" variant="ghost" size="icon" asChild>
-          <Link href={`/projects/${params.projectId}/tickets`}>
+          <Link href={`/projects/${projectId}/tickets`}>
             <X />
           </Link>
         </Button>
@@ -84,8 +86,8 @@ const TicketDetails = () => {
           <div>Assigned to:</div>
           <UserSelector
             user={ticket.assignee}
-            ticketId={params.ticketId}
-            projectId={params.projectId}
+            ticketId={ticketId}
+            projectId={projectId}
           />
         </div>
         <div className="flex flex-row items-center gap-2">
