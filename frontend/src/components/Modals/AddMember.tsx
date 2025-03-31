@@ -61,8 +61,8 @@ export const AddMemeber = (): React.JSX.Element => {
       setLoading(true);
       fetchUsers();
     }
-  }, [users]); // eslint-disable-next-line react-hooks/exhaustive-deps
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [users]);
   return (
     <div className="flex flex-col items-center justify-center gap-4">
       <Popover open={open} onOpenChange={setOpen}>

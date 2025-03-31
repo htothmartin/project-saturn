@@ -20,7 +20,34 @@ const eslintConfig = [
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
+      "no-console": [
+        "warn",
+        {
+          allow: ["warn", "error"],
+        },
+      ],
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "react-redux",
+              importNames: ["useDispatch", "useSelector"],
+              message:
+                "Please use the useAppSelector and useAppDispatch instead.",
+            },
+          ],
+        },
+      ],
     },
+    overrides: [
+      {
+        files: ["src/lib/store/hooks.ts"],
+        rules: {
+          "no-restricted-imports": "off",
+        },
+      },
+    ],
   }),
 ];
 

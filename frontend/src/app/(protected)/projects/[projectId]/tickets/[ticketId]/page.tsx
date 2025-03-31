@@ -40,7 +40,7 @@ const TicketDetails = () => {
           (ticket) => ticket.id.toString() === ticketId,
         ) ?? null,
       );
-  }, [activeProject?.tickets, ticketId]);
+  }, [activeProject, ticketId]);
 
   useEffect(() => {
     if (!comments && !isFetchingComments) {
@@ -51,7 +51,7 @@ const TicketDetails = () => {
         }),
       );
     }
-  }, [comments, isFetchingComments]);
+  }, [comments, isFetchingComments, dispatch, projectId, ticketId]);
 
   if (!ticket) {
     return <Loader />;

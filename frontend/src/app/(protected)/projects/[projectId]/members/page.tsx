@@ -63,10 +63,7 @@ const Members = (): React.JSX.Element => {
         </TableHeader>
         <TableBody>
           {users?.map((user) => (
-            <TableRow
-              key={`ticket-${user.id}`}
-              onClick={() => console.log(user.id)}
-            >
+            <TableRow key={`ticket-${user.id}`}>
               <TableCell className="font-medium">
                 <UserBadge user={user} />
               </TableCell>

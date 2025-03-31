@@ -25,6 +25,7 @@ const Home = (): React.JSX.Element => {
     if (!isProjectsFetching && !projects) {
       dispatch(fetchProjects());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort]);
 
   const pinnedProjects = useMemo(
