@@ -1,7 +1,11 @@
-package com.szte.saturn.entities;
+package com.szte.saturn.entities.project;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.szte.saturn.controllers.dtos.CreateProjectDto;
+import com.szte.saturn.controllers.requests.CreateProjectRequest;
+import com.szte.saturn.entities.Sprint;
+import com.szte.saturn.entities.rel_pinned_project.RelPinnedProject;
+import com.szte.saturn.entities.ticket.Ticket;
+import com.szte.saturn.entities.User;
+import com.szte.saturn.entities.rel_user_projects.RelUserProjects;
 import com.szte.saturn.enums.ProjectStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +14,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -39,6 +42,9 @@ public class Project {
     @Column(name = "status", nullable = false)
     private ProjectStatus status;
 
+    @Column(name = "key", nullable = false)
+    private String key;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -47,37 +53,34 @@ public class Project {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @Column(name = "ticket_counter")
+    private Long ticketCounter;
+
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Ticket> tickets;
+    private Set<Ticket> tickets = new HashSet<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Sprint> sprints;
+    private Set<Sprint> sprints = new HashSet<>();
 
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RelUserProjects> relUserProjects = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_projects",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "projectId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RelPinnedProject> relPinnedProjects = new ArrayList<>();
 
+    public void incrementTicketCounter() {
+        ticketCounter++;
+    }
 
-    @ManyToMany
-    @JoinTable(
-            name = "pinned_projects",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> pinnedProjects = new HashSet<>();
-
-    public Project(CreateProjectDto request){
+    public Project(CreateProjectRequest request){
         this.name = request.getName();
+        this.key = request.getKey();
         this.description = request.getDescription();
+        this.status = ProjectStatus.ACTIVE;
     }
 
 }

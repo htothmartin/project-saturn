@@ -26,7 +26,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { selectSession } from "@/lib/store/features/session/session-selectors";
 import { setCurrentUser } from "@/lib/store/features/session/session-slice";
 
-export const Profile = (): React.JSX.Element => {
+const Profile = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
   const [isEditing, setIsEditing] = useState(false);
   const [file, setFile] = useState<File | null>(null);

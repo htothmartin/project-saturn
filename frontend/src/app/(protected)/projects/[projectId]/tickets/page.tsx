@@ -16,16 +16,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ModalTypes } from "@/enums/ModalTypes";
-import { useActiveJob } from "@/hooks/useActiveJob";
 import { useModal } from "@/hooks/useModal";
-import { selectFilter } from "@/lib/store/features/project/projectSelectors";
+import {
+  selectActiveProject,
+  selectFilter,
+} from "@/lib/store/features/project/projectSelectors";
 import { useAppSelector } from "@/lib/store/hooks";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
 const Tickets = (): React.JSX.Element => {
-  const { activeProject } = useActiveJob();
+  const activeProject = useAppSelector(selectActiveProject);
   const { getModalUrl } = useModal();
   const router = useRouter();
 

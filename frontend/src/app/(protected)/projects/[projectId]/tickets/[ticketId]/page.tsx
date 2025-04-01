@@ -8,12 +8,12 @@ import { MessageInput } from "@/components/Message/MessageInput";
 import { MessageList } from "@/components/Message/MessageList";
 import { Button } from "@/components/ui/button";
 import { UserBadge } from "@/components/UserBadge";
-import { useActiveJob } from "@/hooks/useActiveJob";
 import {
   selectComments,
   selectIsCommentsFetching,
 } from "@/lib/store/features/comments/commentSelectors";
 import { fetchComments } from "@/lib/store/features/comments/commentSlice";
+import { selectActiveProject } from "@/lib/store/features/project/projectSelectors";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { Ticket } from "@/model/tickets";
 import { X } from "lucide-react";
@@ -22,7 +22,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const TicketDetails = () => {
-  const { activeProject } = useActiveJob();
+  const activeProject = useAppSelector(selectActiveProject);
   const { ticketId, projectId } = useParams<{
     ticketId: string;
     projectId: string;

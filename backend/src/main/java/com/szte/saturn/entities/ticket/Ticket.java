@@ -1,6 +1,9 @@
-package com.szte.saturn.entities;
+package com.szte.saturn.entities.ticket;
 
-import com.szte.saturn.controllers.dtos.CreateTicketDto;
+import com.szte.saturn.controllers.requests.CreateTicketDto;
+import com.szte.saturn.entities.User;
+import com.szte.saturn.entities.comment.Comment;
+import com.szte.saturn.entities.project.Project;
 import com.szte.saturn.enums.IssueType;
 import com.szte.saturn.enums.TicketPriority;
 import com.szte.saturn.enums.TicketStatus;
@@ -14,9 +17,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Table(name="tickets")
 @Entity
@@ -24,6 +25,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Accessors(chain = true)
+@IdClass(TicketId.class)
 public class Ticket {
 
     @Id
@@ -64,6 +66,7 @@ public class Ticket {
     @JoinColumn(name = "reporter_id", nullable = false)
     private User reporter;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;

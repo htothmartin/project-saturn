@@ -1,14 +1,12 @@
 package com.szte.saturn.services;
 
-import com.szte.saturn.controllers.dtos.CreateUserRequest;
-import com.szte.saturn.controllers.dtos.UpdateUserRequestDTO;
+import com.szte.saturn.controllers.requests.CreateUserRequest;
+import com.szte.saturn.controllers.requests.UpdateUserRequestDTO;
 import com.szte.saturn.dtos.UserDTO;
-import com.szte.saturn.entities.Project;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.exceptions.ApiException;
 import com.szte.saturn.mapper.UserMapper;
 import com.szte.saturn.repositories.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,7 +23,6 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final ProjectService projectService;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -58,8 +55,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserDTO> findUsersNotAssignedToProject(Long projectId, Long currentUserId) {
-        Project project = projectService.getProjectById(projectId);
-        List<User> users = userRepository.findUsersNotInProject(projectId, project.getOwner().getId(), currentUserId);
+        List<User> users = userRepository.findUsersNotInProject(projectId, currentUserId);
         return userMapper.toListDto(users);
     }
 

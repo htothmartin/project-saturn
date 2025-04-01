@@ -18,7 +18,7 @@ export const getActiveProject = async (id: string) => {
 };
 
 export const deleteProject = async (id: number) => {
-  return await protectedApi.delete(`/project/${id}`);
+  return await protectedApi.delete(`/projects/${id}`);
 };
 
 export const pinProject = async (id: number) => {
@@ -26,7 +26,10 @@ export const pinProject = async (id: number) => {
 };
 
 export const addUserToProject = async (projectId: string, userId: number) => {
-  return await protectedApi.post(`/projects/${projectId}/users/${userId}`);
+  return await protectedApi.post(`/projects/${projectId}/users`, {
+    role: "DEVELOPER",
+    userId,
+  });
 };
 
 export const deleteUserfromProject = async (

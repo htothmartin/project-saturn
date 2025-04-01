@@ -1,61 +1,69 @@
 package com.szte.saturn.services;
 
-import com.szte.saturn.controllers.dtos.CreateProjectDto;
+import com.szte.saturn.controllers.requests.AddUserToProjectRequest;
+import com.szte.saturn.controllers.requests.CreateProjectRequest;
 import com.szte.saturn.dtos.ActiveProjectDTO;
 import com.szte.saturn.dtos.ProjectDTO;
-import com.szte.saturn.dtos.UserDTO;
-import com.szte.saturn.entities.Project;
-import com.szte.saturn.entities.Ticket;
+import com.szte.saturn.entities.project.Project;
 import com.szte.saturn.entities.User;
+import com.szte.saturn.entities.rel_pinned_project.RelPinnedProject;
+import com.szte.saturn.entities.rel_user_projects.ProjectRole;
+import com.szte.saturn.entities.rel_user_projects.RelUserProjects;
 import com.szte.saturn.enums.ProjectStatus;
 import com.szte.saturn.exceptions.ApiException;
 import com.szte.saturn.mapper.ProjectMapper;
 import com.szte.saturn.repositories.ProjectRepository;
-import com.szte.saturn.repositories.TicketRepository;
-import com.szte.saturn.repositories.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.context.annotation.Lazy;
+import com.szte.saturn.repositories.RelPinnedProjectRepository;
+import com.szte.saturn.repositories.RelUserProjectsRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final RelUserProjectsRepository relUserProjectsRepository;
     private final ProjectMapper projectMapper;
     private final UserService userService;
+    private final RelPinnedProjectRepository relPinnedProjectRepository;
 
-    public ProjectService(ProjectRepository projectRepository, ProjectMapper projectMapper,@Lazy UserService userService) {
-        this.projectRepository = projectRepository;
-        this.projectMapper = projectMapper;
-        this.userService = userService;
-    }
-
+    @Transactional(readOnly = true)
     public Project getProjectById(Long projectId){
         return projectRepository.findById(projectId).orElseThrow(() -> ApiException.builder().message("Project not found").status(HttpStatus.NOT_FOUND.value()).build());
     }
 
-    public Project createProject(CreateProjectDto request, User user){
+    @Transactional
+    public ProjectDTO create(CreateProjectRequest request, User user){
         Project project = new Project(request);
         project.setOwner(user);
-        project.setStatus(ProjectStatus.ACTIVE);
-        return projectRepository.save(project);
+        Project savedProject = projectRepository.save(project);
+        relUserProjectsRepository.save(new RelUserProjects(user, savedProject, ProjectRole.OWNER));
+        boolean isPinned = relUserProjectsRepository.existsByUserIdAndProjectId(user.getId(), savedProject.getId());
+        return projectMapper.toDto(savedProject, user.getId(), isPinned);
     }
 
+    @Transactional(readOnly = true)
     public List<ProjectDTO> getProjectsByUser(User user, String sortOrder, String name){
         Sort.Direction direction = sortOrder.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, "name");
-        List<Project> projects = projectRepository.findProjectsByUser(user.getId(), name, sort);
+        Sort sort = Sort.by(direction, "project.name");
+        List<Project> projects = relUserProjectsRepository.findProjectsByUserId(user.getId(), name, sort);
 
-        return projectMapper.toListDto(projects, user.getId());
+        return projects.stream().map(project -> {
+            boolean isPinned = relPinnedProjectRepository.existsByUserIdAndProjectId(user.getId(), project.getId());
+            return projectMapper.toDto(project, user.getId(), isPinned);
+        }).toList();
     }
 
+    @Transactional(readOnly = true)
     public ActiveProjectDTO getProject(Long projectId){
         if(!projectRepository.existsById(projectId)){
             throw ApiException.builder().message("Project not found").status(HttpStatus.NOT_FOUND.value()).build();
@@ -65,38 +73,41 @@ public class ProjectService {
         return projectMapper.toActiveProjectDTO(project);
     }
 
-    public ProjectDTO pinProject(Long projectId, Long userId){
-        User user = userService.findUserById(userId);
-        Project project = getProjectById(projectId);
-
-        if(project.getPinnedProjects().contains(user)){
-            project.getPinnedProjects().remove(user);
+    @Transactional
+    public ProjectDTO pinProject(Long userId, Long projectId){
+        Optional<RelPinnedProject> pinnedProject = relPinnedProjectRepository.findByUserIdAndProjectId(userId, projectId);
+        if(pinnedProject.isPresent()){
+            pinnedProject.ifPresent(relPinnedProjectRepository::delete);
         } else {
-            project.getPinnedProjects().add(user);
+            relPinnedProjectRepository.save(new RelPinnedProject(userId, projectId));
         }
-        projectRepository.save(project);
 
-        return projectMapper.toDto(project, user.getId());
-    }
-
-    public void addUserToProject(Long projectId, Long userId) {
-        User user = userService.findUserById(userId);
         Project project = getProjectById(projectId);
-        if(user.getProjects().contains(project) || project.getOwner().getId().equals(user.getId())){
-            throw new IllegalArgumentException("This user already added to the project");
-        }
-        project.getUsers().add(user);
-        projectRepository.save(project);
+        boolean isPinned = relPinnedProjectRepository.existsByUserIdAndProjectId(userId, project.getId());
+        return projectMapper.toDto(project, userId, isPinned);
     }
 
+    @Transactional
+    public void addUserToProject(Long projectId, AddUserToProjectRequest request) {
+        if(relUserProjectsRepository.existsByUserIdAndProjectId(request.getUserId(), projectId)){
+            throw ApiException.builder().status(HttpStatus.CONFLICT.value()).message("This user already added to the project").build();
+        }
+        User user = userService.findUserById(request.getUserId());
+        Project project = getProjectById(projectId);
+
+        relUserProjectsRepository.save(new RelUserProjects(user, project, request.getRole()));
+    }
+
+    @Transactional
     public void deleteUserFromProject(Long projectId, Long userId) {
-        User user = userService.findUserById(userId);
-        Project project = getProjectById(projectId);
+        if(relUserProjectsRepository.existsByUserIdAndProjectId(userId, projectId)){
+            throw ApiException.builder().status(HttpStatus.CONFLICT.value()).message("This user is not exists or not added to the project").build();
+        }
 
-        project.getUsers().remove(user);
-        projectRepository.save(project);
+        relUserProjectsRepository.deleteByUserIdAndProjectId(userId, projectId);
     }
 
+    @Transactional
     public void delete(Long projectId){
         if(!projectRepository.existsById(projectId)){
             throw ApiException.builder().message("Project not found").status(HttpStatus.NOT_FOUND.value()).build();

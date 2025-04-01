@@ -39,11 +39,9 @@ public class SecurityConfiguration {
 
         http.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-
         http.oauth2Login(customizer -> {
             customizer.successHandler(oAuth2LoginSuccessHandler);
         });
-
 
         http.exceptionHandling(customizer -> {
             customizer.authenticationEntryPoint((request, response, authException) -> {response.sendError(401, "Unauthorized");});

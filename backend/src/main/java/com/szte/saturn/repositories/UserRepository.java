@@ -15,6 +15,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findUserById(Long id);
     boolean existsByEmail(String email);
 
-    @Query("SELECT u FROM User u WHERE u.id != :currentUserId AND u.id != :ownerId AND u.id NOT IN (SELECT user.id FROM Project p JOIN p.users user WHERE p.id = :projectId)")
-    List<User> findUsersNotInProject(@Param("projectId") Long projectId, @Param("ownerId") Long ownerId, @Param("currentUserId") Long currentUserId);
+    @Query("SELECT u FROM User u WHERE u.id != :currentUserId AND u.id NOT IN (SELECT relUserProjects.user.id FROM Project p JOIN p.relUserProjects relUserProjects WHERE p.id = :projectId)")
+    List<User> findUsersNotInProject(@Param("projectId") Long projectId, @Param("currentUserId") Long currentUserId);
 }

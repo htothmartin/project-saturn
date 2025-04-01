@@ -4,7 +4,7 @@ import { selectSession } from "@/lib/store/features/session/session-selectors";
 import { protectedApi } from "@/api/axios";
 import { refreshAccessToken } from "@/api/auth";
 import {
-  logout,
+  clearUserData,
   setAccessToken,
   setCurrentUser,
 } from "@/lib/store/features/session/session-slice";
@@ -15,12 +15,12 @@ export const useAuth = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const { currentUser, accessToken } = useAppSelector(selectSession);
+  const { accessToken } = useAppSelector(selectSession);
 
   useLayoutEffect(() => {
     const requestIntercept = protectedApi.interceptors.request.use(
       (config) => {
-        if (currentUser && accessToken) {
+        if (accessToken && !config.headers["Authorization"]) {
           config.headers["Authorization"] = `Bearer ${accessToken}`;
         }
 
@@ -40,10 +40,9 @@ export const useAuth = () => {
             dispatch(setAccessToken(newAccessToken));
             originalRequest.headers["Authorization"] =
               `Bearer ${newAccessToken}`;
-          } catch (error) {
-            console.error(error);
-            dispatch(logout());
-            router.replace("/login");
+          } catch (_) {
+            dispatch(clearUserData());
+            router.push("/login");
           }
 
           return protectedApi(originalRequest);
@@ -66,7 +65,7 @@ export const useAuth = () => {
         dispatch(setCurrentUser(user));
       } catch (error) {
         console.error(error);
-        dispatch(logout());
+        dispatch(clearUserData());
         router.push("/login");
       }
     })();

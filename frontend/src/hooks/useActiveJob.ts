@@ -12,7 +12,7 @@ export const useActiveJob = () => {
   const { activeProject, isActiveJobFetching } = useAppSelector(selectProjects);
 
   useEffect(() => {
-    if (!isActiveJobFetching && !activeProject) {
+    if (!isActiveJobFetching) {
       dispatch(fetchActiveProject(projectId));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

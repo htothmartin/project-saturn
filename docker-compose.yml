@@ -54,19 +54,12 @@ services:
     volumes:
       - minio_data:/data
 
-  nginx:
-    build:
-      context: ./nginx
+  nginx-dev:
+    image: nginx:latest
+    volumes:
+      - ./nginx/dev:/etc/nginx/templates
     ports:
       - "80:80"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-
-  redis:
-    image: "redis:alpine"
-
-    ports:
-      - "6379:6379"
 
 volumes:
   postgres_data:

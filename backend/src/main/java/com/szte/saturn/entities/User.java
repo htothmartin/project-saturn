@@ -1,7 +1,8 @@
 package com.szte.saturn.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.szte.saturn.controllers.dtos.CreateUserRequest;
+import com.szte.saturn.controllers.requests.CreateUserRequest;
+import com.szte.saturn.entities.rel_pinned_project.RelPinnedProject;
+import com.szte.saturn.entities.rel_user_projects.RelUserProjects;
 import com.szte.saturn.enums.Provider;
 import com.szte.saturn.enums.Role;
 import jakarta.persistence.*;
@@ -53,13 +54,8 @@ public class User implements UserDetails {
     @Column(name = "profile_picture_url")
     private String profilePictureUrl = "";
 
-    @ManyToMany(mappedBy = "users")
-    @JsonIgnore
-    private Set<Project> projects = new HashSet<>();
-
-    @ManyToMany(mappedBy = "pinnedProjects")
-    @JsonIgnore
-    private Set<Project> pinnedProjects = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RelUserProjects> relUserProjects = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<ConnectedAccount> connectedAccounts = new ArrayList<>();

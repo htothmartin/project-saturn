@@ -1,11 +1,11 @@
 package com.szte.saturn.controllers;
 
-import com.szte.saturn.controllers.dtos.CreateCommentDto;
-import com.szte.saturn.controllers.dtos.CreateTicketDto;
-import com.szte.saturn.controllers.dtos.UpdateTicketDto;
+import com.szte.saturn.controllers.requests.CreateCommentDto;
+import com.szte.saturn.controllers.requests.CreateTicketDto;
+import com.szte.saturn.controllers.requests.UpdateTicketDto;
 import com.szte.saturn.dtos.CommentDTO;
 import com.szte.saturn.dtos.TicketDTO;
-import com.szte.saturn.entities.Ticket;
+import com.szte.saturn.entities.ticket.Ticket;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.services.TicketService;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +64,7 @@ public class TicketController {
 
     @GetMapping("/{ticketId}/comments")
     public ResponseEntity<List<CommentDTO>> getTicket(@PathVariable Long projectId, @PathVariable Long ticketId) {
-        List<CommentDTO> comments = ticketService.getComments(ticketId);
+        List<CommentDTO> comments = ticketService.getComments(projectId, ticketId);
 
         return ResponseEntity.ok(comments);
     }

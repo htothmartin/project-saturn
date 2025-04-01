@@ -1,7 +1,7 @@
 package com.szte.saturn.controllers;
 
-import com.szte.saturn.controllers.dtos.CreateUserRequest;
-import com.szte.saturn.controllers.dtos.LoginUserRequest;
+import com.szte.saturn.controllers.requests.CreateUserRequest;
+import com.szte.saturn.controllers.requests.LoginUserRequest;
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.exceptions.ApiException;
 import com.szte.saturn.exceptions.ExpiredRefreshTokenException;
@@ -13,14 +13,11 @@ import com.szte.saturn.services.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;

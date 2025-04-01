@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useActiveJob } from "@/hooks/useActiveJob";
 import { selectIsProjectOwner } from "@/lib/store/features/project/projectSelectors";
 import { useAppSelector } from "@/lib/store/hooks";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -10,6 +11,7 @@ import { useState } from "react";
 
 export const Sidebar = (): React.JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  useActiveJob();
   const { projectId } = useParams<{ projectId: string }>();
   const isOwner = useAppSelector(selectIsProjectOwner);
 

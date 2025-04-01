@@ -1,5 +1,6 @@
 import { Comment } from "@/model/comment";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { clearUserData } from "../session/session-slice";
 
 type CommentState = {
   comments: Comment[] | null;
@@ -32,6 +33,9 @@ const commentSlice = createSlice({
       state.isCommentsFetching = false;
       state.comments = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(clearUserData, () => initialState);
   },
 });
 

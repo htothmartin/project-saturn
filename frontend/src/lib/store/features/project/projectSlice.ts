@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { SortOrder } from "@/enums/SortOrder";
 import { Filter } from "@/model/filter";
 import { Ticket } from "@/model/tickets";
+import { clearUserData } from "../session/session-slice";
 
 type ProjectState = {
   projects: Project[] | null;
@@ -50,6 +51,7 @@ const projectSlice = createSlice({
       state.isActiveJobFetching = false;
     },
     fetchActiveProjectError(state: ProjectState) {
+      state.activeProject = null;
       state.isActiveJobFetching = false;
     },
     setSortOrder(state: ProjectState, action: PayloadAction<SortOrder>) {
@@ -81,6 +83,9 @@ const projectSlice = createSlice({
         },
       );
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(clearUserData, () => initialState);
   },
 });
 

@@ -28,15 +28,15 @@ const sessionSlice = createSlice({
         state.isAuthenticating = false;
       }
     },
-    logout: (state: SessionState) => {
-      state.currentUser = null;
-      state.accessToken = null;
-      state.isAuthenticating = true;
-    },
+    clearUserData: () => initialState,
   },
 });
 
-export const { fetchCurrentUser, setCurrentUser, setAccessToken, logout } =
-  sessionSlice.actions;
+export const {
+  fetchCurrentUser,
+  setCurrentUser,
+  setAccessToken,
+  clearUserData,
+} = sessionSlice.actions;
 
 export default sessionSlice.reducer;

@@ -15,21 +15,26 @@ import {
 } from "@/components/ui/table";
 import { UserBadge } from "@/components/UserBadge";
 import { ModalTypes } from "@/enums/ModalTypes";
-import { useActiveJob } from "@/hooks/useActiveJob";
 import { useModal } from "@/hooks/useModal";
-import { selectFilter } from "@/lib/store/features/project/projectSelectors";
+import {
+  selectActiveProject,
+  selectFilter,
+  selectIsProjectOwner,
+} from "@/lib/store/features/project/projectSelectors";
 import { fetchActiveProject } from "@/lib/store/features/project/projectSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
 const Members = (): React.JSX.Element => {
-  const { activeProject } = useActiveJob();
+  const activeProject = useAppSelector(selectActiveProject);
   const { getModalUrl } = useModal();
   const { projectId } = useParams<{ projectId: string }>();
   const dispatch = useAppDispatch();
 
   const filter = useAppSelector(selectFilter);
+  const isOwner = useAppSelector(selectIsProjectOwner);
 
   const users = activeProject?.users;
 
@@ -46,7 +51,10 @@ const Members = (): React.JSX.Element => {
     <div className="flex w-full flex-col p-4">
       <div className="flex">
         <Link href={getModalUrl(ModalTypes.AddMember)}>
-          <Button>Add</Button>
+          <Button className="flex gap-2">
+            Add
+            <PlusCircle />
+          </Button>
         </Link>
         <div className="ml-auto">
           <SearchBar value={filter.q} />
@@ -58,7 +66,7 @@ const Members = (): React.JSX.Element => {
           <TableRow>
             <TableHead>Name</TableHead>
             <TableHead>Role</TableHead>
-            <TableHead></TableHead>
+            {isOwner && <TableHead>Action</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -71,7 +79,7 @@ const Members = (): React.JSX.Element => {
                 {user.id === activeProject?.owner.id ? "Owner" : "Member"}
               </TableCell>
               <TableCell>
-                {user.id != activeProject?.owner.id && (
+                {user.id != activeProject?.owner.id && isOwner && (
                   <Button
                     onClick={() => handleDeleteFromProject(user.id)}
                     variant="ghost"

@@ -5,6 +5,7 @@ import com.szte.saturn.enums.TicketPriority;
 import com.szte.saturn.enums.TicketStatus;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -16,7 +17,7 @@ public class TicketDTO {
     private UserDTO reporter;
     private TicketStatus status;
     private IssueType issueType;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private TicketPriority ticketPriority;
 }

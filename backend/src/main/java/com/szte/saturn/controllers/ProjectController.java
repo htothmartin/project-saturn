@@ -1,11 +1,10 @@
 package com.szte.saturn.controllers;
 
-import com.szte.saturn.controllers.dtos.CreateProjectDto;
+import com.szte.saturn.controllers.requests.AddUserToProjectRequest;
+import com.szte.saturn.controllers.requests.CreateProjectRequest;
 import com.szte.saturn.dtos.ActiveProjectDTO;
-import com.szte.saturn.dtos.CommentDTO;
 import com.szte.saturn.dtos.ProjectDTO;
-import com.szte.saturn.dtos.UserDTO;
-import com.szte.saturn.entities.Project;
+import com.szte.saturn.entities.project.Project;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.services.ProjectService;
 import org.springframework.http.ResponseEntity;
@@ -26,12 +25,11 @@ public class ProjectController {
     }
 
     @PostMapping()
-    public ResponseEntity<Project> create(@RequestBody CreateProjectDto createProjectDto) {
-
+    public ResponseEntity<ProjectDTO> create(@RequestBody CreateProjectRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         User currentUser = (User) authentication.getPrincipal();
-        Project newProject = projectService.createProject(createProjectDto, currentUser);
+
+        ProjectDTO newProject = projectService.create(request, currentUser);
         return ResponseEntity.ok(newProject);
     }
 
@@ -52,19 +50,19 @@ public class ProjectController {
         return ResponseEntity.ok(activeProject);
     }
 
-    @PostMapping("/{id}/pin")
-    public ResponseEntity<ProjectDTO> pinProject(@PathVariable Long id) {
+    @PostMapping("/{projectId}/pin")
+    public ResponseEntity<ProjectDTO> pinProject(@PathVariable Long projectId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
-        ProjectDTO pinnedProject = projectService.pinProject(id, currentUser.getId());
+        ProjectDTO pinnedProject = projectService.pinProject(currentUser.getId(), projectId);
 
         return ResponseEntity.ok(pinnedProject);
     }
 
-    @PostMapping("/{projectId}/users/{userId}")
-    public ResponseEntity<String> addUserToProject(@PathVariable Long projectId,  @PathVariable Long userId) {
+    @PostMapping("/{projectId}/users")
+    public ResponseEntity<String> addUserToProject(@PathVariable Long projectId, @RequestBody AddUserToProjectRequest request) {
 
-        projectService.addUserToProject(projectId, userId);
+        projectService.addUserToProject(projectId, request);
 
 
         return ResponseEntity.ok().body("Successfully added to project");

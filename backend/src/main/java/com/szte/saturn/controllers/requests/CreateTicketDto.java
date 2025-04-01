@@ -1,4 +1,4 @@
-package com.szte.saturn.controllers.dtos;
+package com.szte.saturn.controllers.requests;
 
 import com.szte.saturn.enums.IssueType;
 import com.szte.saturn.enums.TicketPriority;

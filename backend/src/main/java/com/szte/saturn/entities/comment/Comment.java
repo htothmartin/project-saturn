@@ -1,5 +1,8 @@
-package com.szte.saturn.entities;
+package com.szte.saturn.entities.comment;
 
+import com.szte.saturn.entities.project.Project;
+import com.szte.saturn.entities.ticket.Ticket;
+import com.szte.saturn.entities.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +29,10 @@ public class Comment {
     private User author;
 
     @ManyToOne
-    @JoinColumn(name = "ticket_id", nullable = false)
+    @JoinColumns({
+            @JoinColumn(name = "ticket_id", referencedColumnName = "id", nullable = false),
+            @JoinColumn(name = "project_id", referencedColumnName = "project_id", nullable = false)
+    })
     private Ticket ticket;
 
     public Comment(String content, User author, Ticket ticket) {

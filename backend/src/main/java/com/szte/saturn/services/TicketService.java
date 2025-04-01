@@ -1,20 +1,23 @@
 package com.szte.saturn.services;
 
-import com.szte.saturn.controllers.dtos.CreateCommentDto;
-import com.szte.saturn.controllers.dtos.CreateTicketDto;
-import com.szte.saturn.controllers.dtos.UpdateTicketDto;
+import com.szte.saturn.controllers.requests.CreateCommentDto;
+import com.szte.saturn.controllers.requests.CreateTicketDto;
+import com.szte.saturn.controllers.requests.UpdateTicketDto;
 import com.szte.saturn.dtos.CommentDTO;
 import com.szte.saturn.dtos.TicketDTO;
-import com.szte.saturn.entities.Comment;
-import com.szte.saturn.entities.Project;
-import com.szte.saturn.entities.Ticket;
+import com.szte.saturn.entities.comment.Comment;
+import com.szte.saturn.entities.project.Project;
+import com.szte.saturn.entities.rel_user_projects.RelUserProjects;
+import com.szte.saturn.entities.ticket.Ticket;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.enums.TicketStatus;
 import com.szte.saturn.mapper.CommentMapper;
 import com.szte.saturn.mapper.TicketMapper;
+import com.szte.saturn.repositories.ProjectRepository;
 import com.szte.saturn.repositories.TicketRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,34 +29,43 @@ public class TicketService {
     private final TicketMapper ticketMapper;
     private final UserService userService;
     private final CommentMapper commentMapper;
+    private final ProjectRepository projectRepository;
 
-    public TicketService(TicketRepository ticketRepository, ProjectService projectService, TicketMapper ticketMapper, UserService userService, CommentMapper commentMapper) {
+    public TicketService(TicketRepository ticketRepository, ProjectService projectService, TicketMapper ticketMapper, UserService userService, CommentMapper commentMapper, ProjectRepository projectRepository) {
         this.ticketRepository = ticketRepository;
         this.projectService = projectService;
         this.ticketMapper = ticketMapper;
         this.userService = userService;
         this.commentMapper = commentMapper;
-    }
-    public Ticket getTicketById(Long ticketId) {
-        return ticketRepository.findById(ticketId).orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
+        this.projectRepository = projectRepository;
     }
 
+    @Transactional(readOnly = true)
+    public Ticket getTicketByProjectAndTicketId(Long projectId, Long ticketId) {
+        if(!ticketRepository.existsByProjectIdAndId(projectId, ticketId)){
+            throw new EntityNotFoundException("Ticket with id " + ticketId + " not found");
+        }
+        return ticketRepository.findByProjectIdAndId(projectId, ticketId);
+    }
+
+    @Transactional(readOnly = true)
     public List<Ticket> getTicketsByProjects(Long projectId) {
         return ticketRepository.findByProjectId(projectId);
     }
 
+    @Transactional
     public Ticket createTicket(CreateTicketDto request, User user){
-
         Project project = projectService.getProjectById(request.getProjectId());
-
-        Ticket ticket = new Ticket(request).setReporter(user).setStatus(TicketStatus.COMMITED).setProject(project);
-
+        Ticket ticket = new Ticket(request).setReporter(user).setStatus(TicketStatus.COMMITED).setProject(project).setId(project.getTicketCounter()+1);
+        project.incrementTicketCounter();
+        projectRepository.save(project);
         return ticketRepository.save(ticket);
     }
 
+    @Transactional
     public TicketDTO updateTicket(Long projectId, Long ticketId, UpdateTicketDto request){
         System.out.println(request.toString());
-        Ticket ticket = getTicketById(ticketId);
+        Ticket ticket = getTicketByProjectAndTicketId(projectId, ticketId);
         if(request.getTitle() != null){
             ticket.setTitle(request.getTitle());
         } if(request.getDescription() != null){
@@ -78,17 +90,19 @@ public class TicketService {
         return ticketMapper.toDto(updatedTicket);
     }
 
+    @Transactional
     public CommentDTO createComment(Long projectId, Long ticketId, CreateCommentDto request){
-        Ticket ticket = getTicketById(ticketId);
+        Ticket ticket = getTicketByProjectAndTicketId(projectId, ticketId);
         Project project = projectService.getProjectById(projectId);
-        User author = project.getUsers().stream()
-                .filter(user -> user.getId().equals(request.getAuthorId()))
-                .findFirst().orElse(null);
+        User author = project.getRelUserProjects().stream()
+                .filter(relUserProjects -> relUserProjects.getUser().getId().equals(request.getAuthorId()))
+                .findFirst().map(RelUserProjects::getUser).orElse(null);
         if(author == null){
             System.out.println(request.getAuthorId());
             System.out.println(project.getOwner().getId());
-            if(project.getOwner().getId().equals(request.getAuthorId()))
-            author = project.getOwner();
+            if(project.getOwner().getId().equals(request.getAuthorId())){
+                author = project.getOwner();
+            }
             if(author == null){
                 throw new EntityNotFoundException("User not found");
             }
@@ -99,9 +113,9 @@ public class TicketService {
         return commentMapper.toDTO(savedTicket.getComments().getFirst());
     }
 
-
-    public List<CommentDTO> getComments(Long ticketId) {
-        Ticket ticket = getTicketById(ticketId);
+    @Transactional(readOnly = true)
+    public List<CommentDTO> getComments(Long projectId, Long ticketId) {
+        Ticket ticket = getTicketByProjectAndTicketId(projectId, ticketId);
         return commentMapper.toDTO(ticket.getComments());
     }
 }

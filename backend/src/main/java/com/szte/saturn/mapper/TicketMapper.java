@@ -2,7 +2,7 @@ package com.szte.saturn.mapper;
 
 import com.szte.saturn.dtos.TicketDTO;
 import com.szte.saturn.dtos.UserDTO;
-import com.szte.saturn.entities.Ticket;
+import com.szte.saturn.entities.ticket.Ticket;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

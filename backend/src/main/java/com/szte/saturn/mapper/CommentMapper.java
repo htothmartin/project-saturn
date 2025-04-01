@@ -1,7 +1,7 @@
 package com.szte.saturn.mapper;
 
 import com.szte.saturn.dtos.CommentDTO;
-import com.szte.saturn.entities.Comment;
+import com.szte.saturn.entities.comment.Comment;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

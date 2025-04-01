@@ -3,6 +3,7 @@ package com.szte.saturn.dtos;
 import com.szte.saturn.enums.ProjectStatus;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,7 @@ public class ActiveProjectDTO {
 
     private String description;
 
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     private UserDTO owner;
 

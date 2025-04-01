@@ -1,12 +1,12 @@
 package com.szte.saturn.entities;
 
+import com.szte.saturn.entities.project.Project;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 
 @Table(name = "sprints")

@@ -17,7 +17,7 @@ import { Logout } from "@/api/auth";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/useModal";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { logout } from "@/lib/store/features/session/session-slice";
+import { clearUserData } from "@/lib/store/features/session/session-slice";
 import { selectSession } from "@/lib/store/features/session/session-selectors";
 
 export const Header = (): React.JSX.Element => {
@@ -29,7 +29,7 @@ export const Header = (): React.JSX.Element => {
   const handleLogout = async () => {
     await Logout();
     router.push("/login");
-    dispatch(logout());
+    dispatch(clearUserData());
   };
 
   if (!currentUser) {

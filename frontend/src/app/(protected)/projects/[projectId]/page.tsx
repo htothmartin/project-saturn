@@ -5,7 +5,8 @@ import { Card } from "@/components/Board/Card";
 import { Column } from "@/components/Board/Column";
 import { Loader } from "@/components/Loader";
 import { TicketStatus } from "@/enums/TicketStatus";
-import { useActiveJob } from "@/hooks/useActiveJob";
+import { selectProjects } from "@/lib/store/features/project/projectSelectors";
+import { useAppSelector } from "@/lib/store/hooks";
 import { Ticket } from "@/model/tickets";
 import {
   DragEndEvent,
@@ -51,7 +52,7 @@ const columns: ColumnType[] = [
 ];
 
 const Project = (): React.JSX.Element => {
-  const { activeProject, isActiveJobFetching } = useActiveJob();
+  const { activeProject, isActiveJobFetching } = useAppSelector(selectProjects);
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [activeTicket, setActiveTicket] = useState<Ticket | null>(null);
