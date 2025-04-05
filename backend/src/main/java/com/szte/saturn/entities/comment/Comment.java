@@ -1,15 +1,24 @@
 package com.szte.saturn.entities.comment;
 
-import com.szte.saturn.entities.project.Project;
-import com.szte.saturn.entities.ticket.Ticket;
 import com.szte.saturn.entities.User;
-import jakarta.persistence.*;
+import com.szte.saturn.entities.ticket.Ticket;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Table(name="comments")
+@Table(name = "comments")
 @Entity
 @Getter
 @Setter
@@ -21,7 +30,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="content")
+    @Column(name = "content")
     private String content;
 
     @OneToOne
@@ -35,7 +44,7 @@ public class Comment {
     })
     private Ticket ticket;
 
-    public Comment(String content, User author, Ticket ticket) {
+    public Comment(final String content, final User author, final Ticket ticket) {
         this.content = content;
         this.author = author;
         this.ticket = ticket;

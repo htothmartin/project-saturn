@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { fetchUsersNotAssignedToProject } from "@/api/user";
 import { User } from "@/model/user";
 import { UserBadge } from "../UserBadge";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -15,40 +15,67 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
-import { addUserToProject } from "@/api/project";
+import { addUserToProject } from "@/api/project/project";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { fetchActiveProject } from "@/lib/store/features/project/projectSlice";
 import MoonLoader from "react-spinners/MoonLoader";
 import { CommandLoading } from "cmdk";
+import { ProjectRole } from "@/enums/ProjectRole";
+import { Select } from "../Input/Select";
+import { Separator } from "../ui/separator";
+import { UserIdWithRole } from "@/api/project/requests/user-id-with-role";
+
+type SelectedUser = {
+  user: User;
+  role: ProjectRole;
+};
 
 export const AddMemeber = (): React.JSX.Element => {
   const pathname = usePathname();
   const router = useRouter();
-  const dispacth = useAppDispatch();
+  const dispatch = useAppDispatch();
   const { projectId } = useParams<{ projectId: string }>();
 
   const [open, setOpen] = useState<boolean>(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[] | null>(null);
+  const [selectedUsers, setSelectedUsers] = useState<SelectedUser[]>([]);
   const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
-  const fetchUsers = async () => {
-    try {
-      const { data } = await fetchUsersNotAssignedToProject(projectId);
-      setUsers(data);
-      setLoading(false);
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const { data } = await fetchUsersNotAssignedToProject(projectId);
+        setUsers(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (projectId) {
+      fetchUsers();
     }
-  };
+  }, [projectId]);
+
+  const roleOptions = useMemo(() => {
+    return Object.entries(ProjectRole).map(([_, value]) => ({
+      id: value,
+      data: value,
+    }));
+  }, []);
 
   const handleAddMember = async () => {
     try {
-      if (selectedUser) {
-        await addUserToProject(projectId, selectedUser.id);
-        dispacth(fetchActiveProject(projectId));
+      if (selectedUsers.length) {
+        const userIdsWithRoles: UserIdWithRole[] = selectedUsers.map(
+          (user) => ({ userId: user.user.id, role: user.role }),
+        );
+        await addUserToProject(projectId, userIdsWithRoles);
+        dispatch(fetchActiveProject(projectId));
         router.push(pathname);
       }
     } catch (error) {
@@ -56,32 +83,21 @@ export const AddMemeber = (): React.JSX.Element => {
     }
   };
 
-  useEffect(() => {
-    if (!users && !loading) {
-      setLoading(true);
-      fetchUsers();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [users]);
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="flex h-full flex-col items-center justify-center">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="h-full w-fit justify-start"
+            className="flex w-1/2 justify-between"
           >
-            {selectedUser ? (
-              <UserBadge user={selectedUser} />
-            ) : (
-              "Select user..."
-            )}
+            Click here to select users...
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="" align="start">
+        <PopoverContent align="start">
           <Command shouldFilter={false}>
             <CommandInput
               value={search}
@@ -104,20 +120,18 @@ export const AddMemeber = (): React.JSX.Element => {
                   )
                   .map((user) => (
                     <CommandItem
-                      key={`user-${user.id}`}
+                      key={`user-item-${user.id}`}
                       value={user.id.toString()}
-                      onSelect={(value) => {
-                        setSelectedUser(
-                          users?.find((user) => user.id.toString() === value) ||
-                            null,
-                        );
+                      onSelect={() => {
+                        setSelectedUsers((prev) => [
+                          ...prev,
+                          { user, role: ProjectRole.DEVELOPER },
+                        ]);
+                        setUsers(users.filter((u) => u.id !== user.id));
                         setOpen(false);
                       }}
                     >
                       <UserBadge user={user} />
-                      {user.id === selectedUser?.id && (
-                        <Check className="ml-auto" />
-                      )}
                     </CommandItem>
                   ))}
               </CommandGroup>
@@ -125,7 +139,40 @@ export const AddMemeber = (): React.JSX.Element => {
           </Command>
         </PopoverContent>
       </Popover>
-      <Button disabled={!selectedUser} onClick={handleAddMember}>
+      <div className="m-4 h-full w-full overflow-y-scroll">
+        {selectedUsers.length > 0 &&
+          selectedUsers.map((selected) => (
+            <>
+              <div
+                key={`selected-user-${selected.user.id}`}
+                className="flex w-full flex-row items-center gap-6 p-2"
+              >
+                <UserBadge user={selected.user} />
+                <Select
+                  label="Select a role"
+                  placeholder="Select a role for user"
+                  selectedValue={{ id: selected.role, data: selected.role }}
+                  options={roleOptions}
+                  onSelect={(id: ProjectRole) => {
+                    setSelectedUsers(
+                      selectedUsers.map((sel) =>
+                        sel.user.id === selected.user.id
+                          ? {
+                              user: sel.user,
+                              role: id as ProjectRole,
+                            }
+                          : sel,
+                      ),
+                    );
+                  }}
+                />
+              </div>
+              <Separator />
+            </>
+          ))}
+      </div>
+
+      <Button disabled={!selectedUsers.length} onClick={handleAddMember}>
         Add member
       </Button>
     </div>

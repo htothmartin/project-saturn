@@ -4,8 +4,7 @@ import com.szte.saturn.utils.OAuth2LoginSuccessHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -30,21 +29,24 @@ public class SecurityConfiguration {
     private final UserDetailsService userDetailsService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(customizer -> {
             customizer
                     .requestMatchers(antMatcher("/auth/**")).permitAll()
                     .anyRequest().authenticated();
         });
 
-        http.sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.sessionManagement(customizer ->
+                customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.oauth2Login(customizer -> {
             customizer.successHandler(oAuth2LoginSuccessHandler);
         });
 
         http.exceptionHandling(customizer -> {
-            customizer.authenticationEntryPoint((request, response, authException) -> {response.sendError(401, "Unauthorized");});
+            customizer.authenticationEntryPoint((request, response, authException) -> {
+                response.sendError(HttpStatus.UNAUTHORIZED.value(), "Unauthorized");
+            });
         });
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -55,7 +57,7 @@ public class SecurityConfiguration {
         });
 
 
-        http.csrf(AbstractHttpConfigurer::disable); // TODO: Implement jwt token based authentication
+        http.csrf(AbstractHttpConfigurer::disable); // TODO: Configure csrf
 
         return http.build();
     }
@@ -65,13 +67,13 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(List.of("GET","POST","DELETE", "PATCH"));
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "DELETE", "PATCH"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-        source.registerCorsConfiguration("/**",configuration);
+        source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }

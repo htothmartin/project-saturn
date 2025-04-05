@@ -58,7 +58,7 @@ const TicketDetails = () => {
   }
 
   return (
-    <div className="flex w-full flex-row gap-2 border p-4 shadow-md">
+    <div className="flex w-full flex-row gap-2 p-4 shadow-md">
       <div className="flex w-full flex-col">
         <div className="flex-grow">
           <h1 className="m-4 text-xl font-bold">{ticket.title}</h1>

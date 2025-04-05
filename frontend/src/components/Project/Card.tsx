@@ -14,7 +14,7 @@ import { MoreVertical } from "lucide-react";
 import { ProjectStatusBadge } from "../ProjectStatus";
 import Link from "next/link";
 import { Pin } from "@/assets/icons/Pin";
-import { deleteProject, pinProject } from "@/api/project";
+import { deleteProject, pinProject } from "@/api/project/project";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
   fetchProjects,

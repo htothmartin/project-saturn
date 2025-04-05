@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteUserfromProject } from "@/api/project";
+import { deleteUserfromProject } from "@/api/project/project";
 import { SearchBar } from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import {
@@ -75,9 +75,7 @@ const Members = (): React.JSX.Element => {
               <TableCell className="font-medium">
                 <UserBadge user={user} />
               </TableCell>
-              <TableCell>
-                {user.id === activeProject?.owner.id ? "Owner" : "Member"}
-              </TableCell>
+              <TableCell>{user.role}</TableCell>
               <TableCell>
                 {user.id != activeProject?.owner.id && isOwner && (
                   <Button

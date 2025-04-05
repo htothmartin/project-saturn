@@ -10,7 +10,6 @@ export async function middleware(request: NextRequest) {
 
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get("refresh-token");
-
   if (refreshToken && unprotectedPaths.includes(request.nextUrl.pathname)) {
     return NextResponse.redirect(new URL("/projects", request.url));
   }

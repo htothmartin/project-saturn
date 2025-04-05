@@ -7,16 +7,10 @@ import lombok.Data;
 
 @Data
 public class UpdateTicketDto {
-
-    String title;
-
-    String description;
-
-    TicketPriority priority;
-
-    TicketStatus status;
-
-    IssueType issueType;
-
-    Long assigneeId;
+    private String title;
+    private String description;
+    private TicketPriority priority;
+    private TicketStatus status;
+    private IssueType issueType;
+    private Long assigneeId;
 }

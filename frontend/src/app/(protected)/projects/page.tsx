@@ -1,8 +1,7 @@
 "use client";
+
 import { ProjectCard } from "@/components/Project/Card";
-import { SearchBar } from "@/components/SearchBar";
-import { Button } from "@/components/ui/button";
-import { SortOrder } from "@/enums/SortOrder";
+
 import {
   selectFilter,
   selectProjects,
@@ -12,8 +11,11 @@ import {
   setSortOrder,
 } from "@/lib/store/features/project/projectSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { ArrowDownAZ, ArrowUpAZIcon } from "lucide-react";
+
 import { useEffect, useMemo } from "react";
+import { TopBar } from "./components/TopBar";
+import { SortOrder } from "@/enums/SortOrder";
+import { Loader } from "@/components/Loader";
 
 const Home = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
@@ -38,32 +40,19 @@ const Home = (): React.JSX.Element => {
     [projects],
   );
 
-  return (
-    <>
-      <div className="flex items-center gap-2 p-4">
-        <h3 className="text-2xl font-bold">Your projects</h3>
-        <div className="ml-auto">Sorting order:</div>
-        {sort === "asc" ? (
-          <Button
-            onClick={() => {
-              dispatch(setSortOrder(SortOrder.Descending));
-            }}
-            variant="ghost"
-          >
-            <ArrowDownAZ />
-          </Button>
-        ) : (
-          <Button
-            onClick={() => {
-              dispatch(setSortOrder(SortOrder.Ascending));
-            }}
-            variant="ghost"
-          >
-            <ArrowUpAZIcon />
-          </Button>
-        )}
-        <SearchBar value={q} />
-      </div>
+  const Body = () => {
+    if (isProjectsFetching) {
+      return <Loader />;
+    }
+
+    if (pinnedProjects?.length === 0 && notPinnedProjects?.length === 0) {
+      return (
+        <div className="flex h-1/2 w-full items-center justify-center">
+          No projects to display
+        </div>
+      );
+    }
+    return (
       <div className="mx-auto mt-8 flex h-full w-full flex-wrap justify-center gap-8">
         {pinnedProjects?.map((project) => (
           <ProjectCard key={project.id} project={project} />
@@ -72,6 +61,19 @@ const Home = (): React.JSX.Element => {
           <ProjectCard key={project.id} project={project} />
         ))}
       </div>
+    );
+  };
+
+  return (
+    <>
+      <TopBar
+        onSearchClick={(sortOrder: SortOrder) => {
+          dispatch(setSortOrder(sortOrder));
+        }}
+        q={q}
+        sort={sort}
+      />
+      {Body()}
     </>
   );
 };

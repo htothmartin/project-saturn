@@ -1,3 +1,4 @@
+import { ProjectRole } from "@/enums/ProjectRole";
 import { ConnectedAccount } from "./connected-accounts";
 
 export type User = {
@@ -8,4 +9,8 @@ export type User = {
   lastname: string;
   email: string;
   connectedAccounts: ConnectedAccount[];
+};
+
+export type ProjectUser = User & {
+  role: ProjectRole;
 };

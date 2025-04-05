@@ -1,9 +1,10 @@
 package com.szte.saturn.entities.rel_pinned_project;
 
-
-import com.szte.saturn.entities.User;
-import com.szte.saturn.entities.project.Project;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

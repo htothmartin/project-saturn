@@ -16,11 +16,11 @@ public class CommentMapper {
     private ModelMapper modelMapper;
 
 
-    public CommentDTO toDTO(Comment comment) {
+    public CommentDTO toDTO(final Comment comment) {
         return modelMapper.map(comment, CommentDTO.class);
     }
 
-    public List<CommentDTO> toDTO(List<Comment> comments) {
+    public List<CommentDTO> toDTO(final List<Comment> comments) {
         return comments.stream().map(this::toDTO).collect(Collectors.toList());
     }
 

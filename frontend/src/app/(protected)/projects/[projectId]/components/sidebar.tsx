@@ -17,7 +17,7 @@ export const Sidebar = (): React.JSX.Element => {
 
   return (
     <div
-      className={`flex h-full ${isOpen ? "w-40" : "w-12"} flex-col gap-4 bg-background p-2 transition-all duration-200`}
+      className={`flex h-full ${isOpen ? "w-40" : "w-12"} flex-col gap-4 border-r-2 bg-background p-2 transition-all duration-200`}
     >
       <Button
         onClick={() => setIsOpen(!isOpen)}

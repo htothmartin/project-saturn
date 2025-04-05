@@ -10,6 +10,9 @@ import java.util.Optional;
 
 @Repository
 public interface ConnectedAccountRepository extends JpaRepository<ConnectedAccount, Long> {
-    @Query("SELECT a FROM ConnectedAccount a WHERE a.provider = :provider AND a.providerId = :providerId")
-    Optional<ConnectedAccount> findByProviderAndProviderId(@Param("provider") String provider, @Param("providerId") String providerId);
+    @Query("SELECT a FROM ConnectedAccount a "
+            + "WHERE a.provider = :provider AND a.providerId = :providerId")
+    Optional<ConnectedAccount> findByProviderAndProviderId(
+            @Param("provider") String provider,
+            @Param("providerId") String providerId);
 }

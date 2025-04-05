@@ -1,20 +1,16 @@
-"use client";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getMonogram } from "@/lib/utils";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 type Props = {
   imageUrl: string;
   fullName: string;
+  onClick?: () => void;
 };
 
-export const UserAvatar = ({ imageUrl, fullName }: Props) => {
-  const router = useRouter();
-
+export const UserAvatar = ({ imageUrl, fullName, onClick }: Props) => {
   return (
-    <Avatar onClick={() => router.push("/profile")}>
+    <Avatar onClick={onClick}>
       <AvatarImage src={imageUrl} alt="Profile picture" asChild>
         {imageUrl && (
           <Image src={imageUrl} width={60} height={90} alt="Profile picture" />

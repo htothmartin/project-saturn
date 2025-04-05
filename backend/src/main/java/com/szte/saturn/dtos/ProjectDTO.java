@@ -4,7 +4,6 @@ import com.szte.saturn.enums.ProjectStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
 public class ProjectDTO {
@@ -14,6 +13,8 @@ public class ProjectDTO {
     private String name;
 
     private String description;
+
+    private String key;
 
     private LocalDateTime createdAt;
 

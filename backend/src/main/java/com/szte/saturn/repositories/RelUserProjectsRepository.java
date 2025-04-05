@@ -15,8 +15,13 @@ public interface RelUserProjectsRepository extends CrudRepository<RelUserProject
 
     boolean existsByUserIdAndProjectId(Long userId, Long projectId);
 
-    @Query("SELECT r.project FROM RelUserProjects r WHERE r.user.id = :userId AND LOWER(r.project.name) LIKE LOWER(CONCAT('%', :name, '%'))")
-    List<Project> findProjectsByUserId(@Param("userId") Long userId, @Param("name") String name, Sort sort);
+    @Query("SELECT r.project FROM RelUserProjects r "
+            + "WHERE r.user.id = :userId AND LOWER(r.project.name) "
+            + "LIKE LOWER(CONCAT('%', :name, '%'))")
+    List<Project> findProjectsByUserId(
+            @Param("userId") Long userId,
+            @Param("name") String name,
+            Sort sort);
 
     void deleteByUserIdAndProjectId(Long userId, Long projectId);
 }

@@ -1,7 +1,6 @@
 package com.szte.saturn.configs;
 
 import com.szte.saturn.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +16,7 @@ public class ApplicationConfiguration {
 
     private final UserRepository userRepository;
 
-    public ApplicationConfiguration(UserRepository userRepository) {
+    public ApplicationConfiguration(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -33,9 +32,11 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+    public AuthenticationManager authenticationManager(
+            final AuthenticationConfiguration config)
+                throws Exception {
+                    return config.getAuthenticationManager();
+                }
 
     @Bean
     AuthenticationProvider authenticationProvider() {

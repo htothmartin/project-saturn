@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { createProjectSchema } from "@/lib/schemas";
 import { useState } from "react";
-import { createNewProject } from "@/api/project";
+import { createNewProject } from "@/api/project/project";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
 import { fetchProjects } from "@/lib/store/features/project/projectSlice";

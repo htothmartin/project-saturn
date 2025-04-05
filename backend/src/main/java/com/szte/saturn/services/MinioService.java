@@ -1,7 +1,12 @@
 package com.szte.saturn.services;
 
-import io.minio.*;
+import io.minio.BucketExistsArgs;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.MakeBucketArgs;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import io.minio.http.Method;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,38 +16,37 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class MinioService {
 
-
     private final MinioClient minioClient;
 
-    public MinioService(MinioClient minioClient) {
+    @Value("${minio.bucket-name}")
+    private String bucketName;
+
+    @Value("${minio.exipry-time-in-minutes}")
+    private int expiryTimeInMinutes;
+
+    public MinioService(final MinioClient minioClient) {
         this.minioClient = minioClient;
     }
 
-    public  String uploadFile(MultipartFile file) {
+    public  String uploadFile(final MultipartFile file) {
         try {
 
-            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket("saturn").build());
+            boolean found = minioClient.bucketExists(BucketExistsArgs
+                    .builder()
+                    .bucket(bucketName)
+                    .build());
             if (!found) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket("saturn").build());
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
             }
 
             String fileName = "profile-pictures/" + UUID.randomUUID();
 
             minioClient.putObject(PutObjectArgs.builder()
-                    .bucket("saturn")
+                    .bucket(bucketName)
                     .object(fileName)
                     .stream(file.getInputStream(), file.getSize(), -1)
                     .contentType(file.getContentType())
                     .build());
-
-            String url = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                    .bucket("saturn")
-                    .object(fileName)
-                    .method(Method.GET) // Set the HTTP method to GET
-                    .expiry(60 * 60) // URL expiry time in seconds (1 hour)
-                    .build());
-
-
 
             return fileName;
 
@@ -51,18 +55,18 @@ public class MinioService {
         }
     }
 
-    public String generatePresignedUrl(String objectName) {
+    public String generatePreSignedUrl(final String objectName) {
         try {
             return minioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
                             .method(Method.GET)
-                            .bucket("saturn")
+                            .bucket(bucketName)
                             .object(objectName)
-                            .expiry(30, TimeUnit.MINUTES)
+                            .expiry(expiryTimeInMinutes, TimeUnit.MINUTES)
                             .build()
             );
         } catch (Exception e) {
-            throw new RuntimeException("Failed to generate presigned URL", e);
+            throw new RuntimeException("Failed to generate pre signed URL", e);
         }
     }
 

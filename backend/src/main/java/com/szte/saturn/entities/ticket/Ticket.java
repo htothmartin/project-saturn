@@ -7,7 +7,17 @@ import com.szte.saturn.entities.project.Project;
 import com.szte.saturn.enums.IssueType;
 import com.szte.saturn.enums.TicketPriority;
 import com.szte.saturn.enums.TicketStatus;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +29,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(name="tickets")
+@Table(name = "tickets")
 @Entity
 @Getter
 @Setter
@@ -29,10 +39,9 @@ import java.util.List;
 public class Ticket {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", length = 150)
+    @Column(name = "title")
     private String title;
 
     @Column(name = "description")
@@ -75,7 +84,7 @@ public class Ticket {
     private List<Comment> comments = new ArrayList<>();
 
 
-    public Ticket(CreateTicketDto ticketDto) {
+    public Ticket(final CreateTicketDto ticketDto) {
         this.title = ticketDto.getTitle();
         this.description = ticketDto.getDescription();
         this.priority = ticketDto.getPriority();

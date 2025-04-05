@@ -1,6 +1,7 @@
 import { ProjectForm } from "@/model/project";
-import { protectedApi } from "./axios";
+import { protectedApi } from "../axios";
 import { Filter } from "@/model/filter";
+import { UserIdWithRole } from "./requests/user-id-with-role";
 
 export const createNewProject = async (project: ProjectForm) => {
   return await protectedApi.post("/projects", { ...project });
@@ -25,11 +26,11 @@ export const pinProject = async (id: number) => {
   return await protectedApi.post(`/projects/${id}/pin`);
 };
 
-export const addUserToProject = async (projectId: string, userId: number) => {
-  return await protectedApi.post(`/projects/${projectId}/users`, {
-    role: "DEVELOPER",
-    userId,
-  });
+export const addUserToProject = async (
+  projectId: string,
+  body: UserIdWithRole[],
+) => {
+  return await protectedApi.post(`/projects/${projectId}/users`, body);
 };
 
 export const deleteUserfromProject = async (

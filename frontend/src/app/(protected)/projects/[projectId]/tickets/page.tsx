@@ -54,6 +54,7 @@ const Tickets = (): React.JSX.Element => {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[20px]">Type</TableHead>
+            <TableHead></TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="w-[100px]">Priority</TableHead>
@@ -67,6 +68,7 @@ const Tickets = (): React.JSX.Element => {
               <TableCell className="font-medium">
                 <IssueTypeSelect type={ticket.issueType} ticketId={ticket.id} />
               </TableCell>
+              <TableCell>{`${activeProject?.key}-${ticket.id}`}</TableCell>
               <TableCell>{ticket.title}</TableCell>
               <TableCell>{ticket.status}</TableCell>
               <TableCell>

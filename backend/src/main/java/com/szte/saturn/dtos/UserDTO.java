@@ -14,7 +14,7 @@ public class UserDTO {
 
     private String lastname;
 
-    private String FullName;
+    private String fullName;
 
     private String profilePictureUrl;
 

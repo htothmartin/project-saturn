@@ -15,16 +15,16 @@ public class TicketMapper {
     @Autowired
     private UserMapper userMapper;
 
-    public TicketDTO toDto(Ticket ticket) {
+    public TicketDTO toDto(final Ticket ticket) {
 
         TicketDTO ticketDTO = modelMapper.map(ticket, TicketDTO.class);
 
-        if(ticket.getAssignee() != null) {
+        if (ticket.getAssignee() != null) {
             UserDTO assigne = userMapper.toDto(ticket.getAssignee());
             ticketDTO.setAssignee(assigne);
         }
 
-        if(ticket.getReporter() != null) {
+        if (ticket.getReporter() != null) {
             UserDTO reporter = userMapper.toDto(ticket.getReporter());
             ticketDTO.setReporter(reporter);
         }

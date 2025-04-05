@@ -1,11 +1,21 @@
 package com.szte.saturn.entities;
 
 import com.szte.saturn.controllers.requests.CreateUserRequest;
-import com.szte.saturn.entities.rel_pinned_project.RelPinnedProject;
 import com.szte.saturn.entities.rel_user_projects.RelUserProjects;
 import com.szte.saturn.enums.Provider;
 import com.szte.saturn.enums.Role;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,9 +27,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
-@Table(name="users")
+@Table(name = "users")
 @Entity
 @Getter
 @Setter
@@ -31,13 +44,13 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "firstname", nullable = false, length = 50)
+    @Column(name = "firstname", nullable = false)
     private String firstname;
 
-    @Column(name = "lastname", nullable = false, length = 50)
+    @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @Column(name = "email", nullable = false, unique = true, length = 100)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
@@ -70,7 +83,7 @@ public class User implements UserDetails {
     @Column(name = "provider", nullable = false)
     private Provider provider;
 
-    public User(CreateUserRequest request) {
+    public User(final CreateUserRequest request) {
         this.firstname = request.getFirstname();
         this.lastname = request.getLastname();
         this.email = request.getEmail();
@@ -78,14 +91,13 @@ public class User implements UserDetails {
         this.provider = Provider.EMAIL;
     }
 
-    public User(OAuth2User oAuth2User){
+    public User(final OAuth2User oAuth2User) {
         this.email = oAuth2User.getAttribute("email");
         String name = oAuth2User.getAttribute("name");
-        String profilePictureUrl = oAuth2User.getAttribute("profile_picture_url");
 
-        if(name != null){
+        if (name != null) {
             List<String> names = List.of(name.split(" "));
-            if(names.size() > 1){
+            if (names.size() > 1) {
                 this.firstname = names.get(0);
                 this.lastname = names.get(1);
             } else {
@@ -98,7 +110,7 @@ public class User implements UserDetails {
         this.setPassword("");
     }
 
-    public void addConnectedAcoount(ConnectedAccount connectedAccount){
+    public void addConnectedAcoount(final ConnectedAccount connectedAccount) {
         connectedAccounts.add(connectedAccount);
     }
 

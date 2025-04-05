@@ -14,18 +14,23 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 @RequestMapping("/auth")
 @RestController
 @RequiredArgsConstructor
-public class AuthenticationController {
+public final class AuthenticationController {
 
     private final JwtService jwtService;
 
@@ -35,14 +40,16 @@ public class AuthenticationController {
 
     private final UserDetailsService userDetailsService;
 
+    private static final int SECOND_IN_MILLISECONDS = 1000;
+
     @PostMapping("/signup")
-    public ResponseEntity<UserDTO> register(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserDTO> register(@RequestBody final CreateUserRequest request) {
         UserDTO registeredUser = userService.create(request);
         return ResponseEntity.ok(registeredUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticate(@RequestBody LoginUserRequest request) {
+    public ResponseEntity<?> authenticate(@RequestBody final LoginUserRequest request) {
         UserDTO authenticatedUser = authenticationService.login(request);
 
         String accessToken = jwtService.generateToken(authenticatedUser.getId(), false);
@@ -51,41 +58,49 @@ public class AuthenticationController {
         ResponseCookie jwtCookie = ResponseCookie.from("refresh-token", refreshToken)
                 .httpOnly(true)
                 .secure(true)
-                .path("/api")
-                .maxAge(jwtService.getRefreshExpiration() / 1000)
+                .path("/")
+                .maxAge(jwtService.getRefreshExpiration() / SECOND_IN_MILLISECONDS)
                 .sameSite("Strict")
                 .build();
 
-        LoginResponse loginResponse = new LoginResponse().setMessage("success").setAccessToken(accessToken);
+        LoginResponse loginResponse = new LoginResponse()
+                .setMessage("success")
+                .setAccessToken(accessToken);
 
         return ResponseEntity.ok().header("Set-Cookie", jwtCookie.toString()).body(loginResponse);
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<?> refresh(HttpServletRequest request) {
+    public ResponseEntity<?> refresh(final HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        
-        if(cookies == null) {
-            throw ApiException.builder().message("No refresh token provided").status(400).build();
+
+        if (cookies == null) {
+            throw ApiException.builder()
+                    .message("No refresh token provided")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .build();
         }
 
         String refreshToken = "";
         String newAccessToken = "";
 
-        for(Cookie cookie : cookies){
-            if("refresh-token".equals(cookie.getName())){
+        for (Cookie cookie : cookies) {
+            if ("refresh-token".equals(cookie.getName())) {
                 refreshToken = cookie.getValue();
             }
         }
 
-        if(refreshToken.isEmpty()) {
-            throw ApiException.builder().message("No refresh token provided").status(400).build();
+        if (refreshToken.isEmpty()) {
+            throw ApiException.builder()
+                    .message("No refresh token provided")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .build();
         }
 
-        try{
+        try {
             final String userEmail = jwtService.extractUsername(refreshToken, true);
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
-            if(jwtService.isValidToken(refreshToken, userDetails, true)){
+            if (jwtService.isValidToken(refreshToken, userDetails, true)) {
                 UserDTO user = userService.getUserByEmail(userEmail);
 
                 newAccessToken = jwtService.generateToken(user.getId(), false);
@@ -93,24 +108,27 @@ public class AuthenticationController {
             }
         } catch (ExpiredJwtException exception) {
             throw new ExpiredRefreshTokenException(exception.getMessage());
-        }
-        catch (Exception exception) {
-            throw ApiException.builder().message("Invalid or expired JWT token").status(401).build();
+        } catch (Exception exception) {
+            throw ApiException.builder()
+                    .message("Invalid or expired JWT token")
+                    .status(HttpStatus.UNAUTHORIZED.value()).build();
         }
 
         ResponseCookie cookie = ResponseCookie.from("refresh-token", refreshToken)
                 .httpOnly(true)
                 .secure(true)
-                .path("/api")
-                .maxAge(jwtService.getRefreshExpiration() / 1000)
+                .path("/")
+                .maxAge(jwtService.getRefreshExpiration() / SECOND_IN_MILLISECONDS)
                 .sameSite("Strict")
                 .build();
 
-        return ResponseEntity.ok().header("Set-Cookie", cookie.toString()).body(new RefreshResponse().setAccessToken(newAccessToken));
+        return ResponseEntity.ok()
+                .header("Set-Cookie", cookie.toString())
+                .body(new RefreshResponse().setAccessToken(newAccessToken));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
+    public ResponseEntity<String> logout(final HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             SecurityContextHolder.clearContext();
@@ -119,7 +137,7 @@ public class AuthenticationController {
         ResponseCookie cookie = ResponseCookie.from("refresh-token", "")
                 .httpOnly(true)
                 .secure(true)
-                .path("/api")
+                .path("/")
                 .maxAge(0)
                 .sameSite("Strict")
                 .build();

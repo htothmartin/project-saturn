@@ -26,9 +26,12 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public UserDTO create(CreateUserRequest request){
-        if(userRepository.existsByEmail(request.getEmail())){
-            throw ApiException.builder().message("This email is already taken").status(HttpStatus.BAD_REQUEST.value()).build();
+    public UserDTO create(final CreateUserRequest request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw ApiException.builder()
+                    .message("This email is already taken")
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .build();
         }
         User user = new User(request);
         user.setPassword(passwordEncoder.encode((request.getPassword())));
@@ -36,43 +39,47 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User findUserById(Long userId){
-        return userRepository.findById(userId).orElseThrow(() -> new BadCredentialsException("User not found"));
+    public User findUserById(final Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new BadCredentialsException("User not found"));
     }
 
     @Transactional(readOnly = true)
-    public List<UserDTO> allUsers(){
+    public List<UserDTO> allUsers() {
         List<User> users = new ArrayList<>();
         userRepository.findAll().forEach(users::add);
         return  userMapper.toListDto(users);
     }
 
     @Transactional(readOnly = true)
-    public UserDTO getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new BadCredentialsException("User not found"));
+    public UserDTO getUserByEmail(final String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BadCredentialsException("User not found"));
         return userMapper.toDto(user);
     }
 
     @Transactional(readOnly = true)
-    public List<UserDTO> findUsersNotAssignedToProject(Long projectId, Long currentUserId) {
+    public List<UserDTO> findUsersNotAssignedToProject(
+            final Long projectId,
+            final Long currentUserId) {
         List<User> users = userRepository.findUsersNotInProject(projectId, currentUserId);
         return userMapper.toListDto(users);
     }
 
     @Transactional
-    public void updateProfilePictureUrl(String fileUrl, Long userId) {
+    public void updateProfilePictureUrl(final String fileUrl, final Long userId) {
         User user = findUserById(userId);
         user.setProfilePictureUrl(fileUrl);
         userRepository.save(user);
     }
 
     @Transactional
-    public UserDTO updateUser(Long id, UpdateUserRequestDTO request) {
+    public UserDTO updateUser(final Long id, final UpdateUserRequestDTO request) {
         User user = findUserById(id);
-        if(request.getFirstname() != null){
+        if (request.getFirstname() != null) {
             user.setFirstname(request.getFirstname());
         }
-        if(request.getLastname() != null){
+        if (request.getLastname() != null) {
             user.setLastname(request.getLastname());
         }
 

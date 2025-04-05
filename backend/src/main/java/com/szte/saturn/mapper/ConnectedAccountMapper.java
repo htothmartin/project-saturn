@@ -15,11 +15,11 @@ public class ConnectedAccountMapper {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ConnectedAccountDTO toDTO(ConnectedAccount connectedAccount) {
+    public ConnectedAccountDTO toDTO(final ConnectedAccount connectedAccount) {
         return modelMapper.map(connectedAccount, ConnectedAccountDTO.class);
     }
 
-    public List<ConnectedAccountDTO> toListDTO(List<ConnectedAccount> connectedAccounts) {
+    public List<ConnectedAccountDTO> toListDTO(final List<ConnectedAccount> connectedAccounts) {
         return connectedAccounts.stream().map(this::toDTO).collect(Collectors.toList());
     }
 }

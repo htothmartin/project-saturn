@@ -1,3 +1,3 @@
-import * as Project from "./project";
+import * as Project from "./project/project";
 
 export { Project };

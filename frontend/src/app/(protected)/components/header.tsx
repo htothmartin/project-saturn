@@ -86,6 +86,7 @@ export const Header = (): React.JSX.Element => {
         <UserAvatar
           imageUrl={currentUser.profilePictureUrl}
           fullName={currentUser.fullName}
+          onClick={() => router.push("/profile")}
         />
       </div>
     </div>

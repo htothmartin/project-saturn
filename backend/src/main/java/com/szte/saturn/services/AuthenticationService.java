@@ -24,18 +24,21 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
-    public UserDTO login(LoginUserRequest request) {
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new BadCredentialsException("Wrong email or password"));
+    public UserDTO login(final LoginUserRequest request) {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                () -> new BadCredentialsException("Wrong email or password")
+        );
 
-        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("Wrong password or email");
         }
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                user,
-                null,
-                user.getAuthorities()
-        );
+        UsernamePasswordAuthenticationToken authToken
+                = new UsernamePasswordAuthenticationToken(
+                    user,
+                    null,
+                    user.getAuthorities()
+                );
         SecurityContextHolder.getContext().setAuthentication(authToken);
         return userMapper.toDto(user);
     }

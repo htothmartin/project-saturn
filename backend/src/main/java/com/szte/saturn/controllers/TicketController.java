@@ -11,7 +11,13 @@ import com.szte.saturn.services.TicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -21,12 +27,12 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    public TicketController(TicketService ticketService) {
+    public TicketController(final TicketService ticketService) {
         this.ticketService = ticketService;
     }
 
     @PostMapping
-    public ResponseEntity<Ticket> createTicket(@RequestBody CreateTicketDto addTicketDto) {
+    public ResponseEntity<Ticket> createTicket(@RequestBody final CreateTicketDto addTicketDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         User currentUser = (User) authentication.getPrincipal();
@@ -37,17 +43,19 @@ public class TicketController {
     }
 
     @PatchMapping("/{ticketId}")
-    public ResponseEntity<TicketDTO> updateTicket(@PathVariable Long projectId,
-                                                  @PathVariable Long ticketId,
-                                                  @RequestBody UpdateTicketDto updateTicketDto) {
+    public ResponseEntity<TicketDTO> updateTicket(
+            @PathVariable final Long projectId,
+            @PathVariable final Long ticketId,
+            @RequestBody final UpdateTicketDto updateTicketDto) {
 
         TicketDTO updatedTicket = ticketService.updateTicket(projectId, ticketId, updateTicketDto);
 
         return ResponseEntity.ok(updatedTicket);
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<Ticket>> getAllByProjectsTickets(@PathVariable Long projectId ) {
+    @GetMapping
+    public ResponseEntity<List<Ticket>> getAllByProjectsTickets(
+            @PathVariable final Long projectId) {
         List<Ticket> tickets = ticketService.getTicketsByProjects(projectId);
 
         return ResponseEntity.ok(tickets);
@@ -55,7 +63,10 @@ public class TicketController {
 
     //Comments
     @PostMapping("/{ticketId}/comments")
-    public ResponseEntity<CommentDTO> addCommentToProject(@PathVariable Long projectId, @PathVariable Long ticketId, @RequestBody CreateCommentDto commentDTO) {
+    public ResponseEntity<CommentDTO> addCommentToProject(
+            @PathVariable final Long projectId,
+            @PathVariable final Long ticketId,
+            @RequestBody final CreateCommentDto commentDTO) {
 
         CommentDTO comment = ticketService.createComment(projectId, ticketId, commentDTO);
 
@@ -63,7 +74,9 @@ public class TicketController {
     }
 
     @GetMapping("/{ticketId}/comments")
-    public ResponseEntity<List<CommentDTO>> getTicket(@PathVariable Long projectId, @PathVariable Long ticketId) {
+    public ResponseEntity<List<CommentDTO>> getTicket(
+            @PathVariable final Long projectId,
+            @PathVariable final Long ticketId) {
         List<CommentDTO> comments = ticketService.getComments(projectId, ticketId);
 
         return ResponseEntity.ok(comments);

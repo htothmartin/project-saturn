@@ -12,14 +12,18 @@ public class HttpErrorResponse {
     private Map<String, String> errors;
     private List<String> generalErrors;
 
-    public HttpErrorResponse(String message, int status, Map<String, String> errors, List<String> generalErrors) {
+    public HttpErrorResponse(
+            final String message,
+            final int status,
+            final Map<String, String> errors,
+            final List<String> generalErrors) {
         this.message = message;
         this.status = status;
         this.errors = errors;
         this.generalErrors = generalErrors;
     }
 
-    public HttpErrorResponse(String message, int status) {
+    public HttpErrorResponse(final String message, final int status) {
         this.message = message;
         this.status = status;
     }

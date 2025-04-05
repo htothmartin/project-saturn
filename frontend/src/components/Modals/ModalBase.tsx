@@ -20,8 +20,8 @@ export function ModalBase({
   return (
     <>
       <div className="fixed top-0 z-10 flex h-screen w-screen items-center justify-center bg-black bg-opacity-70">
-        <Card className="w-6/12">
-          <CardHeader className="flex flex-row items-center">
+        <Card className="lg:1/2 h-1/2 w-4/5 md:w-4/6 xl:w-2/5">
+          <CardHeader className="flex h-[15%] flex-row items-center">
             <CardTitle>{title}</CardTitle>
             {closeable && (
               <Link className="ml-auto" href={pathname}>
@@ -29,7 +29,7 @@ export function ModalBase({
               </Link>
             )}
           </CardHeader>
-          <CardContent>{children}</CardContent>
+          <CardContent className="h-[85%]">{children}</CardContent>
         </Card>
       </div>
     </>

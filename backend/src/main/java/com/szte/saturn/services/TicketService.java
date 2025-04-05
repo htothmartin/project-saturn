@@ -16,12 +16,14 @@ import com.szte.saturn.mapper.TicketMapper;
 import com.szte.saturn.repositories.ProjectRepository;
 import com.szte.saturn.repositories.TicketRepository;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TicketService {
 
     private final TicketRepository ticketRepository;
@@ -31,53 +33,54 @@ public class TicketService {
     private final CommentMapper commentMapper;
     private final ProjectRepository projectRepository;
 
-    public TicketService(TicketRepository ticketRepository, ProjectService projectService, TicketMapper ticketMapper, UserService userService, CommentMapper commentMapper, ProjectRepository projectRepository) {
-        this.ticketRepository = ticketRepository;
-        this.projectService = projectService;
-        this.ticketMapper = ticketMapper;
-        this.userService = userService;
-        this.commentMapper = commentMapper;
-        this.projectRepository = projectRepository;
-    }
-
     @Transactional(readOnly = true)
-    public Ticket getTicketByProjectAndTicketId(Long projectId, Long ticketId) {
-        if(!ticketRepository.existsByProjectIdAndId(projectId, ticketId)){
+    public Ticket getTicketByProjectAndTicketId(final Long projectId, final Long ticketId) {
+        if (!ticketRepository.existsByProjectIdAndId(projectId, ticketId)) {
             throw new EntityNotFoundException("Ticket with id " + ticketId + " not found");
         }
         return ticketRepository.findByProjectIdAndId(projectId, ticketId);
     }
 
     @Transactional(readOnly = true)
-    public List<Ticket> getTicketsByProjects(Long projectId) {
+    public List<Ticket> getTicketsByProjects(final Long projectId) {
         return ticketRepository.findByProjectId(projectId);
     }
 
     @Transactional
-    public Ticket createTicket(CreateTicketDto request, User user){
+    public Ticket createTicket(final CreateTicketDto request, final User user) {
         Project project = projectService.getProjectById(request.getProjectId());
-        Ticket ticket = new Ticket(request).setReporter(user).setStatus(TicketStatus.COMMITED).setProject(project).setId(project.getTicketCounter()+1);
+        Ticket ticket = new Ticket(request)
+                .setReporter(user)
+                .setStatus(TicketStatus.COMMITED)
+                .setProject(project)
+                .setId(project.getTicketCounter() + 1);
+
         project.incrementTicketCounter();
         projectRepository.save(project);
         return ticketRepository.save(ticket);
     }
 
     @Transactional
-    public TicketDTO updateTicket(Long projectId, Long ticketId, UpdateTicketDto request){
+    public TicketDTO updateTicket(final Long projectId, final Long ticketId, final UpdateTicketDto request) {
         System.out.println(request.toString());
         Ticket ticket = getTicketByProjectAndTicketId(projectId, ticketId);
-        if(request.getTitle() != null){
+        if (request.getTitle() != null) {
             ticket.setTitle(request.getTitle());
-        } if(request.getDescription() != null){
+        }
+        if (request.getDescription() != null) {
             ticket.setDescription(request.getDescription());
-        } if(request.getPriority() != null){
+        }
+        if (request.getPriority() != null) {
             ticket.setPriority(request.getPriority());
-        } if(request.getStatus() != null){
+        }
+        if (request.getStatus() != null) {
             ticket.setStatus(request.getStatus());
-        } if(request.getIssueType() != null){
+        }
+        if (request.getIssueType() != null) {
             ticket.setIssueType(request.getIssueType());
-        } if(request.getAssigneeId() != null){
-            if(request.getAssigneeId() == -1){
+        }
+        if (request.getAssigneeId() != null) {
+            if (request.getAssigneeId() == -1) {
                 ticket.setAssignee(null);
             } else {
                 User newAssignee = userService.findUserById(request.getAssigneeId());
@@ -91,19 +94,19 @@ public class TicketService {
     }
 
     @Transactional
-    public CommentDTO createComment(Long projectId, Long ticketId, CreateCommentDto request){
+    public CommentDTO createComment(final Long projectId, final Long ticketId, final CreateCommentDto request) {
         Ticket ticket = getTicketByProjectAndTicketId(projectId, ticketId);
         Project project = projectService.getProjectById(projectId);
         User author = project.getRelUserProjects().stream()
                 .filter(relUserProjects -> relUserProjects.getUser().getId().equals(request.getAuthorId()))
                 .findFirst().map(RelUserProjects::getUser).orElse(null);
-        if(author == null){
+        if (author == null) {
             System.out.println(request.getAuthorId());
             System.out.println(project.getOwner().getId());
-            if(project.getOwner().getId().equals(request.getAuthorId())){
+            if (project.getOwner().getId().equals(request.getAuthorId())) {
                 author = project.getOwner();
             }
-            if(author == null){
+            if (author == null) {
                 throw new EntityNotFoundException("User not found");
             }
         }
@@ -114,7 +117,7 @@ public class TicketService {
     }
 
     @Transactional(readOnly = true)
-    public List<CommentDTO> getComments(Long projectId, Long ticketId) {
+    public List<CommentDTO> getComments(final Long projectId, final Long ticketId) {
         Ticket ticket = getTicketByProjectAndTicketId(projectId, ticketId);
         return commentMapper.toDTO(ticket.getComments());
     }
