@@ -6,7 +6,8 @@ import { Column } from "@/components/Board/Column";
 import { Loader } from "@/components/Loader";
 import { TicketStatus } from "@/enums/TicketStatus";
 import { selectProjects } from "@/lib/store/features/project/projectSelectors";
-import { useAppSelector } from "@/lib/store/hooks";
+import { fetchProjects } from "@/lib/store/features/project/projectSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { Ticket } from "@/model/tickets";
 import {
   DragEndEvent,
@@ -52,6 +53,8 @@ const columns: ColumnType[] = [
 ];
 
 const Project = (): React.JSX.Element => {
+  const dispatch = useAppDispatch();
+
   const { activeProject, isActiveJobFetching } = useAppSelector(selectProjects);
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
@@ -152,6 +155,9 @@ const Project = (): React.JSX.Element => {
       await updateTicket(projectId, activeTicket.id.toString(), {
         status: active.data.current?.ticket.status as TicketStatus,
       });
+      if (active.data.current?.ticket.status == TicketStatus.CLOSED) {
+        dispatch(fetchProjects());
+      }
     } catch (error) {
       console.error(error);
     }

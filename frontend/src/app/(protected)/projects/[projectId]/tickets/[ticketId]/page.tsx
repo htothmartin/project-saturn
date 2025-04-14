@@ -1,6 +1,7 @@
 "use client";
 
 import { PrioritySelect } from "@/components/LabelSelects/PrioritySelect";
+import { SprintSelect } from "@/components/LabelSelects/SprintSelect";
 import { StatusSelect } from "@/components/LabelSelects/StatusSelect";
 import { UserSelector } from "@/components/LabelSelects/UserSelector";
 import { Loader } from "@/components/Loader";
@@ -13,34 +14,23 @@ import {
   selectIsCommentsFetching,
 } from "@/lib/store/features/comments/commentSelectors";
 import { fetchComments } from "@/lib/store/features/comments/commentSlice";
-import { selectActiveProject } from "@/lib/store/features/project/projectSelectors";
+import { selectTicketById } from "@/lib/store/features/project/projectSelectors";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { Ticket } from "@/model/tickets";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const TicketDetails = () => {
-  const activeProject = useAppSelector(selectActiveProject);
   const { ticketId, projectId } = useParams<{
     ticketId: string;
     projectId: string;
   }>();
-  const [ticket, setTicket] = useState<Ticket | null>(null);
   const dispatch = useAppDispatch();
 
   const isFetchingComments = useAppSelector(selectIsCommentsFetching);
   const comments = useAppSelector(selectComments);
-
-  useEffect(() => {
-    if (activeProject)
-      setTicket(
-        activeProject.tickets.find(
-          (ticket) => ticket.id.toString() === ticketId,
-        ) ?? null,
-      );
-  }, [activeProject, ticketId]);
+  const ticket = useAppSelector(selectTicketById(ticketId));
 
   useEffect(() => {
     if (!comments && !isFetchingComments) {
@@ -97,6 +87,13 @@ const TicketDetails = () => {
         <div className="flex flex-row items-center gap-2">
           <div>Priority:</div>
           <PrioritySelect type={ticket.ticketPriority} ticketId={ticket.id} />
+        </div>
+        <div className="flex flex-row items-center gap-2">
+          <div>Sprint:</div>
+          <SprintSelect
+            ticketId={ticket.id}
+            selectedSprintId={ticket.sprintId}
+          />
         </div>
 
         <p>Created at: {new Date(ticket.createdAt).toLocaleString()}</p>

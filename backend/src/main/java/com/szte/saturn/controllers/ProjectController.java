@@ -7,10 +7,10 @@ import com.szte.saturn.dtos.ProjectDTO;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.services.ProjectService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,39 +30,44 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @PostMapping()
-    public ResponseEntity<ProjectDTO> create(@RequestBody final CreateProjectRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-
-        ProjectDTO newProject = projectService.create(request, currentUser);
+    @PostMapping
+    public ResponseEntity<ProjectDTO> create(
+            @AuthenticationPrincipal final User user,
+            @RequestBody final CreateProjectRequest request) {
+        ProjectDTO newProject = projectService.create(request, user);
         return ResponseEntity.ok(newProject);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ActiveProjectDTO> update(
+            @PathVariable final Long id,
+            @RequestBody final ActiveProjectDTO request) {
+        ActiveProjectDTO project = projectService.update(id, request);
+
+        return ResponseEntity.ok(project);
     }
 
     @GetMapping
     public ResponseEntity<List<ProjectDTO>> getProjectByUser(
+            @AuthenticationPrincipal final User user,
             @RequestParam(defaultValue = "asc") final String sort,
             @RequestParam(defaultValue = "") final String q) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        List<ProjectDTO> projectsList = projectService.getProjectsByUser(currentUser, sort, q);
+        List<ProjectDTO> projectsList = projectService.getProjectsByUser(user, sort, q);
 
         return ResponseEntity.ok(projectsList);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ActiveProjectDTO> getProjectById(@PathVariable final Long id) {
-
         ActiveProjectDTO activeProject = projectService.getProject(id);
 
         return ResponseEntity.ok(activeProject);
     }
 
     @PostMapping("/{projectId}/pin")
-    public ResponseEntity<ProjectDTO> pinProject(@PathVariable final Long projectId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        ProjectDTO pinnedProject = projectService.pinProject(currentUser.getId(), projectId);
+    public ResponseEntity<ProjectDTO> pinProject(
+            @AuthenticationPrincipal final User user, @PathVariable final Long projectId) {
+        ProjectDTO pinnedProject = projectService.pinProject(user.getId(), projectId);
 
         return ResponseEntity.ok(pinnedProject);
     }
@@ -71,7 +76,6 @@ public class ProjectController {
     public ResponseEntity<String> addUserToProject(
             @PathVariable final Long projectId,
             @RequestBody final List<AddUserToProjectRequest> request) {
-
         projectService.addUserToProject(projectId, request);
 
 

@@ -7,14 +7,19 @@ import {
   specialRegex,
   upperCaseRegex,
 } from "./constants";
+import { ProjectStatus } from "@/enums/ProjectStatus";
 
 export const createProjectSchema = z.object({
-  projectName: z.string().min(1, "The project name is required."),
-  projectDescription: z.string().optional(),
-  projectKey: z
+  name: z.string().min(1, "The project name is required."),
+  description: z.string().optional(),
+  key: z
     .string()
     .min(2, "The project key is required.")
     .max(6, "The porject key can't be longer than 6 character."),
+});
+
+export const updateProjectSchema = createProjectSchema.extend({
+  status: z.nativeEnum(ProjectStatus),
 });
 
 export const addTicketSchema = z.object({
@@ -64,4 +69,10 @@ export const registerSchema = z
 export const loginSchema = z.object({
   email: z.string().email("This is not a valid email address."),
   password: z.string(),
+});
+
+export const createSprintSchema = z.object({
+  name: z.string(),
+  startDate: z.date(),
+  endDate: z.date(),
 });

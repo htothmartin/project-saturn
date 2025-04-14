@@ -143,4 +143,22 @@ public class ProjectService {
         }
         projectRepository.deleteById(projectId);
     }
+
+    @Transactional
+    public ActiveProjectDTO update(final Long id, final ActiveProjectDTO request) {
+        Project project = getProjectById(id);
+        if (request.getName() != null) {
+            project.setName(request.getName());
+        }
+        if (request.getDescription() != null) {
+            project.setDescription(request.getDescription());
+        }
+        if (request.getStatus() != null) {
+            project.setStatus(request.getStatus());
+        }
+
+        projectRepository.save(project);
+
+        return projectMapper.toActiveProjectDTO(project);
+    }
 }

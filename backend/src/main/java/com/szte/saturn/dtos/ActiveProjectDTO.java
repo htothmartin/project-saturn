@@ -2,7 +2,6 @@ package com.szte.saturn.dtos;
 
 import com.szte.saturn.enums.ProjectStatus;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import lombok.Data;
 
@@ -22,9 +21,11 @@ public class ActiveProjectDTO {
 
     private UserDTO owner;
 
-    private ProjectStatus projectStatus;
+    private ProjectStatus status;
 
-    private List<TicketDTO> tickets;
+    private Set<SprintDTO> sprints;
+
+    private Set<TicketDTO> tickets;
 
     private Set<ProjectUsersDTO> users;
 }

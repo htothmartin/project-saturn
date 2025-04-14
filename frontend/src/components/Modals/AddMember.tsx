@@ -24,7 +24,7 @@ import { CommandLoading } from "cmdk";
 import { ProjectRole } from "@/enums/ProjectRole";
 import { Select } from "../Input/Select";
 import { Separator } from "../ui/separator";
-import { UserIdWithRole } from "@/api/project/requests/user-id-with-role";
+import { UserIdWithRole } from "@/api/project/type/user-id-with-role";
 
 type SelectedUser = {
   user: User;

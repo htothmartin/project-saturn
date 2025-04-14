@@ -32,9 +32,9 @@ export const CreateProject = (): React.JSX.Element => {
   const projectForm = useForm<Inputs>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
-      projectName: "",
-      projectDescription: "",
-      projectKey: "",
+      name: "",
+      description: "",
+      key: "",
     },
   });
 
@@ -42,9 +42,9 @@ export const CreateProject = (): React.JSX.Element => {
     setIsLoading(true);
     try {
       await createNewProject({
-        name: data.projectName,
-        description: data.projectDescription ?? "",
-        key: data.projectKey,
+        name: data.name,
+        description: data.description ?? "",
+        key: data.key,
       });
 
       toast("Project successfuly created");
@@ -62,7 +62,7 @@ export const CreateProject = (): React.JSX.Element => {
       <form method="POST" onSubmit={projectForm.handleSubmit(onSubmit)}>
         <FormField
           control={projectForm.control}
-          name="projectName"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Project name</FormLabel>
@@ -75,7 +75,7 @@ export const CreateProject = (): React.JSX.Element => {
         />
         <FormField
           control={projectForm.control}
-          name="projectDescription"
+          name="description"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Project description</FormLabel>
@@ -88,7 +88,7 @@ export const CreateProject = (): React.JSX.Element => {
         />
         <FormField
           control={projectForm.control}
-          name="projectKey"
+          name="key"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Project key</FormLabel>

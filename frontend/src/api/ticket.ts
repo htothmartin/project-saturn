@@ -8,8 +8,8 @@ export const createTicket = async (projectId: string, ticket: TicketForm) => {
 };
 
 export const updateTicket = async (
-  projectId: string,
-  ticketId: string,
+  projectId: string | number,
+  ticketId: string | number,
   updateTicket: UpdateTicket,
 ) => {
   return await protectedApi.patch(`projects/${projectId}/tickets/${ticketId}`, {

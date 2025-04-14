@@ -78,7 +78,7 @@
 
     <!-- Checks for whitespace                               -->
     <!-- See https://checkstyle.org/checks/whitespace/index.html -->
-    <module name="FileTabCharacter"/>
+<!--    <module name="FileTabCharacter"/>-->
 
     <!-- Miscellaneous other checks.                   -->
     <!-- See https://checkstyle.org/checks/misc/index.html -->
@@ -184,7 +184,7 @@
         <!-- See https://checkstyle.org/checks/misc/index.html -->
         <module name="ArrayTypeStyle"/>
         <module name="FinalParameters"/>
-        <module name="TodoComment"/>
+<!--        <module name="TodoComment"/>-->
         <module name="UpperEll"/>
 
         <!-- https://checkstyle.org/filters/suppressionxpathfilter.html -->

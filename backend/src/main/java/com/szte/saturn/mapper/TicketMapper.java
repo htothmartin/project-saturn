@@ -19,6 +19,7 @@ public class TicketMapper {
 
         TicketDTO ticketDTO = modelMapper.map(ticket, TicketDTO.class);
 
+
         if (ticket.getAssignee() != null) {
             UserDTO assigne = userMapper.toDto(ticket.getAssignee());
             ticketDTO.setAssignee(assigne);
@@ -28,6 +29,7 @@ public class TicketMapper {
             UserDTO reporter = userMapper.toDto(ticket.getReporter());
             ticketDTO.setReporter(reporter);
         }
+
 
         return ticketDTO;
     }

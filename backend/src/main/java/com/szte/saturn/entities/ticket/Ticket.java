@@ -1,6 +1,7 @@
 package com.szte.saturn.entities.ticket;
 
 import com.szte.saturn.controllers.requests.CreateTicketDto;
+import com.szte.saturn.entities.Sprint;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.entities.comment.Comment;
 import com.szte.saturn.entities.project.Project;
@@ -82,6 +83,10 @@ public class Ticket {
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "sprint_id")
+    private Sprint sprint;
 
 
     public Ticket(final CreateTicketDto ticketDto) {

@@ -22,6 +22,7 @@ export type Ticket = {
   createdAt: Date;
   updatedAt: Date;
   ticketPriority: TicketPriority;
+  sprintId: number;
 };
 
 export type UpdateTicket = {
@@ -31,4 +32,5 @@ export type UpdateTicket = {
   status?: TicketStatus;
   issueType?: IssueType;
   priority?: TicketPriority;
+  sprintId?: string | number;
 };

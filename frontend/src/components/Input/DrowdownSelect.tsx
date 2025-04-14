@@ -18,7 +18,7 @@ type Props<T> = {
   searchPlaceHolder?: string;
 };
 
-export const DropdownSelect = <T extends { id: string }>({
+export const DropdownSelect = <T extends { id: string | number }>({
   item,
   render,
   filterItems,

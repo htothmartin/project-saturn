@@ -19,7 +19,6 @@ import { Loader } from "@/components/Loader";
 
 const Home = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
-
   const { sort, q } = useAppSelector(selectFilter);
   const { projects, isProjectsFetching } = useAppSelector(selectProjects);
 

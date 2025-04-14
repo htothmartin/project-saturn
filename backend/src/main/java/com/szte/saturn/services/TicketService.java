@@ -5,6 +5,7 @@ import com.szte.saturn.controllers.requests.CreateTicketDto;
 import com.szte.saturn.controllers.requests.UpdateTicketDto;
 import com.szte.saturn.dtos.CommentDTO;
 import com.szte.saturn.dtos.TicketDTO;
+import com.szte.saturn.entities.Sprint;
 import com.szte.saturn.entities.comment.Comment;
 import com.szte.saturn.entities.project.Project;
 import com.szte.saturn.entities.rel_user_projects.RelUserProjects;
@@ -32,6 +33,7 @@ public class TicketService {
     private final UserService userService;
     private final CommentMapper commentMapper;
     private final ProjectRepository projectRepository;
+    private final SprintService sprintService;
 
     @Transactional(readOnly = true)
     public Ticket getTicketByProjectAndTicketId(final Long projectId, final Long ticketId) {
@@ -85,6 +87,14 @@ public class TicketService {
             } else {
                 User newAssignee = userService.findUserById(request.getAssigneeId());
                 ticket.setAssignee(newAssignee);
+            }
+        }
+        if (request.getSprintId() != null) {
+            if (request.getSprintId() == -1) {
+                ticket.setSprint(null);
+            } else {
+                Sprint sprint = sprintService.getById(request.getSprintId());
+                ticket.setSprint(sprint);
             }
         }
 

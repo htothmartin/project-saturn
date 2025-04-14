@@ -93,7 +93,7 @@ export const ProjectCard = ({ project }: Props): React.JSX.Element => {
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
         <div className="flex flex-row gap-2 py-4">
-          <ProjectStatusBadge statusType={project.projectStatus} />
+          <ProjectStatusBadge statusType={project.status} />
           {isOwner && <Badge>Owner</Badge>}
           <div className="ml-auto">
             <Link href={`projects/${project.id}`}>

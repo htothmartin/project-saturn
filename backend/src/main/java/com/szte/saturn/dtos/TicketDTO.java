@@ -19,4 +19,5 @@ public class TicketDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private TicketPriority ticketPriority;
+    private long sprintId;
 }

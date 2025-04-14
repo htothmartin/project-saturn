@@ -4,6 +4,7 @@ import { SortOrder } from "@/enums/SortOrder";
 import { Filter } from "@/model/filter";
 import { Ticket } from "@/model/tickets";
 import { clearUserData } from "../session/session-slice";
+import { Sprint } from "@/model/sprint";
 
 type ProjectState = {
   projects: Project[] | null;
@@ -74,6 +75,7 @@ const projectSlice = createSlice({
       if (!state.activeProject) {
         return;
       }
+
       state.activeProject.tickets = state.activeProject.tickets.map(
         (ticket) => {
           if (ticket.id === action.payload.id) {
@@ -82,6 +84,29 @@ const projectSlice = createSlice({
           return ticket;
         },
       );
+    },
+    updateSprint: (state: ProjectState, action: PayloadAction<Sprint>) => {
+      if (!state.activeProject) return;
+      const exists =
+        state.activeProject?.sprints.some(
+          (sprint) => sprint.id == action.payload.id,
+        ) ?? false;
+
+      if (!exists) {
+        state.activeProject.sprints = [
+          action.payload,
+          ...(state.activeProject?.sprints ?? []),
+        ];
+      } else {
+        state.activeProject.sprints = state.activeProject.sprints.map(
+          (sprint) => {
+            if (sprint.id == action.payload.id) {
+              return action.payload;
+            }
+            return sprint;
+          },
+        );
+      }
     },
   },
   extraReducers: (builder) => {
@@ -100,6 +125,7 @@ export const {
   setSearchValue,
   pinProjectSuccess,
   updateTicketSuccess,
+  updateSprint,
 } = projectSlice.actions;
 
 export default projectSlice.reducer;

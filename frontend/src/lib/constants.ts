@@ -1,4 +1,5 @@
-import { User } from "@/model/user";
+import { ProjectRole } from "@/enums/ProjectRole";
+import { ProjectUser } from "@/model/user";
 
 export const lowerCaseRegex = /[a-z]+/;
 export const upperCaseRegex = /[A-Z]+/;
@@ -8,7 +9,7 @@ export const noop = () => {};
 
 export const unprotectedPaths = ["/login", "/register"];
 
-export const unassigned: User = {
+export const unassigned: ProjectUser = {
   id: -1,
   fullName: "Unassigned",
   profilePictureUrl: "",
@@ -16,4 +17,5 @@ export const unassigned: User = {
   lastname: "",
   connectedAccounts: [],
   email: "",
+  role: ProjectRole.DEVELOPER,
 };

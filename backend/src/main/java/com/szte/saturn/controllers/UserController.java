@@ -8,8 +8,7 @@ import com.szte.saturn.services.MinioService;
 import com.szte.saturn.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,12 +37,9 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDTO> authenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<UserDTO> me(@AuthenticationPrincipal final User user) {
 
-        User currentUser = (User) authentication.getPrincipal();
-
-        return ResponseEntity.ok(userMapper.toDto(currentUser));
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 
     @GetMapping
@@ -55,37 +51,32 @@ public class UserController {
 
     @PatchMapping
     public ResponseEntity<UserDTO> updateUser(
+            @AuthenticationPrincipal final User user,
             @RequestBody final UpdateUserRequestDTO updateUserRequestDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        UserDTO userDTO = userService.updateUser(currentUser.getId(), updateUserRequestDTO);
+        UserDTO userDTO = userService.updateUser(user.getId(), updateUserRequestDTO);
 
         return ResponseEntity.ok(userDTO);
     }
 
 
     @GetMapping("/not-in-project/{projectId}")
-    public ResponseEntity<List<UserDTO>> getUsersNotInProject(@PathVariable final Long projectId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-
+    public ResponseEntity<List<UserDTO>> getUsersNotInProject(
+            @AuthenticationPrincipal final User user,
+            @PathVariable final Long projectId) {
         List<UserDTO> users = userService.findUsersNotAssignedToProject(
                 projectId,
-                currentUser.getId());
+                user.getId());
 
         return ResponseEntity.ok(users);
     }
 
     @PostMapping("/upload-profile-picture")
-    public ResponseEntity<?> uploadProfilePicture(@RequestParam("file") final MultipartFile file) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-
+    public ResponseEntity<?> uploadProfilePicture(
+            @AuthenticationPrincipal final User user, @RequestParam("file") final MultipartFile file) {
         String fileName = minioService.uploadFile(file);
-
         String signedUrl = minioService.generatePreSignedUrl(fileName);
 
-        userService.updateProfilePictureUrl(fileName, currentUser.getId());
+        userService.updateProfilePictureUrl(fileName, user.getId());
 
         return ResponseEntity.ok(
                 Map.of("message", "File uploaded successfully", "profilePictureUrl", signedUrl));

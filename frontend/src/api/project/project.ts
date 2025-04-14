@@ -1,7 +1,7 @@
-import { ProjectForm } from "@/model/project";
+import { ActiveProject, ProjectForm } from "@/model/project";
 import { protectedApi } from "../axios";
 import { Filter } from "@/model/filter";
-import { UserIdWithRole } from "./requests/user-id-with-role";
+import { UserIdWithRole } from "./type/user-id-with-role";
 
 export const createNewProject = async (project: ProjectForm) => {
   return await protectedApi.post("/projects", { ...project });
@@ -38,4 +38,11 @@ export const deleteUserfromProject = async (
   userId: number,
 ) => {
   return await protectedApi.delete(`/projects/${projectId}/users/${userId}`);
+};
+
+export const updateProject = (
+  projectId: string | number,
+  project: Partial<ActiveProject>,
+) => {
+  return protectedApi.patch(`/projects/${projectId}`, project);
 };

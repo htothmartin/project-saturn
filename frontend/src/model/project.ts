@@ -1,6 +1,7 @@
 import { ProjectStatus } from "@/enums/ProjectStatus";
 import { Ticket } from "./tickets";
 import { ProjectUser, User } from "./user";
+import { Sprint } from "./sprint";
 
 export type Project = {
   id: number;
@@ -9,7 +10,7 @@ export type Project = {
   description: string;
   pin: boolean;
   key: string;
-  projectStatus: ProjectStatus;
+  status: ProjectStatus;
   ticketCount: number;
   closedTickets: number;
 };
@@ -26,7 +27,8 @@ export type ActiveProject = {
   owner: User;
   description: string;
   key: string;
-  projectStatus: ProjectStatus;
+  status: ProjectStatus;
+  sprints: Sprint[];
   tickets: Ticket[];
   users: ProjectUser[];
 };

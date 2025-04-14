@@ -13,4 +13,5 @@ public class UpdateTicketDto {
     private TicketStatus status;
     private IssueType issueType;
     private Long assigneeId;
+    private Long sprintId;
 }

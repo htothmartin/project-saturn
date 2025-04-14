@@ -3,8 +3,10 @@ package com.szte.saturn.mapper;
 import com.szte.saturn.dtos.ActiveProjectDTO;
 import com.szte.saturn.dtos.ProjectDTO;
 import com.szte.saturn.dtos.ProjectUsersDTO;
+import com.szte.saturn.dtos.SprintDTO;
 import com.szte.saturn.dtos.TicketDTO;
 import com.szte.saturn.dtos.UserDTO;
+import com.szte.saturn.entities.Sprint;
 import com.szte.saturn.entities.project.Project;
 import com.szte.saturn.entities.ticket.Ticket;
 import com.szte.saturn.enums.TicketStatus;
@@ -12,8 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,8 @@ public class ProjectMapper {
     private UserMapper userMapper;
     @Autowired
     private TicketMapper ticketMapper;
+    @Autowired
+    private SprintMapper sprintMapper;
 
 
     public ProjectDTO toDto(final Project project, final boolean isPinned) {
@@ -45,10 +48,18 @@ public class ProjectMapper {
         ActiveProjectDTO activeProjectDTO = modelMapper.map(project, ActiveProjectDTO.class);
         activeProjectDTO.setCreatedAt(project.getCreatedAt());
 
-        List<TicketDTO> tickets = new ArrayList<>();
+        Set<TicketDTO> tickets = new HashSet<>();
         for (Ticket ticket : project.getTickets()) {
             tickets.add(ticketMapper.toDto(ticket));
+
         }
+
+        Set<SprintDTO> sprints = new HashSet<>();
+        for (Sprint sprint : project.getSprints()) {
+            sprints.add(sprintMapper.toDTO(sprint));
+        }
+
+        activeProjectDTO.setSprints(sprints);
 
         activeProjectDTO.setTickets(tickets);
 

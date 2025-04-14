@@ -20,7 +20,7 @@ public class ProjectDTO {
 
     private UserDTO owner;
 
-    private ProjectStatus projectStatus;
+    private ProjectStatus status;
 
     private boolean pin;
 

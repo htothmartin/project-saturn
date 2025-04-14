@@ -13,8 +13,9 @@ type Props<T> = {
   label: string;
   placeholder: string;
   selectedValue?: SelectOption<T>;
-  options: SelectOption<string>[];
+  options: SelectOption<T>[];
   onSelect: (id: T) => void;
+  disabled?: boolean;
 };
 
 export const Select = <T extends string>({
@@ -23,17 +24,16 @@ export const Select = <T extends string>({
   selectedValue,
   options,
   onSelect,
+  disabled = false,
 }: Props<T>) => {
   return (
-    <ShadCNSelect onValueChange={onSelect}>
-      <SelectTrigger className="w-[180px]">
-        {selectedValue ? (
-          <SelectValue placeholder={placeholder}>
-            {selectedValue.data}
-          </SelectValue>
-        ) : (
-          <SelectValue placeholder={placeholder} />
-        )}
+    <ShadCNSelect
+      defaultValue={selectedValue?.id}
+      disabled={disabled}
+      onValueChange={onSelect}
+    >
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder={selectedValue?.data ?? placeholder} />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

@@ -14,3 +14,11 @@ export const getMonogram = (fullName: string) => {
 
   return `${fullNameSplit[0].at(0)}${fullNameSplit[1].at(0)}`;
 };
+
+export const comapreFields = <T extends Record<string, unknown>>(
+  a: T,
+  b: Partial<T>,
+  keys: (keyof T)[],
+) => {
+  return keys.every((key) => a[key] === b[key]);
+};
