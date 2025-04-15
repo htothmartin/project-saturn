@@ -19,6 +19,7 @@ import { useModal } from "@/hooks/useModal";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { clearUserData } from "@/lib/store/features/session/session-slice";
 import { selectSession } from "@/lib/store/features/session/session-selectors";
+import { getFullName } from "@/lib/utils";
 
 export const Header = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
@@ -85,7 +86,7 @@ export const Header = (): React.JSX.Element => {
         <ThemeToggle />
         <UserAvatar
           imageUrl={currentUser.profilePictureUrl}
-          fullName={currentUser.fullName}
+          fullName={getFullName(currentUser)}
           onClick={() => router.push("/profile")}
         />
       </div>

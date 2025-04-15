@@ -1,14 +1,11 @@
 package com.szte.saturn.services;
 
-import com.szte.saturn.controllers.requests.CreateCommentDto;
 import com.szte.saturn.controllers.requests.CreateTicketDto;
 import com.szte.saturn.controllers.requests.UpdateTicketDto;
 import com.szte.saturn.dtos.CommentDTO;
 import com.szte.saturn.dtos.TicketDTO;
 import com.szte.saturn.entities.Sprint;
-import com.szte.saturn.entities.comment.Comment;
 import com.szte.saturn.entities.project.Project;
-import com.szte.saturn.entities.rel_user_projects.RelUserProjects;
 import com.szte.saturn.entities.ticket.Ticket;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.enums.TicketStatus;
@@ -101,29 +98,6 @@ public class TicketService {
         Ticket updatedTicket = ticketRepository.save(ticket);
 
         return ticketMapper.toDto(updatedTicket);
-    }
-
-    @Transactional
-    public CommentDTO createComment(final Long projectId, final Long ticketId, final CreateCommentDto request) {
-        Ticket ticket = getTicketByProjectAndTicketId(projectId, ticketId);
-        Project project = projectService.getProjectById(projectId);
-        User author = project.getRelUserProjects().stream()
-                .filter(relUserProjects -> relUserProjects.getUser().getId().equals(request.getAuthorId()))
-                .findFirst().map(RelUserProjects::getUser).orElse(null);
-        if (author == null) {
-            System.out.println(request.getAuthorId());
-            System.out.println(project.getOwner().getId());
-            if (project.getOwner().getId().equals(request.getAuthorId())) {
-                author = project.getOwner();
-            }
-            if (author == null) {
-                throw new EntityNotFoundException("User not found");
-            }
-        }
-        Comment comment = new Comment(request.getContent(), author, ticket);
-        ticket.getComments().add(comment);
-        Ticket savedTicket = ticketRepository.save(ticket);
-        return commentMapper.toDTO(savedTicket.getComments().getFirst());
     }
 
     @Transactional(readOnly = true)

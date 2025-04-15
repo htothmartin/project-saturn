@@ -2,15 +2,14 @@ package com.szte.saturn.mapper;
 
 import com.szte.saturn.dtos.SprintDTO;
 import com.szte.saturn.entities.Sprint;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class SprintMapper {
-
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public SprintDTO toDTO(final Sprint sprint) {
         return modelMapper.map(sprint, SprintDTO.class);

@@ -2,19 +2,18 @@ package com.szte.saturn.mapper;
 
 import com.szte.saturn.dtos.CommentDTO;
 import com.szte.saturn.entities.comment.Comment;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class CommentMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
-
+    private final ModelMapper modelMapper;
 
     public CommentDTO toDTO(final Comment comment) {
         return modelMapper.map(comment, CommentDTO.class);

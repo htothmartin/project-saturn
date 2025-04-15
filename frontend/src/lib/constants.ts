@@ -11,9 +11,8 @@ export const unprotectedPaths = ["/login", "/register"];
 
 export const unassigned: ProjectUser = {
   id: -1,
-  fullName: "Unassigned",
   profilePictureUrl: "",
-  firstname: "",
+  firstname: "Unassigned",
   lastname: "",
   connectedAccounts: [],
   email: "",

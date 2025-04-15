@@ -7,8 +7,12 @@ import com.szte.saturn.dtos.CommentDTO;
 import com.szte.saturn.dtos.TicketDTO;
 import com.szte.saturn.entities.ticket.Ticket;
 import com.szte.saturn.entities.User;
+import com.szte.saturn.services.CommentService;
 import com.szte.saturn.services.TicketService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +27,13 @@ import java.util.List;
 
 @RequestMapping("/projects/{projectId}/tickets")
 @RestController
+@RequiredArgsConstructor
+@Slf4j
 public class TicketController {
 
     private final TicketService ticketService;
-
-    public TicketController(final TicketService ticketService) {
-        this.ticketService = ticketService;
-    }
+    private final SimpMessagingTemplate messagingTemplate;
+    private final CommentService commentService;
 
     @PostMapping
     public ResponseEntity<Ticket> createTicket(@RequestBody final CreateTicketDto addTicketDto) {
@@ -68,7 +72,7 @@ public class TicketController {
             @PathVariable final Long ticketId,
             @RequestBody final CreateCommentDto commentDTO) {
 
-        CommentDTO comment = ticketService.createComment(projectId, ticketId, commentDTO);
+        CommentDTO comment = commentService.create(projectId, ticketId, commentDTO);
 
         return ResponseEntity.ok(comment);
     }

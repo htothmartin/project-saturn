@@ -1,3 +1,4 @@
+import { User } from "@/model/user";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -13,6 +14,13 @@ export const getMonogram = (fullName: string) => {
   }
 
   return `${fullNameSplit[0].at(0)}${fullNameSplit[1].at(0)}`;
+};
+
+export const getFullName = (user: User) => {
+  if (!user) {
+    return "";
+  }
+  return `${user.firstname ?? ""} ${user.lastname ?? ""}`;
 };
 
 export const comapreFields = <T extends Record<string, unknown>>(

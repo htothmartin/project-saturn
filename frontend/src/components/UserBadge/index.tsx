@@ -2,6 +2,7 @@ import { User } from "@/model/user";
 import { UserAvatar } from "../UserAvatar";
 import clsx from "clsx";
 import { unassigned } from "@/lib/constants";
+import { getFullName } from "@/lib/utils";
 
 type Props = {
   user: User | null;
@@ -25,9 +26,9 @@ export const UserBadge = ({
     >
       <UserAvatar
         imageUrl={user?.profilePictureUrl ?? unassigned.profilePictureUrl}
-        fullName={user?.fullName ?? unassigned.fullName}
+        fullName={user ? getFullName(user) : unassigned.firstname}
       />
-      <div>{user?.fullName ?? unassigned.fullName} </div>
+      <div>{user ? getFullName(user) : unassigned.firstname} </div>
     </div>
   );
 };

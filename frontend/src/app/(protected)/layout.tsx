@@ -6,6 +6,7 @@ import { useAppSelector } from "@/lib/store/hooks";
 import { selectSession } from "@/lib/store/features/session/session-selectors";
 import { SplashScreen } from "@/components/SplashScreen";
 import { useAuth } from "@/hooks/useAuth";
+import { useWebsocket } from "@/hooks/use-websocket";
 
 export default function Layout({
   children,
@@ -13,6 +14,7 @@ export default function Layout({
   const { isAuthenticating } = useAppSelector(selectSession);
 
   useAuth();
+  useWebsocket();
 
   if (isAuthenticating) {
     return <SplashScreen />;

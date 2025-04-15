@@ -18,8 +18,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
-
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
@@ -32,7 +30,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(customizer -> {
             customizer
-                    .requestMatchers(antMatcher("/auth/**")).permitAll()
+                    .requestMatchers("/auth/**", "/ws/**").permitAll()
                     .anyRequest().authenticated();
         });
 

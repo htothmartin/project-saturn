@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { ConnectedAccounts } from "./components/connected-accounts";
 import { Separator } from "@/components/ui/separator";
-import { getMonogram } from "@/lib/utils";
+import { getFullName, getMonogram } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { selectSession } from "@/lib/store/features/session/session-selectors";
 import { setCurrentUser } from "@/lib/store/features/session/session-slice";
@@ -115,7 +115,7 @@ const Profile = (): React.JSX.Element => {
         <div className="flex h-[250px] w-[250px] items-center justify-center overflow-hidden rounded-full border bg-purple-900">
           {!currentUser.profilePictureUrl ? (
             <div className="text-center text-7xl">
-              {getMonogram(currentUser.fullName)}
+              {getMonogram(getFullName(currentUser))}
             </div>
           ) : (
             <Image
@@ -127,7 +127,7 @@ const Profile = (): React.JSX.Element => {
             />
           )}
         </div>
-        <div>{currentUser.fullName}</div>
+        <div>{getFullName(currentUser)}</div>
         <div>Upload new profile image</div>
         <div className="flex flex-row gap-2">
           <Input

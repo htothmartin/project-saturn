@@ -33,13 +33,24 @@ const commentSlice = createSlice({
       state.isCommentsFetching = false;
       state.comments = null;
     },
+    appendComments: (state: CommentState, action: PayloadAction<Comment>) => {
+      if (state.comments) {
+        state.comments = [action.payload, ...state.comments];
+      } else {
+        state.comments = [action.payload];
+      }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(clearUserData, () => initialState);
   },
 });
 
-export const { fetchComments, fetchCommentsSuccess, fetchCommentsError } =
-  commentSlice.actions;
+export const {
+  fetchComments,
+  fetchCommentsSuccess,
+  fetchCommentsError,
+  appendComments,
+} = commentSlice.actions;
 
 export default commentSlice.reducer;

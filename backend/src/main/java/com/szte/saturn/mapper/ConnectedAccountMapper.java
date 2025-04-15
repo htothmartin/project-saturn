@@ -2,18 +2,18 @@ package com.szte.saturn.mapper;
 
 import com.szte.saturn.dtos.ConnectedAccountDTO;
 import com.szte.saturn.entities.ConnectedAccount;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class ConnectedAccountMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public ConnectedAccountDTO toDTO(final ConnectedAccount connectedAccount) {
         return modelMapper.map(connectedAccount, ConnectedAccountDTO.class);

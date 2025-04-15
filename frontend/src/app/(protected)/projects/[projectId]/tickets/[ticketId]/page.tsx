@@ -54,7 +54,7 @@ const TicketDetails = () => {
           <h1 className="m-4 text-xl font-bold">{ticket.title}</h1>
           <p className="m-4 text-gray-600">{ticket.description}</p>
         </div>
-        <div className="mt-auto">
+        <div className="max-h-[30%]">
           Messages
           <MessageInput />
           <MessageList messages={comments} />

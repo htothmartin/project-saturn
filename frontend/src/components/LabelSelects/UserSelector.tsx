@@ -9,6 +9,7 @@ import { DropdownSelect } from "../Input/DrowdownSelect";
 import { v4 } from "uuid";
 import { noop, unassigned } from "@/lib/constants";
 import { SelectOption } from "../Input/type";
+import { getFullName } from "@/lib/utils";
 
 type Props = {
   user: User | null;
@@ -38,10 +39,10 @@ export const UserSelector = ({
       users.filter((u) => {
         if (!user) {
           if (u.data.id === -1) return false;
-          return u.data.fullName.toLowerCase().includes(search);
+          return getFullName(u.data).toLowerCase().includes(search);
         } else {
           return (
-            u.data.fullName.toLowerCase().includes(search) &&
+            getFullName(u.data).toLowerCase().includes(search) &&
             u.data.id != user.id
           );
         }

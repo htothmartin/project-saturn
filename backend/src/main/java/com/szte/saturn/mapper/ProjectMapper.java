@@ -10,8 +10,8 @@ import com.szte.saturn.entities.Sprint;
 import com.szte.saturn.entities.project.Project;
 import com.szte.saturn.entities.ticket.Ticket;
 import com.szte.saturn.enums.TicketStatus;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -19,16 +19,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class ProjectMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private TicketMapper ticketMapper;
-    @Autowired
-    private SprintMapper sprintMapper;
+    private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
+    private final TicketMapper ticketMapper;
+    private final SprintMapper sprintMapper;
 
 
     public ProjectDTO toDto(final Project project, final boolean isPinned) {

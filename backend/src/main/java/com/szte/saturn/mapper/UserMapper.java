@@ -5,8 +5,8 @@ import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.entities.rel_user_projects.ProjectRole;
 import com.szte.saturn.services.MinioService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,15 +15,12 @@ import java.util.stream.Collectors;
 
 
 @Component
+@RequiredArgsConstructor
 public class UserMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private MinioService minioService;
-    @Autowired
-    private ConnectedAccountMapper connectedAccountMapper;
+    private final ModelMapper modelMapper;
+    private final MinioService minioService;
+    private final ConnectedAccountMapper connectedAccountMapper;
 
     public UserDTO toDto(final User user) {
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
@@ -38,7 +35,6 @@ public class UserMapper {
             );
         }
 
-        userDTO.setFullName(user.getFirstname() + " " + user.getLastname());
         return userDTO;
     }
 

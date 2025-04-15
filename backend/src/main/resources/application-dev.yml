@@ -59,11 +59,7 @@ minio:
   bucket-name: ${MINIO_BUCKET_NAME}
   exipry-time-in-minutes: ${MINIO_EXPIRY_TIME_IN_MINUTES}
 
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
+
 
 server:
   servlet:

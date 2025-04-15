@@ -25,6 +25,7 @@ import { ProjectRole } from "@/enums/ProjectRole";
 import { Select } from "../Input/Select";
 import { Separator } from "../ui/separator";
 import { UserIdWithRole } from "@/api/project/type/user-id-with-role";
+import { getFullName } from "@/lib/utils";
 
 type SelectedUser = {
   user: User;
@@ -116,7 +117,7 @@ export const AddMemeber = (): React.JSX.Element => {
               <CommandGroup>
                 {users
                   ?.filter((user) =>
-                    user.fullName.toLowerCase().includes(search),
+                    getFullName(user).toLowerCase().includes(search),
                   )
                   .map((user) => (
                     <CommandItem
@@ -141,12 +142,9 @@ export const AddMemeber = (): React.JSX.Element => {
       </Popover>
       <div className="m-4 h-full w-full overflow-y-scroll">
         {selectedUsers.length > 0 &&
-          selectedUsers.map((selected) => (
-            <>
-              <div
-                key={`selected-user-${selected.user.id}`}
-                className="flex w-full flex-row items-center gap-6 p-2"
-              >
+          selectedUsers.map((selected, id) => (
+            <div key={`selected-user-${selected.user.id}`}>
+              <div className="flex w-full flex-row items-center gap-6 p-2">
                 <UserBadge user={selected.user} />
                 <Select
                   label="Select a role"
@@ -167,8 +165,8 @@ export const AddMemeber = (): React.JSX.Element => {
                   }}
                 />
               </div>
-              <Separator />
-            </>
+              {id + 1 !== selectedUsers.length && <Separator />}
+            </div>
           ))}
       </div>
 

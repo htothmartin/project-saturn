@@ -3,26 +3,24 @@ package com.szte.saturn.mapper;
 import com.szte.saturn.dtos.TicketDTO;
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.ticket.Ticket;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class TicketMapper {
 
-    @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
-    private UserMapper userMapper;
+    private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
 
     public TicketDTO toDto(final Ticket ticket) {
 
         TicketDTO ticketDTO = modelMapper.map(ticket, TicketDTO.class);
 
-
         if (ticket.getAssignee() != null) {
-            UserDTO assigne = userMapper.toDto(ticket.getAssignee());
-            ticketDTO.setAssignee(assigne);
+            UserDTO assignee = userMapper.toDto(ticket.getAssignee());
+            ticketDTO.setAssignee(assignee);
         }
 
         if (ticket.getReporter() != null) {

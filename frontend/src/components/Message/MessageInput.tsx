@@ -4,8 +4,9 @@ import { Button } from "../ui/button";
 import { ChangeEvent, useState } from "react";
 import { useParams } from "next/navigation";
 import { createMessage } from "@/api/ticket";
-import { useAppSelector } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { selectSession } from "@/lib/store/features/session/session-selectors";
+import { appendComments } from "@/lib/store/features/comments/commentSlice";
 
 export const MessageInput = () => {
   const { projectId, ticketId } = useParams<{
@@ -14,15 +15,23 @@ export const MessageInput = () => {
   }>();
   const [message, setMessage] = useState<string>("");
   const { currentUser } = useAppSelector(selectSession);
+  const dispatch = useAppDispatch();
 
   const sendMessage = async () => {
     if (currentUser) {
-      await createMessage(projectId, ticketId, currentUser.id, message);
+      const { data } = await createMessage(
+        projectId,
+        ticketId,
+        currentUser.id,
+        message,
+      );
+      dispatch(appendComments(data));
+      setMessage("");
     }
   };
 
   return (
-    <div className="felx-row flex">
+    <div className="felx-row flex gap-4">
       <Input
         value={message}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
