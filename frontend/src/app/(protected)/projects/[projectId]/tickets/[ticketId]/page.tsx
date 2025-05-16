@@ -5,8 +5,8 @@ import { SprintSelect } from "@/components/LabelSelects/SprintSelect";
 import { StatusSelect } from "@/components/LabelSelects/StatusSelect";
 import { UserSelector } from "@/components/LabelSelects/UserSelector";
 import { Loader } from "@/components/Loader";
-import { MessageInput } from "@/components/Message/MessageInput";
-import { MessageList } from "@/components/Message/MessageList";
+import { MessageInput } from "@/components/Message/message-input";
+import { MessageList } from "@/components/Message/message-list";
 import { Button } from "@/components/ui/button";
 import { UserBadge } from "@/components/UserBadge";
 import {
@@ -54,7 +54,7 @@ const TicketDetails = () => {
           <h1 className="m-4 text-xl font-bold">{ticket.title}</h1>
           <p className="m-4 text-gray-600">{ticket.description}</p>
         </div>
-        <div className="max-h-[30%]">
+        <div className="flex max-h-[30%] flex-col gap-2">
           Messages
           <MessageInput />
           <MessageList messages={comments} />

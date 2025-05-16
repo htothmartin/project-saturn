@@ -1,13 +1,14 @@
 import { User } from "@/model/user";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { unassigned } from "./constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export const getMonogram = (fullName: string) => {
-  if (!fullName) return "?";
+  if (!fullName || fullName.includes(unassigned.firstname)) return "?";
   const fullNameSplit = fullName.split(" ");
   if (fullNameSplit.length < 2) {
     return "?";

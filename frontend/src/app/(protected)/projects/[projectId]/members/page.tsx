@@ -1,12 +1,10 @@
 "use client";
 
 import { deleteUserfromProject } from "@/api/project/project";
-import { SearchBar } from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -15,10 +13,10 @@ import {
 } from "@/components/ui/table";
 import { UserBadge } from "@/components/UserBadge";
 import { ModalTypes } from "@/enums/ModalTypes";
+import { projectRoleMap } from "@/enums/ProjectRole";
 import { useModal } from "@/hooks/useModal";
 import {
   selectActiveProject,
-  selectFilter,
   selectIsProjectOwner,
 } from "@/lib/store/features/project/projectSelectors";
 import { fetchActiveProject } from "@/lib/store/features/project/projectSlice";
@@ -33,7 +31,6 @@ const Members = (): React.JSX.Element => {
   const { projectId } = useParams<{ projectId: string }>();
   const dispatch = useAppDispatch();
 
-  const filter = useAppSelector(selectFilter);
   const isOwner = useAppSelector(selectIsProjectOwner);
 
   const users = activeProject?.users;
@@ -56,12 +53,8 @@ const Members = (): React.JSX.Element => {
             <PlusCircle />
           </Button>
         </Link>
-        <div className="ml-auto">
-          <SearchBar value={filter.q} />
-        </div>
       </div>
       <Table>
-        <TableCaption>Members</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
@@ -75,23 +68,25 @@ const Members = (): React.JSX.Element => {
               <TableCell className="font-medium">
                 <UserBadge user={user} />
               </TableCell>
-              <TableCell>{user.role}</TableCell>
-              <TableCell>
-                {user.id != activeProject?.owner.id && isOwner && (
-                  <Button
-                    onClick={() => handleDeleteFromProject(user.id)}
-                    variant="ghost"
-                  >
-                    Remove user
-                  </Button>
-                )}
-              </TableCell>
+              <TableCell>{projectRoleMap[user.role]}</TableCell>
+              {isOwner && (
+                <TableCell>
+                  {user.id != activeProject?.owner.id && (
+                    <Button
+                      onClick={() => handleDeleteFromProject(user.id)}
+                      variant="ghost"
+                    >
+                      Remove user
+                    </Button>
+                  )}
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={5}>Total</TableCell>
+            <TableCell colSpan={2}>Total</TableCell>
             <TableCell className="text">{users?.length}</TableCell>
           </TableRow>
         </TableFooter>

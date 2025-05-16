@@ -37,13 +37,13 @@ export const IssueTypeSelect = ({
     data === type ? (
       <IssueTypeLabel type={data} />
     ) : (
-      <IssueTypeLabel type={data} showText />
+      <IssueTypeLabel type={data as IssueType} showText />
     );
 
   const onSelect = async ({ data }: SelectOption<IssueType>) => {
     try {
       const response = await updateTicket(projectId, ticketId.toString(), {
-        issueType: data,
+        issueType: data as IssueType,
       });
       dispatch(updateTicketSuccess(response.data));
     } catch (error) {

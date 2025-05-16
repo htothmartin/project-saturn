@@ -34,7 +34,7 @@ public class UserService {
                     .build();
         }
         User user = new User(request);
-        user.setPassword(passwordEncoder.encode((request.getPassword())));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         return userMapper.toDto(userRepository.save(user));
     }
 

@@ -37,4 +37,7 @@ public class SprintService {
         return sprintMapper.toDTO(sprint);
     }
 
+    public void delete(Long id) {
+        sprintRepository.deleteById(id);
+    }
 }

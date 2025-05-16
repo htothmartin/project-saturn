@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
 type Props = {
@@ -23,16 +22,6 @@ export const OAuthLogin = ({ isLoading }: Props): React.JSX.Element => {
           className="w-full gap-2"
         >
           <FcGoogle /> Google
-        </Button>
-      </Link>
-      <Link href={getProviderLoginUrl("github")}>
-        <Button
-          variant="outline"
-          type="button"
-          disabled={isLoading}
-          className="w-full gap-2"
-        >
-          <FaGithub /> GitHub
         </Button>
       </Link>
     </div>

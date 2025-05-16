@@ -30,13 +30,13 @@ export const StatusSelect = ({ type, ticketId }: Props): React.JSX.Element => {
   );
 
   const render = ({ data }: SelectOption<TicketStatus>) => (
-    <StatusLabel type={data} />
+    <StatusLabel type={data as TicketStatus} />
   );
 
   const onSelect = async ({ data }: SelectOption<TicketStatus>) => {
     try {
       const response = await updateTicket(projectId, ticketId.toString(), {
-        status: data,
+        status: data as TicketStatus,
       });
       dispatch(updateTicketSuccess(response.data));
     } catch (error) {

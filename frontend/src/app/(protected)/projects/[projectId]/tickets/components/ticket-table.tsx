@@ -14,6 +14,7 @@ import {
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { StatusSelect } from "@/components/LabelSelects/StatusSelect";
 
 type Props = {
   projectId: string;
@@ -27,12 +28,12 @@ export const TicketTable = ({ tickets, projectId, ticketKey }: Props) => {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[20px]">Type</TableHead>
-          <TableHead></TableHead>
+          <TableHead>Id</TableHead>
           <TableHead>Name</TableHead>
           <TableHead>Status</TableHead>
           <TableHead className="w-[100px]">Priority</TableHead>
-          <TableHead className="text-right">Assigne</TableHead>
-          <TableHead></TableHead>
+          <TableHead>Assignee</TableHead>
+          <TableHead>Action</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -43,7 +44,9 @@ export const TicketTable = ({ tickets, projectId, ticketKey }: Props) => {
             </TableCell>
             <TableCell>{`${ticketKey}-${ticket.id}`}</TableCell>
             <TableCell>{ticket.title}</TableCell>
-            <TableCell>{ticket.status}</TableCell>
+            <TableCell>
+              <StatusSelect type={ticket.status} ticketId={ticket.id} />
+            </TableCell>
             <TableCell>
               <PrioritySelect
                 type={ticket.ticketPriority}
@@ -69,7 +72,7 @@ export const TicketTable = ({ tickets, projectId, ticketKey }: Props) => {
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={5}>Total</TableCell>
+          <TableCell colSpan={6}>Total</TableCell>
           <TableCell className="text">{tickets?.length}</TableCell>
         </TableRow>
       </TableFooter>

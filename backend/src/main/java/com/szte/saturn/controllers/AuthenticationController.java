@@ -13,6 +13,7 @@ import com.szte.saturn.services.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -43,7 +44,7 @@ public final class AuthenticationController {
     private static final int SECOND_IN_MILLISECONDS = 1000;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDTO> register(@RequestBody final CreateUserRequest request) {
+    public ResponseEntity<UserDTO> register(@RequestBody @Valid final CreateUserRequest request) {
         UserDTO registeredUser = userService.create(request);
         return ResponseEntity.ok(registeredUser);
     }

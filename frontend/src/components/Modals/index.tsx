@@ -1,10 +1,10 @@
 "use client";
 import { ModalTypes } from "@/enums/ModalTypes";
 import { useSearchParams } from "next/navigation";
-import { ModalBase } from "./ModalBase";
-import { CreateProject } from "./CreateProject";
-import { AddTicket } from "./AddTicket";
-import { AddMemeber } from "./AddMember";
+import { ModalBase } from "./modal-base";
+import { CreateProject } from "./createt-project";
+import { AddTicket } from "./add-ticket";
+import { AddMemeber } from "./add-member";
 
 type ModalData = {
   title: string;

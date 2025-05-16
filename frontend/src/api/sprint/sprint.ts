@@ -8,3 +8,7 @@ export const createSprint = async (
   const reponse = await protectedApi.post<Sprint>("/sprints", body);
   return reponse.data;
 };
+
+export const deleteSprint = async (sprintId: number) => {
+  await protectedApi.delete(`/sprints/${sprintId}`);
+};

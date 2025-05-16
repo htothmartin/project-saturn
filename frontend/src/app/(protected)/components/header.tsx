@@ -53,13 +53,6 @@ export const Header = (): React.JSX.Element => {
             </Link>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link href="/home/" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Settings
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
             <Link
               href={getModalUrl(ModalTypes.CreateProject)}
               legacyBehavior
@@ -67,13 +60,6 @@ export const Header = (): React.JSX.Element => {
             >
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 New Project
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem className="">
-            <Link href="/home/" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Documentation
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>

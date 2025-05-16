@@ -29,7 +29,7 @@ export const Card = ({ ticket }: Props): React.JSX.Element => {
     >
       <h2 className="text-lg font-semibold text-white">{ticket.title}</h2>
 
-      <div className="flex flex-col items-center gap-2 text-sm text-white xl:flex-row">
+      <div className="flex flex-col items-center gap-2 text-sm text-white 2xl:flex-row">
         <span className="font-medium">Assigned:</span>{" "}
         <UserBadge user={ticket.assignee} />
       </div>

@@ -23,7 +23,7 @@ export const Column = ({ id, title, items }: Props): React.JSX.Element => {
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
       <div
         ref={setNodeRef}
-        className="my-2 ml-2 h-full min-h-96 w-full min-w-52 flex-1 rounded border-2 border-solid border-purple-500 bg-zinc-800 p-5"
+        className="my-2 ml-2 h-full min-h-96 w-full min-w-52 flex-1 rounded border-2 border-solid border-purple-300 bg-secondary p-5"
       >
         <div className="pb-4 text-center font-bold">{title}</div>
         <div className="flex flex-col gap-4">

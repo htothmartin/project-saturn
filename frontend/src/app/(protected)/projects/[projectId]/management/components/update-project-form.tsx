@@ -23,7 +23,7 @@ import {
 } from "@/lib/store/features/project/projectSlice";
 import { toast } from "sonner";
 import { Select } from "@/components/Input/Select";
-import { ProjectStatus } from "@/enums/ProjectStatus";
+import { ProjectStatus, ProjectStatusMap } from "@/enums/ProjectStatus";
 import { SelectOption } from "@/components/Input/type";
 
 type Props = {
@@ -75,7 +75,7 @@ export const UpdateProjectForm = ({
     ProjectStatus,
   ).map((status) => ({
     id: status,
-    data: status,
+    data: ProjectStatusMap[status],
   }));
 
   return (

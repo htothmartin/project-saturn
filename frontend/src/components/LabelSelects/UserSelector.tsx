@@ -51,13 +51,13 @@ export const UserSelector = ({
   );
 
   const render = ({ data }: SelectOption<User>) => (
-    <UserBadge user={data} onClick={noop} />
+    <UserBadge user={data as User} onClick={noop} />
   );
 
   const onSelect = async ({ data }: SelectOption<User>) => {
     try {
       const reponse = await updateTicket(projectId, ticketId, {
-        assigneeId: data.id.toString(),
+        assigneeId: (data as User).id.toString(),
       });
       dispatch(updateTicketSuccess(reponse.data));
     } catch (error) {

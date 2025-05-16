@@ -1,14 +1,10 @@
 "use client";
 
-import { SearchBar } from "@/components/SearchBar";
 import { Button } from "@/components/ui/button";
 
 import { ModalTypes } from "@/enums/ModalTypes";
 import { useModal } from "@/hooks/useModal";
-import {
-  selectActiveProject,
-  selectFilter,
-} from "@/lib/store/features/project/projectSelectors";
+import { selectActiveProject } from "@/lib/store/features/project/projectSelectors";
 import { useAppSelector } from "@/lib/store/hooks";
 
 import Link from "next/link";
@@ -16,13 +12,12 @@ import { useParams } from "next/navigation";
 import { TicketTable } from "./components/ticket-table";
 import { useMemo } from "react";
 import { Ticket } from "@/model/tickets";
+import { PlusCircle } from "lucide-react";
 
 const Tickets = (): React.JSX.Element => {
   const activeProject = useAppSelector(selectActiveProject);
   const { getModalUrl } = useModal();
   const BACKLOG = "backlog";
-
-  const filter = useAppSelector(selectFilter);
 
   const filteredTickets = useMemo(() => {
     const result: Record<string, Ticket[]> = {};
@@ -46,11 +41,11 @@ const Tickets = (): React.JSX.Element => {
     <div className="w-full flex-1 flex-col overflow-y-auto p-4">
       <div className="flex">
         <Link href={getModalUrl(ModalTypes.AddTicket)}>
-          <Button>Add</Button>
+          <Button className="flex gap-2">
+            Add ticket
+            <PlusCircle />
+          </Button>
         </Link>
-        <div className="ml-auto">
-          <SearchBar value={filter.q} />
-        </div>
       </div>
       <h2 className="mt-4 text-3xl">Sprints</h2>
       {activeProject?.sprints.map((sprint) => (

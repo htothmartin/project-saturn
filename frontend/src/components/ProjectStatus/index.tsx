@@ -1,4 +1,4 @@
-import { ProjectStatus } from "@/enums/ProjectStatus";
+import { ProjectStatus, ProjectStatusMap } from "@/enums/ProjectStatus";
 import { Badge } from "../ui/badge";
 
 type Props = {
@@ -10,14 +10,14 @@ export const ProjectStatusBadge = ({
 }: Props): React.JSX.Element => {
   switch (statusType) {
     case ProjectStatus.ACTIVE:
-      return <Badge variant="green">{ProjectStatus.ACTIVE}</Badge>;
+      return <Badge variant="green">{ProjectStatusMap[statusType]}</Badge>;
     case ProjectStatus.COMPLETED:
-      return <Badge variant="green">{ProjectStatus.COMPLETED}</Badge>;
+      return <Badge variant="green">{ProjectStatusMap[statusType]}</Badge>;
     case ProjectStatus.IN_PROGRESS:
-      return <Badge variant="blue">{ProjectStatus.IN_PROGRESS}</Badge>;
+      return <Badge variant="blue">{ProjectStatusMap[statusType]}</Badge>;
     case ProjectStatus.FINISHED:
-      return <Badge variant="green">{ProjectStatus.FINISHED}</Badge>;
+      return <Badge variant="green">{ProjectStatusMap[statusType]}</Badge>;
     default:
-      return <Badge variant="destructive">Undifined</Badge>;
+      return <Badge variant="destructive">No status</Badge>;
   }
 };

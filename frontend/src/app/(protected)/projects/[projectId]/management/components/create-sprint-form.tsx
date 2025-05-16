@@ -20,6 +20,7 @@ import { useParams } from "next/navigation";
 import { useMemo } from "react";
 import { Matcher } from "react-day-picker";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const CreateSprintForm = () => {
@@ -30,7 +31,6 @@ export const CreateSprintForm = () => {
     resolver: zodResolver(createSprintSchema),
     defaultValues: {
       name: "",
-      startDate: new Date(),
     },
   });
 
@@ -48,10 +48,24 @@ export const CreateSprintForm = () => {
 
   const handleSubmit = async (values: z.infer<typeof createSprintSchema>) => {
     try {
-      const data = await createSprint({ ...values, projectId });
+      const startDate = new Date(values.startDate);
+      startDate.setHours(0, 0, 0, 0);
+
+      const endDate = new Date(values.endDate);
+      endDate.setHours(0, 0, 0, 0);
+
+      const data = await createSprint({
+        ...values,
+        startDate,
+        endDate,
+        projectId,
+      });
+      createSprintForm.reset();
+      toast.success("Sprint added successfully");
       dispatch(updateSprint(data));
     } catch (error) {
       console.error(error);
+      toast.error("There was an error during sprint creation");
     }
   };
 
@@ -60,6 +74,7 @@ export const CreateSprintForm = () => {
       <form
         method="POST"
         onSubmit={createSprintForm.handleSubmit(handleSubmit)}
+        className="m-2 flex w-[90%] flex-col gap-4"
       >
         <FormField
           control={createSprintForm.control}
@@ -77,7 +92,7 @@ export const CreateSprintForm = () => {
           control={createSprintForm.control}
           name="startDate"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col gap-2">
               <FormLabel>Start date</FormLabel>
               <FormControl>
                 <DatePicker
@@ -93,7 +108,7 @@ export const CreateSprintForm = () => {
           control={createSprintForm.control}
           name="endDate"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col gap-2">
               <FormLabel>Start date</FormLabel>
               <FormControl>
                 <DatePicker
@@ -105,7 +120,9 @@ export const CreateSprintForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Add sprint</Button>
+        <Button className="mt-2" type="submit">
+          Add sprint
+        </Button>
       </form>
     </Form>
   );
