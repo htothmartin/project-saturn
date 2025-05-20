@@ -8,7 +8,7 @@ import {
   setAccessToken,
   setCurrentUser,
 } from "@/lib/store/features/session/session-slice";
-import { me } from "@/api/user";
+import { me } from "@/api/user/user";
 import { useRouter } from "next/navigation";
 
 export const useAuth = () => {

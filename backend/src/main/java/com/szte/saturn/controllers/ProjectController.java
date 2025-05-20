@@ -6,6 +6,7 @@ import com.szte.saturn.dtos.ActiveProjectDTO;
 import com.szte.saturn.dtos.ProjectDTO;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.services.ProjectService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,15 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping("/projects")
+@RequestMapping(ProjectController.PROJECT_ENDPOINT)
 @RestController
+@RequiredArgsConstructor
 public class ProjectController {
 
-    private final ProjectService projectService;
+    public static final String PROJECT_ENDPOINT = "/projects";
 
-    public ProjectController(final ProjectService projectService) {
-        this.projectService = projectService;
-    }
+    private final ProjectService projectService;
 
     @PostMapping
     public ResponseEntity<ProjectDTO> create(

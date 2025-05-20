@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/sprints")
+@RequestMapping(SprintController.SPRINT_ENDPOINT)
 @RestController
 @RequiredArgsConstructor
 public class SprintController {
+
+    public static final String SPRINT_ENDPOINT = "/sprints";
 
     private final SprintService sprintService;
 
@@ -26,7 +28,7 @@ public class SprintController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable final Long id) {
         sprintService.delete(id);
         return ResponseEntity.ok().build();
     }

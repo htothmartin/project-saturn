@@ -3,7 +3,7 @@
 import { Button } from "../ui/button";
 import { useEffect, useMemo, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { fetchUsersNotAssignedToProject } from "@/api/user";
+import { fetchUsersNotAssignedToProject } from "@/api/user/user";
 import { User } from "@/model/user";
 import { UserBadge } from "../UserBadge";
 import { ChevronsUpDown } from "lucide-react";

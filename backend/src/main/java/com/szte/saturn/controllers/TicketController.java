@@ -12,7 +12,6 @@ import com.szte.saturn.services.TicketService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,14 +24,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping("/projects/{projectId}/tickets")
+@RequestMapping(TicketController.TICKET_ENDPOINT)
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class TicketController {
 
+    public static final String TICKET_ENDPOINT = "/projects/{projectId}/tickets";
+
     private final TicketService ticketService;
-    private final SimpMessagingTemplate messagingTemplate;
     private final CommentService commentService;
 
     @PostMapping

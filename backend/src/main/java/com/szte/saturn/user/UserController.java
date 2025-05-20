@@ -1,11 +1,13 @@
 package com.szte.saturn.controllers;
 
+import com.szte.saturn.controllers.requests.ChangePasswordRequest;
 import com.szte.saturn.controllers.requests.UpdateUserRequestDTO;
 import com.szte.saturn.dtos.UserDTO;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.mapper.UserMapper;
 import com.szte.saturn.services.MinioService;
 import com.szte.saturn.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,17 +26,13 @@ import java.util.Map;
 
 @RequestMapping("/users")
 @RestController
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final MinioService minioService;
     @Autowired
     private UserMapper userMapper;
-
-    public UserController(final UserService userService, final MinioService minioService) {
-        this.userService = userService;
-        this.minioService = minioService;
-    }
 
     @GetMapping("/me")
     public ResponseEntity<UserDTO> me(@AuthenticationPrincipal final User user) {
@@ -80,6 +78,12 @@ public class UserController {
 
         return ResponseEntity.ok(
                 Map.of("message", "File uploaded successfully", "profilePictureUrl", signedUrl));
+    }
+
+    @PostMapping("/change-password")
+    public void changePassword(@AuthenticationPrincipal final User user,
+                               @RequestBody final ChangePasswordRequest changePasswordRequest) {
+        userService.changePassword(changePasswordRequest, user.getId());
     }
 
 

@@ -1,5 +1,6 @@
 import { User } from "@/model/user";
-import { protectedApi } from "./axios";
+import { protectedApi } from "../axios";
+import { ChangePasswordRequest } from "./type";
 
 export const me = async () => {
   const { data } = await protectedApi.get("users/me");
@@ -27,4 +28,8 @@ export const uploadProfileImage = async (file: File) => {
       "Content-Type": "multipart/form-data",
     },
   });
+};
+
+export const changePassword = async (request: ChangePasswordRequest) => {
+  return await protectedApi.post("/users/change-password", request);
 };

@@ -1,5 +1,6 @@
 package com.szte.saturn.controllers.requests;
 
+import com.szte.saturn.utils.AppConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -20,10 +21,11 @@ public class CreateUserRequest {
     private String lastname;
 
     @NotBlank(message = "Please enter a password!")
-    @Size(min = 8, message = "Password should be at least 8 characters!")
+    @Size(min = AppConstants.PASSWORD_MIN_LENGTH, message = "Password should be at least 8 characters!")
     @Pattern(regexp = ".*[a-z].*", message = "The password must contain at least one lowercase character.")
     @Pattern(regexp = ".*[A-Z].*", message = "The password must contain at least one uppercase character.")
     @Pattern(regexp = ".*\\d.*", message = "The password must contain at least one number.")
-    @Pattern(regexp = ".*[!@#$%^&*(),.?\":{}|<>].*", message = "The password must contain at least one special character.")
+    @Pattern(regexp = ".*[!@#$%^&*(),.?\":{}|<>].*",
+            message = "The password must contain at least one special character.")
     private String password;
 }

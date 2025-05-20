@@ -1,5 +1,6 @@
 package com.szte.saturn.services;
 
+import com.szte.saturn.controllers.requests.ChangePasswordRequest;
 import com.szte.saturn.controllers.requests.CreateUserRequest;
 import com.szte.saturn.controllers.requests.UpdateUserRequestDTO;
 import com.szte.saturn.dtos.UserDTO;
@@ -85,5 +86,16 @@ public class UserService {
 
         userRepository.save(user);
         return userMapper.toDto(user);
+    }
+
+    @Transactional
+    public void changePassword(final ChangePasswordRequest changePasswordRequest, final long userId) {
+        User user = findUserById(userId);
+        if (!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Wrong password");
+        }
+
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        userRepository.save(user);
     }
 }

@@ -27,21 +27,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.szte.saturn.utils.AppConstants.SECOND_IN_MILLISECONDS;
 
-@RequestMapping("/auth")
+
+@RequestMapping(AuthenticationController.AUTH_ENDPOINT)
 @RestController
 @RequiredArgsConstructor
 public final class AuthenticationController {
 
+    public static final String AUTH_ENDPOINT = "/auth";
+
     private final JwtService jwtService;
-
     private final AuthenticationService authenticationService;
-
     private final UserService userService;
-
     private final UserDetailsService userDetailsService;
-
-    private static final int SECOND_IN_MILLISECONDS = 1000;
 
     @PostMapping("/signup")
     public ResponseEntity<UserDTO> register(@RequestBody @Valid final CreateUserRequest request) {

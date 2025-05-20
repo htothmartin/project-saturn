@@ -76,3 +76,29 @@ export const createSprintSchema = z.object({
   startDate: z.date(),
   endDate: z.date(),
 });
+
+export const changePasswordSchema = z
+  .object({
+    oldPassword: z.string().min(1, "Please enter the old password!"),
+    newPassword: z
+      .string()
+      .min(1, "Please enter a password!")
+      .min(8, "Password should minimum 8 character!")
+      .refine((value) => lowerCaseRegex.test(value), {
+        message: "The password must contain at least one lowercase character.",
+      })
+      .refine((value) => upperCaseRegex.test(value), {
+        message: "The password must contain at least one uppercase character.",
+      })
+      .refine((value) => numberRegex.test(value), {
+        message: "The password must contain at least one number.",
+      })
+      .refine((value) => specialRegex.test(value), {
+        message: "The password must contain at least one special character.",
+      }),
+    confirmPassword: z.string().min(1, "Please enter the new password again!"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "The passwords must match.",
+    path: ["confirmPassword"],
+  });

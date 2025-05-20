@@ -1,6 +1,6 @@
 "use client";
 
-import { updateUser, uploadProfileImage } from "@/api/user";
+import { updateUser, uploadProfileImage } from "@/api/user/user";
 import { ErrorMessage } from "@/components/Error/error-message";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +25,7 @@ import { getFullName, getMonogram } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { selectSession } from "@/lib/store/features/session/session-selectors";
 import { setCurrentUser } from "@/lib/store/features/session/session-slice";
+import { PasswordReset } from "./components/password-reset";
 
 const Profile = (): React.JSX.Element => {
   const dispatch = useAppDispatch();
@@ -145,6 +146,7 @@ const Profile = (): React.JSX.Element => {
         )}
       </div>
       <div className="flex w-1/2 flex-col items-center gap-2 p-12">
+        <h3 className="my-4 text-xl">Profile information</h3>
         <Form {...updateUserDetailsForm}>
           <form
             method="POST"
@@ -187,6 +189,7 @@ const Profile = (): React.JSX.Element => {
         </Form>
         <Separator />
         <ConnectedAccounts connectedAccounts={currentUser.connectedAccounts} />
+        {!currentUser.connectedAccounts.length && <PasswordReset />}
       </div>
     </div>
   );
