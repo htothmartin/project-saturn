@@ -24,10 +24,6 @@ export const SprintList = ({ sprints }: Props): React.JSX.Element => {
     dispatch(fetchActiveProject(projectId));
   };
 
-  sprints.forEach((element) => {
-    console.log(element.endDate);
-  });
-
   return (
     <div className="flex flex-col gap-4">
       {sprints.map((sprint) => (

@@ -1,6 +1,6 @@
 app:
   frontend:
-    host: localhost:3000
+    host: ${HOST}
 
 spring:
   application:
@@ -32,7 +32,7 @@ spring:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
             scope: profile, email
-            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+            redirect-uri: http://${HOST}/api/login/oauth2/code/google
             client-name: Google
           github:
             client-id: ${GITHUB_CLIENT_ID}
@@ -61,10 +61,18 @@ minio:
   access-key: ${MINIO_ACCESS_KEY}
   secret-key: ${MINIO_SECRET_KEY}
   bucket-name: ${MINIO_BUCKET_NAME}
-  expiry-time-in-minutes: ${MINIO_EXPIRY_TIME_IN_MINUTES}
-
-
+  exipry-time-in-minutes: ${MINIO_EXPIRY_TIME_IN_MINUTES}
 
 server:
   servlet:
     context-path: /api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+

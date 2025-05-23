@@ -43,15 +43,15 @@ export const PrioritySelect = ({
   );
 
   const render = ({ data }: SelectOption<TicketPriority>) => (
-    <PriorityLabel type={data} />
+    <PriorityLabel type={data as TicketPriority} />
   );
 
   const onSelect = async ({ data }: SelectOption<TicketPriority>) => {
     try {
-      const reponse = await updateTicket(projectId, ticketId.toString(), {
-        priority: data,
+      const response = await updateTicket(projectId, ticketId.toString(), {
+        priority: data as TicketPriority,
       });
-      dispatch(updateTicketSuccess(reponse.data));
+      dispatch(updateTicketSuccess(response.data));
     } catch (error) {
       console.error(error);
     }

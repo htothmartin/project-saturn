@@ -1,5 +1,6 @@
 package com.szte.saturn.utils;
 
+import com.szte.saturn.configs.AppConfig;
 import com.szte.saturn.entities.ConnectedAccount;
 import com.szte.saturn.entities.User;
 import com.szte.saturn.enums.Provider;
@@ -30,7 +31,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final ConnectedAccountRepository connectedAccountRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
-    private static final int SECOND_IN_MILLISECONDS = 1000;
+    private final AppConfig appConfig;
 
     @Override
     @Transactional
@@ -77,11 +78,11 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setPath("/");
-        cookie.setMaxAge((int) jwtService.getRefreshExpiration() / SECOND_IN_MILLISECONDS);
+        cookie.setMaxAge((int) jwtService.getRefreshExpiration() / appConfig.getSECOND_IN_MILLISECONDS());
 
         response.addCookie(cookie);
 
-        response.sendRedirect("http://localhost:3000/projects");
+        response.sendRedirect("http://" + appConfig.getFrontendHost() + "/projects");
     }
 
     private User createUserFromOAuth2User(final OAuth2AuthenticationToken authentication) {

@@ -30,7 +30,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(customizer -> {
             customizer
-                    .requestMatchers("/auth/**", "/ws/**").permitAll()
+                    .requestMatchers("/auth/**", "/ws/**", "/actuator/**").permitAll()
                     .anyRequest().authenticated();
         });
 
