@@ -120,6 +120,7 @@ const Profile = (): React.JSX.Element => {
             </div>
           ) : (
             <Image
+              unoptimized
               src={currentUser.profilePictureUrl ?? ""}
               alt="Profile picture"
               width={250}

@@ -1,6 +1,6 @@
 app:
   frontend:
-    host: localhost:3000
+    host: ${HOST}
 
 spring:
   application:

@@ -2,7 +2,7 @@ type Props = {
   size?: number;
 };
 
-export const SaturnLogo = ({ size = 64 }: Props): React.JSX.Element => {
+export const SaturnLogo = ({ size = 64 }: Props) => {
   const pxSize = `${size}px`;
   return (
     <svg

@@ -2,7 +2,7 @@
 import { ModalTypes } from "@/enums/ModalTypes";
 import { useSearchParams } from "next/navigation";
 import { ModalBase } from "./modal-base";
-import { CreateProject } from "./createt-project";
+import { CreateProject } from "./create-project";
 import { AddTicket } from "./add-ticket";
 import { AddMemeber } from "./add-member";
 

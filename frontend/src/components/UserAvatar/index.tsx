@@ -13,7 +13,13 @@ export const UserAvatar = ({ imageUrl, fullName, onClick }: Props) => {
     <Avatar onClick={onClick}>
       <AvatarImage src={imageUrl} alt="Profile picture" asChild>
         {imageUrl && (
-          <Image src={imageUrl} width={60} height={90} alt="Profile picture" />
+          <Image
+            unoptimized
+            src={imageUrl}
+            width={60}
+            height={90}
+            alt="Profile picture"
+          />
         )}
       </AvatarImage>
       <AvatarFallback>{getMonogram(fullName)}</AvatarFallback>
