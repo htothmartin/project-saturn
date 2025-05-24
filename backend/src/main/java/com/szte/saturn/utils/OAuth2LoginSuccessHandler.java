@@ -82,7 +82,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         response.addCookie(cookie);
 
-        response.sendRedirect("http://" + appConfig.getFrontendHost() + "/projects");
+        response.sendRedirect(appConfig.getFrontendHost() + "/projects");
     }
 
     private User createUserFromOAuth2User(final OAuth2AuthenticationToken authentication) {
